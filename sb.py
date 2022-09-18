@@ -26,6 +26,8 @@ class sbrebase:
 					os.system("sudo ostree admin pin 0")
 				case "upg":
 					os.system("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
+				case "fk-repair":
+					os.system("flatpak repair --user && flatpak repair")
 				case "-h":
 					self.showhelp()
 				case _:
