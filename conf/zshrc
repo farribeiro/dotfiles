@@ -217,6 +217,8 @@ alias swap2ram="sudo swapoff -a; swapon -a; sysctl -w vm.drop_caches=3"
 # alias vboxstop='sudo modprobe -r vboxdrv && sudo modprobe -r vboxnetflt'
 alias vi="vim"
 alias zpub="zip -0 $1 mimetype && zip -9 -r $1 META-INF OEBPS"
+alias dk-containers-purge="docker rm $(docker ps -a -q)"
+alias dk-images-purgeunstaged="docker rmi $(docker images -f dangling=true --format={{.ID}})"
 
 # Esses alias permitem abrir um arquivo diretamente (ex, % file.txt e o vim já é aberto).
 alias -s html=$BROWSER
@@ -296,6 +298,12 @@ dcomp (){
 for i in `\ls -1`; do
 	jpegoptim -o -m80 --strip-all "$1";
 done
+}
+
+dk-images-upgrades(){
+	for i in `docker images --format={{.Repository}}:{{.Tag}}`; do
+		docker pull $i;
+	done
 }
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
