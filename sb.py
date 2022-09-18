@@ -8,7 +8,7 @@ class sbrebase:
 	__sbversion = int(sp.getoutput("rpm -E %fedora"))	
 
 	def showhelp(self):
-		print ("Options:\n\nreinstall:\n  reinstall removed dependencies\nchange:\n  change to next version of silverblue\ncleanall:\n  clean everting of rpm-ostree\npreview:\n  dry run of rpmostree upgrade")
+		print ("Options:\n\nreinstall:\n  reinstall removed dependencies\nchange:\n  change to next version of silverblue\ncleanall:\n  clean everting of rpm-ostree\npreview:\n  dry run of rpmostree upgrade\npin:\n  Pin the Ostree Deployment")
 
 
 	def __init__(self):
@@ -22,6 +22,12 @@ class sbrebase:
 					os.system("rpm-ostree cleanup -p -b -m")
 				case "preview":
 					os.system("rpm-ostree upgrade --preview")
+				case "pin":
+					os.system("sudo ostree admin pin 0")
+				case "upg":
+					os.system("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
+				case "fk-repair":
+					os.system("flatpak repair --user && flatpak repair")
 				case "-h":
 					self.showhelp()
 				case _:
