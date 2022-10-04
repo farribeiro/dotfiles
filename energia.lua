@@ -22,6 +22,15 @@ function kwh4mes()
     return KWh * horas4dia * dias
 end
 
+function estimativas()
+    io.write("\n**********ESTIMATIVAS GLOBAIS**********\n")
+    io.write(KWh, "KWh x ", preco, "= R$ ", custo4hora(), "/hora\n")
+    io.write("Custo de R$ ", custo4dia(), "/dia\n")
+    io.write("Custo de R$ ", custo4mes(), "/mês (24x7)\n")
+    io.write(KWh, " x ", horas4dia, " x ", dias, " = ", kwh4mes(), "kWh/mês\n")
+    io.write("***************************************\n\n")
+end
+
 horas4dia = 24
 dias = 30
 
@@ -36,13 +45,8 @@ io.write("Potência(W): ")
 ptnc = io.read("*number")
 KWh = potencia4kwh(ptnc)
 
+estimativas()
 
-io.write("\n**********ESTIMATIVAS GLOBAIS**********\n")
-io.write(KWh, "KWh x ", preco, "= R$ ", custo4hora(), "/hora\n")
-io.write("Custo de R$ ", custo4dia(), "/dia\n")
-io.write("Custo de R$ ", custo4mes(), "/mês (24x7)\n")
-io.write(KWh, " x ", horas4dia, " x ", dias, " = ", kwh4mes(), "kWh/mês\n")
-io.write("***************************************\n\n")
 io.write("Quantas horas por dias usa o equipamento (horas decimais): ")
 horas4dia = io.read("*number")
 io.write("Quantos dias usa o equipamento: ")
