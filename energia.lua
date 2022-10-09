@@ -1,5 +1,3 @@
-co = coroutine.create (function ()
-
 function potencia(amp,volts)
 	return amp * volts
 end
@@ -55,8 +53,3 @@ io.write("Quantos dias usa o equipamento: ")
 dias = io.read("*number")
 
 io.write("\nCusto de R$ ", custo4hora() * horas4dia * dias)
-coroutine.yield()
-end)
-
-coroutine.resume(co)
-
