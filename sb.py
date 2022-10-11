@@ -21,8 +21,8 @@ class sbrebase:
 	def __init__(self):
 		try:
 			match sys.argv[1]:	
-				# case "reinstall":
-					# os.system("rpm-ostree upgrade --install=akmod-nvidia-470xx --install=xorg-x11-drv-nvidia-470xx --install=xorg-x11-drv-nvidia-470xx-power --install=nvidia-settings-470xx --install=rtl88x2bu-kmod --install=flatpak-builder")
+				case "reinstall":
+					os.system("rpm-ostree upgrade --install=rtl88x2bu-kmod --install=flatpak-builder")
 				case "change":
 					print("Syntax:\n\nrpm-ostree rebase fedora:fedora/",self.__sbversion+1,"/x86_64/silverblue --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 				case "cleanall":
