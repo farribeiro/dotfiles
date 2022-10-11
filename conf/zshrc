@@ -296,15 +296,14 @@ bindkey '^i' expand-or-complete-prefix
 #############################
 #
 # shot - takes a screenshot of your current window
-shot ()
-{
-import -w root -quality 75 "$HOME/shot-$(date +%s).png"
+shot (){
+	import -w root -quality 75 "$HOME/shot-$(date +%s).png"
 }
 
 dcomp (){
-for i in `\ls -1`; do
-	jpegoptim -o -m80 --strip-all "$1";
-done
+	for i in `\ls -1`; do
+		jpegoptim -o -m80 --strip-all "$1";
+	done
 }
 
 lbrycontentstats (){
