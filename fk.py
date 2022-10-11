@@ -58,7 +58,7 @@ class Fk:
 			case "list-runtimes":
 				self.show_nruntimes()
 				print ("Runtimes installed:\n")
-				print (self.list_runtime())
+				print (self.size_runtimes())
 			case "list-apps":
 				self.show_napps()
 				print ("Apps installed:\n")
