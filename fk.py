@@ -43,7 +43,8 @@ class Fk:
 		return sp.getoutput("flatpak list --app --columns=runtime | sort | uniq -c | sort -n")
 
 	def list_apps (self):
-		return sp.getoutput("flatpak list --app --columns=name | sort | uniq -c | sort -n")
+		return sp.getoutput("flatpak list --app --columns=name | sort | uniq -c | sort -n | sed \"s/1/-/\"")
+
 	def list_sdk(self):
 		return sp.getoutput("flatpak list | sort | uniq -c | grep -E \"[Ss][Dd][Kk]\" | sort -n")
 		# | sed \"s/\d\d?/-/\"")
