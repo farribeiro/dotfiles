@@ -215,7 +215,7 @@ alias swap2ram="sudo swapoff -a; swapon -a; sysctl -w vm.drop_caches=3"
 # alias tb="~/thunderbird/thunderbird"
 # alias vboxstart='sudo modprobe vboxdrv && sudo modprobe vboxnetflt'
 # alias vboxstop='sudo modprobe -r vboxdrv && sudo modprobe -r vboxnetflt'
-alias vi="vim"
+alias vim="vi"
 alias zpub="zip -0 $1 mimetype && zip -9 -r $1 META-INF OEBPS"
 alias sb-preview="rpm-ostree upgrade --preview"
 alias sb-clean="rpm-ostree cleanup -p -b -m"
