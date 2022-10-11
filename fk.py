@@ -18,6 +18,9 @@ class Fk:
 	def n_apps(self):
 		self.__n_apps = int(sp.getoutput("flatpak list --app --columns=name | sort | uniq -c | sort -n | wc -l"))
 
+	def n_sdks(self):
+		self.__n_sdks = int(sp.getoutput("flatpak list | sort | uniq -c | grep -E \"[Ss][Dd][Kk]\" | sort -n | wc -l"))
+
 	def n_things(self):
 		self.n_runtimes()
 		self.n_apps()
@@ -31,6 +34,10 @@ class Fk:
 	def show_nruntimes(self):
 		self.n_runtimes()
 		print ("Numbers of runtimes: ", self.__n_runtimes)
+
+	def show_nsdks(self):
+		self.n_sdks()
+		print ("Numbers of Sdks: ", self.__n_sdks)
 
 	def list_runtime (self):
 		return sp.getoutput("flatpak list --app --columns=runtime | sort | uniq -c | sort -n")
