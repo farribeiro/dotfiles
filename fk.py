@@ -57,5 +57,7 @@ class Fk:
 				os.system("flatpak repair --user && flatpak repair")
 			case "cleanall":
 				os.system("flatpak remove --unused --delete-data")
+			case "b":
+				os.system("flatpak-builder --install --user --force-clean build-dir ", sys.argv[2])
 
 f = Fk()
