@@ -217,6 +217,15 @@ alias swap2ram="sudo swapoff -a; swapon -a; sysctl -w vm.drop_caches=3"
 # alias vboxstop='sudo modprobe -r vboxdrv && sudo modprobe -r vboxnetflt'
 alias vi="vim"
 alias zpub="zip -0 $1 mimetype && zip -9 -r $1 META-INF OEBPS"
+alias sb-preview="rpm-ostree upgrade --preview"
+alias sb-clean="rpm-ostree cleanup -p -b -m"
+alias fk-purge="flatpak remove --unused --delete-data"
+alias wf="echo $XDG_SESSION_TYPE && MOZ_ENABLE_WAYLAND=1 ~/firefox/firefox"
+# alias tg="~/Telegram/Telegram"
+alias fk-repair="flatpak repair --user && flatpak repair"
+alias metin="cpulimit -i -l 100 flatpak run com.usebottles.bottles"
+alias sb-pin="sudo ostree admin pin 0"
+alias mt-hud="flatpak run --env=MANGOHUD=1 net.minetest.Minetest"
 
 # Esses alias permitem abrir um arquivo diretamente (ex, % file.txt e o vim já é aberto).
 alias -s html=$BROWSER
@@ -296,6 +305,28 @@ dcomp (){
 for i in `\ls -1`; do
 	jpegoptim -o -m80 --strip-all "$1";
 done
+}
+
+lbrycontentstats (){
+	cd ~/git/static-exp &&\
+	python lbry-host-statics.py &&\
+	python -m http.server
+}
+
+sb-upg (){
+	# rpm-ostree refresh-md -f &&\
+	rpm-ostree upgrade &&\
+	flatpak update -y &&\
+	toolbox run sudo dnf update -y
+}
+
+git-pullall(){
+	find . -maxdepth 1 -type d -exec bash -c "cd '{}' && git pull" \;
+}
+
+mt-gen(){
+	cd ~/net.minetest.Minetest ;
+	flatpak-builder --user --install --force-clean build-dir net.minetest.Minetest.yaml
 }
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
