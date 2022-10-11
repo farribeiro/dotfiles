@@ -329,6 +329,10 @@ mt-gen(){
 	flatpak-builder --user --install --force-clean build-dir net.minetest.Minetest.yaml
 }
 
+export DOCKER_HOST=Unix:///run/user/$UID/podman/podman.sock
+
+export PATH=$PATH:/home/fribeiro/Documentos/dotfiles
+
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
