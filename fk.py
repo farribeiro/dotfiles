@@ -24,8 +24,10 @@ class Fk:
 	def n_things(self):
 		self.n_runtimes()
 		self.n_apps()
+		self.n_sdks()
 		self.show_napps()
 		self.show_nruntimes()
+		self.show_nsdks()
 	
 	def show_napps(self):
 		self.n_apps()
