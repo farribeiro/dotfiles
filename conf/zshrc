@@ -211,7 +211,7 @@ alias sed="sed -r"
 # alias smbrefresh="sudo \"service smbd restart;service nmbd restart\""
 # alias svim="sudo vim"
 # alias svns="svnserve -d -r /home/fabio/auxiliar.svn"
-alias swap2ram="sudo swapoff -a; swapon -a; sysctl -w vm.drop_caches=3"
+# alias swap2ram="sudo swapoff -a; swapon -a; sysctl -w vm.drop_caches=3"
 # alias tb="~/thunderbird/thunderbird"
 # alias vboxstart='sudo modprobe vboxdrv && sudo modprobe vboxnetflt'
 # alias vboxstop='sudo modprobe -r vboxdrv && sudo modprobe -r vboxnetflt'
