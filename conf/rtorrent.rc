@@ -1,0 +1,2 @@
+network.port_range.set = 6958-6958
+session.path.set = ~/.rtorrent.session
