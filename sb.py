@@ -33,6 +33,8 @@ class sbrebase:
 					os.system("sudo ostree admin pin 0")
 				case "upg":
 					os.system("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
+				case "mesa-freeworld":
+					os.system("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld")
 				case "-h":
 					self.showhelp()
 				case _:
