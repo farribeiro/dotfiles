@@ -4,6 +4,17 @@ function lerNumero(mensagem)
 	return io.read("*number") or 0
 end
 
+function fmt(valor)
+	return ("%.2f"):format(valor)
+end
+
+-- Funções de calculo
+function escrevecustodiames(tipo)
+	io.write("Custo de R$ ")
+	if tipo == "dia" then return io.write(fmt(custo4dia()), "/dia\n") end
+	if tipo == "mes" then return io.write(fmt(custo4mes()), "/mês (24x7)\n") end
+end
+
 function potencia(amp,volts)
 	return amp * volts
 end
@@ -28,15 +39,6 @@ function kwh4mes()
 	return KWh * horas4dia * dias
 end
 
-function estimativas()
-	io.write("\n**********ESTIMATIVAS GLOBAIS**********\n")
-	io.write(KWh, "KWh x ", preco, "= R$ ", custo4hora(), "/hora\n")
-	io.write("Custo de R$ ", custo4dia(), "/dia\n")
-	io.write("Custo de R$ ", custo4mes(), "/mês (24x7)\n")
-	io.write(KWh, " x ", horas4dia, " x ", dias, " = ", kwh4mes(), "kWh/mês\n")
-	io.write("***************************************\n\n")
-end
-
 horas4dia = 24
 dias = 30
 
@@ -51,7 +53,12 @@ dias = lerNumero("Quantos dias usa o equipamento: ")
 -- except ValueError:
 KWh = potencia4kwh(ptnc)
 
-estimativas()
 
+io.write("\n********** ESTIMATIVAS ***************\n")
+io.write(fmt(KWh), "KWh x R$ ", fmt(preco), " = R$ ", fmt(custo4hora()), "/hora\n")
+io.write(fmt(KWh), " x ", horas4dia, " x ", dias, " = ", fmt(kwh4mes()), "kWh/mês\n")
+escrevecustodiames("dia")
+escrevecustodiames("mes")
+io.write("\n***************************************\n\n")
 
-io.write("\nCusto de R$ ", custo4hora() * horas4dia * dias)
+io.write("Custo de R$ ", fmt(custo4hora() * horas4dia * dias), "\n")
