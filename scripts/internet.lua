@@ -27,7 +27,7 @@ function tombits(size)
 end
 
 function tokbits(size)
-	return tombits(size) / 10
+	return tombits(size) * 10
 end
 
 function tombytes(size)
