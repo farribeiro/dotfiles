@@ -1,3 +1,9 @@
+-- Funções Utilitários
+function lerNumero(mensagem)
+	io.write(mensagem)
+	return io.read("*number") or 0
+end
+
 function potencia(amp,volts)
 	return amp * volts
 end
@@ -34,22 +40,18 @@ end
 horas4dia = 24
 dias = 30
 
-io.write("Preço(KWh): ")
-preco = io.read("*number")
+preco = lerNumero("Preço(KWh): ")
+ptnc = lerNumero("Potência(W): ")
+horas4dia = lerNumero("Quantas horas por dias usa o equipamento (horas decimais): ")
+dias = lerNumero("Quantos dias usa o equipamento: ")
 -- try:
 	-- amp = float(input("Amperes: "))
 	-- volts = float(input("Voltagem: "))
 	-- ptnc = self.potencia(amp,volts)
 -- except ValueError:
-io.write("Potência(W): ")
-ptnc = io.read("*number")
 KWh = potencia4kwh(ptnc)
 
 estimativas()
 
-io.write("Quantas horas por dias usa o equipamento (horas decimais): ")
-horas4dia = io.read("*number")
-io.write("Quantos dias usa o equipamento: ")
-dias = io.read("*number")
 
 io.write("\nCusto de R$ ", custo4hora() * horas4dia * dias)
