@@ -53,7 +53,6 @@ dias = lerNumero("Quantos dias usa o equipamento: ")
 -- except ValueError:
 KWh = potencia4kwh(ptnc)
 
-
 io.write("\n********** ESTIMATIVAS ***************\n")
 io.write(fmt(KWh), "KWh x R$ ", fmt(preco), " = R$ ", fmt(custo4hora()), "/hora\n")
 io.write(fmt(KWh), " x ", horas4dia, " x ", dias, " = ", fmt(kwh4mes()), "kWh/mês\n")
@@ -61,4 +60,7 @@ escrevecustodiames("dia")
 escrevecustodiames("mes")
 io.write("\n***************************************\n\n")
 
+-- io.write("\n\n*** Custo ***\n")
 io.write("Custo de R$ ", fmt(custo4hora() * horas4dia * dias), "\n")
+
+io.write("\n")
