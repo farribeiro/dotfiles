@@ -71,7 +71,7 @@ class Fk:
 			case "cleanall":
 				os.system("flatpak remove --unused --delete-data")
 			case "b":
-				c = "flatpak-builder --install --user --force-clean build-dir ", sys.argv[2]
+				c = "flatpak-builder --install --user --force-clean build-dir " + sys.argv[2]
 				os.system(c)
 			case "up":
 				os.system("flatpak update")
