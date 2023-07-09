@@ -22,7 +22,7 @@ class sbrebase:
 		try:
 			match sys.argv[1]:	
 				case "reinstall":
-					os.system("rpm-ostree upgrade --install=rtl88x2bu-kmod --install=flatpak-builder")
+					os.system("rpm-ostree upgrade --install=flatpak-builder")
 				case "change":
 					print("Syntax:\n\nrpm-ostree rebase fedora:fedora/",self.__sbversion+1,"/x86_64/silverblue --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 				case "cleanall":
