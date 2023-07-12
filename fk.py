@@ -79,7 +79,7 @@ class Fk:
 				c = "flatpak install flathub " + sys.argv[2]
 				os.system(c)
 			case "pg":
-				c = "flatpak remove --unused --delete-data" + sys.argv[2]
+				c = "flatpak remove --delete-data " + sys.argv[2]
 				os.system(c)
 
 f = Fk()
