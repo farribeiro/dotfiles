@@ -20,10 +20,12 @@ class sbrebase:
 
 	def __init__(self):
 		try:
-			match sys.argv[1]:	
+			match sys.argv[1]:
 				case "reinstall":
 					os.system("rpm-ostree upgrade --install=flatpak-builder")
-				case "change":
+				case "cb":
+					os.system("ostree remote refs fedora | grep silverblue | grep $(uname -i)")
+			        case "change":
 					print("Syntax:\n\nrpm-ostree rebase fedora:fedora/",self.__sbversion+1,"/x86_64/silverblue --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 				case "cleanall":
 					os.system("rpm-ostree cleanup -p -b -m")
