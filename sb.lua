@@ -37,7 +37,22 @@ handlers = {
 
 	["mesa-drm-freeworld"] = function()
 		os.execute("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg")
+	end,
+
+	["help"] = function()
+		io.write("Options:\n\n",
+			"reinstall:\n  reinstall removed dependencies\n",
+			"change:\n  change to next version of silverblue\n",
+			"cleanall:\n  clean everting of rpm-ostree\n",
+			"preview:\n  dry run of rpmostree upgrade\n",
+			"pin:\n  Pin the Ostree Deployment\n"
+		)
 	end
 }
+
+if not arg or #arg == 0 then
+	handlers["help"]()
+	os.exit(1)
+end
 
 handlers[arg[1]]()

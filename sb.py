@@ -16,7 +16,13 @@ class sbrebase:
 		return int(sp.getoutput("rpm -E %fedora"))
 
 	def showhelp(self):
-		print ("Options:\n\nreinstall:\n  reinstall removed dependencies\nchange:\n  change to next version of silverblue\ncleanall:\n  clean everting of rpm-ostree\npreview:\n  dry run of rpmostree upgrade\npin:\n  Pin the Ostree Deployment")
+		print ("Options:\n\n",
+			"reinstall:\n  reinstall removed dependencies\n",
+			"change:\n  change to next version of silverblue\n",
+			"cleanall:\n  clean everting of rpm-ostree\n",
+			"preview:\n  dry run of rpmostree upgrade\n",
+			"pin:\n  Pin the Ostree Deployment"
+		)
 
 	def __init__(self):
 		try:
@@ -39,7 +45,7 @@ class sbrebase:
 					os.system("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
 				case "mesa-drm-freeworld":
 					os.system("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg")
-				case "-h":
+				case "help":
 					self.showhelp()
 				case _:
 					self.showhelp()
