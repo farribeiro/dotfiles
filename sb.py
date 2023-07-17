@@ -12,11 +12,11 @@ import subprocess as sp
 
 class sbrebase:
 
-	__sbversion = int(sp.getoutput("rpm -E %fedora"))	
+	def sbversion(self):
+		return int(sp.getoutput("rpm -E %fedora"))
 
 	def showhelp(self):
 		print ("Options:\n\nreinstall:\n  reinstall removed dependencies\nchange:\n  change to next version of silverblue\ncleanall:\n  clean everting of rpm-ostree\npreview:\n  dry run of rpmostree upgrade\npin:\n  Pin the Ostree Deployment")
-
 
 	def __init__(self):
 		try:
@@ -24,10 +24,11 @@ class sbrebase:
 				case "reinstall":
 					os.system("rpm-ostree upgrade --install=flatpak-builder")
 				case "cb":
-					c = "ostree remote refs fedora | grep -E " + str(self.__sbversion+1) + " | grep -E x86_64/silverblue$"
+					c = "ostree remote refs fedora | grep -E " + str(self.sbversion()+1) + " | grep -E x86_64/silverblue$"
 					os.system(c)
 				case "change":
-					print("Syntax:\n\nrpm-ostree rebase fedora:fedora/",self.__sbversion+1,"/x86_64/silverblue --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
+					print("Syntax:\n\nrpm-ostree rebase fedora:fedora/",self.sbversion()+1,"/x86_64/silverblue")
+					#--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 				case "cleanall":
 					os.system("rpm-ostree cleanup -p -b -m")
 				case "preview":
