@@ -1,0 +1,43 @@
+#!/usr/bin/lua
+
+function sbversion()
+	local handle = io.popen("rpm -E %fedora")
+	local result = handle:read("*a")
+	handle:close()
+	return tonumber(result)
+end
+
+handlers = {
+-- ["reinstall"] = function() os.execute("rpm-ostree upgrade --install=flatpak-builder") end
+
+	["cb"] = function()
+		os.execute(("ostree remote refs fedora | grep -E %d | grep -E x86_64/silverblue$"):format(sbversion()+1))
+	end,
+
+	["change"] = function()
+		os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/silverblue"):format(sbversion()+1))
+		--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
+	end,
+	
+	["cleanall"] = function()
+		os.execute("rpm-ostree cleanup -p -b -m")
+	end,
+
+	["preview"] = function()
+		os.execute("rpm-ostree upgrade --preview")
+	end,
+
+	["pin"] = function()
+		os.execute("sudo ostree admin pin 0")
+	end,
+
+	["upg"] = function()
+		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
+	end,
+
+	["mesa-drm-freeworld"] = function()
+		os.execute("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg")
+	end
+}
+
+handlers[arg[1]]()
