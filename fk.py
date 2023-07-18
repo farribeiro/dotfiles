@@ -20,14 +20,6 @@ class Fk:
 
 	def n_sdks(self):
 		self.__n_sdks = int(sp.getoutput("flatpak list | sort | uniq -c | grep -E \"[Ss][Dd][Kk]\" | sort -n | wc -l"))
-
-	def n_things(self):
-		self.n_runtimes()
-		self.n_apps()
-		self.n_sdks()
-		self.show_napps()
-		self.show_nruntimes()
-		self.show_nsdks()
 	
 	def show_napps(self):
 		self.n_apps()
@@ -53,6 +45,14 @@ class Fk:
 
 	def size_runtimes (self):
 		return sp.getoutput("cd /var/lib/flatpak/runtime; flatpak list --app --columns=runtime | sort | uniq | xargs du -sh --total")
+
+	def n_things(self):
+		self.n_runtimes()
+		self.n_apps()
+		self.n_sdks()
+		self.show_napps()
+		self.show_nruntimes()
+		self.show_nsdks()
 
 	def __init__ (self):
 		match sys.argv[1]:
