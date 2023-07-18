@@ -82,7 +82,8 @@ class Fk:
 				c = "flatpak remove --delete-data " + sys.argv[2]
 				os.system(c)
 			case "convert-flathub":
-				list = sp.getoutput("flatpak list --app --columns=application | xargs")
+				os.system("flatpak list --app --columns=application > ~/flatpak-list-bk.txt")
+				list = sp.getoutput("cat ~/flatpak-list-bk.txt | xargs")
 				c = "flatpak remove -y " + list
 				os.system(c)
 				c = "flatpak install flathub -y " + list
