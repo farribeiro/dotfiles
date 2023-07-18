@@ -86,7 +86,7 @@ class Fk:
 				list = sp.getoutput("cat ~/flatpak-list-bk.txt | xargs")
 				c = "flatpak remove -y " + list
 				os.system(c)
-				c = "flatpak install flathub -y " + list
+				c = "flatpak install flathub --system -y " + list
 				os.system(c)
 
 f = Fk()
