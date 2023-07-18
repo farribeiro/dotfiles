@@ -45,6 +45,10 @@ handlers = {
 		os.execute("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg")
 	end,
 
+	["in"] = function()
+		os.execute(("rpm-ostree upgrade --install=%s"):format(arg[2]))
+	end,
+
 	["help"] = function()
 		io.write("Options:\n\n",
 			"reinstall:\n  reinstall removed dependencies\n",

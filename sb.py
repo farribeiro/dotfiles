@@ -45,6 +45,9 @@ class sbrebase:
 					os.system("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
 				case "mesa-drm-freeworld":
 					os.system("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg")
+				case "in":
+					c = "rpm-ostree upgrade --install=" + sys.argv[2]
+					os.system(c)
 				case "help":
 					self.showhelp()
 				case _:
