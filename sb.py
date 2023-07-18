@@ -41,7 +41,7 @@ class sbrebase:
 					os.system("rpm-ostree upgrade --preview")
 				case "pin":
 					os.system("sudo ostree admin pin 0")
-				case "upg":
+				case "up":
 					os.system("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
 				case "mesa-drm-freeworld":
 					os.system("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg")

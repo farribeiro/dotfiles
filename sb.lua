@@ -37,7 +37,7 @@ handlers = {
 		os.execute("sudo ostree admin pin 0")
 	end,
 
-	["upg"] = function()
+	["up"] = function()
 		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
 	end,
 
