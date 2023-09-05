@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: GPL-2.0
+-- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
+
 -- Funções Utilitários
 function lerNumero(mensagem)
 	io.write(mensagem)

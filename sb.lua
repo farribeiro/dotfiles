@@ -1,10 +1,7 @@
 #!/usr/bin/lua
 
--- (c) Fábio Rodrigues Ribeiro - http://farribeiro.blogspot.com
-
--- Copying and distribution of this file, with or without modification, are
--- permitted in any medium without royalty provided the copyright notice and this
--- notice are preserved.  This file is offered as-is, without any warranty.
+-- SPDX-License-Identifier: GPL-2.0
+-- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
 function sbversion()
 	local handle = io.popen("rpm -E %fedora")
