@@ -5,9 +5,11 @@
 
 function sbversion()
 	local handle = io.popen("rpm -E %fedora")
+function getoutput(command)
+	local handle = io.popen(command)
 	local result = handle:read("*a")
 	handle:close()
-	return tonumber(result)
+	return result
 end
 
 handlers = {
