@@ -47,12 +47,30 @@ handlers = {
 	end,
 
 	["help"] = function()
-		io.write("Options:\n\n",
-			"reinstall:\n  reinstall removed dependencies\n",
-			"change:\n  change to next version of silverblue\n",
-			"cleanall:\n  clean everting of rpm-ostree\n",
-			"preview:\n  dry run of rpmostree upgrade\n",
-			"pin:\n  Pin the Ostree Deployment\n"
+		io.write([[
+Options:
+
+cb:
+  check new branch
+nextsb:
+  upgrade to next version of silverblue
+up:
+  upgrade the role system to latest commit
+cleanall:
+  clean everting of rpm-ostree
+preview:
+  dry run of rpmostree upgrade
+pin:
+  Pin the Ostree Deployment
+mesa-drm-freeworld:
+  Install RPMFusion's mesa-drm freeworld (need configure rpmfusion repo)
+search-inrpm:
+  Search for installed package
+can:
+  Cancel transaction
+lc:
+  Show last changes in rpm-ostree
+]]
 		)
 	end
 }

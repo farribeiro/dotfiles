@@ -13,12 +13,15 @@ class sbrebase:
 		return int(sp.getoutput("rpm -E %fedora"))
 
 	def showhelp(self):
-		print ("Options:\n\n",
-			"reinstall:\n  reinstall removed dependencies\n",
-			"change:\n  change to next version of silverblue\n",
+		print("Options:\n\n",
+			# "reinstall:\n  reinstall removed dependencies\n",
+			"cb:\n  check new branch\n",
+			"upgsb:\n  upgrade to next version of silverblue\n",
+			"up:\n  upgrade the role system to latest commit\n",
 			"cleanall:\n  clean everting of rpm-ostree\n",
 			"preview:\n  dry run of rpmostree upgrade\n",
-			"pin:\n  Pin the Ostree Deployment"
+			"pin:\n  Pin the Ostree Deployment\n",
+			"mesa-drm-freeworld:\n  install RPMFusion's mesa-drm freeworld (need configure rpmfusion repo)"
 		)
 
 	def __init__(self):
