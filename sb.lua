@@ -4,7 +4,9 @@
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
 function sbversion()
-	local handle = io.popen("rpm -E %fedora")
+	return tonumber(getoutput("rpm -E %fedora"))
+end
+
 function getoutput(command)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
