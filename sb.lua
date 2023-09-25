@@ -39,6 +39,7 @@ handlers = {
 	end,
 
 	["up"] = function()
+		io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
 		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
 	end,
 
