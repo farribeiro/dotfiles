@@ -80,6 +80,9 @@ lc:
 	end
 }
 
+-- Extra functions
+-- handlers["checkbranch"] = handlers['cb']
+
 if not arg or #arg == 0 then
 	handlers["help"]()
 	os.exit(1)
