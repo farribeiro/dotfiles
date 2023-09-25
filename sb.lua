@@ -51,6 +51,12 @@ handlers = {
 		os.execute(("rpm-ostree upgrade --install=%s"):format(arg[2]))
 	end,
 
+	["ostree-unpinall"] = function()
+		for i = 2, 5 do
+			os.execute(("sudo ostree admin pin --unpin %d"):format(i))
+		end
+	end,
+
 	["help"] = function()
 		io.write([[
 Options:
