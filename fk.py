@@ -43,6 +43,9 @@ class Fk:
 	def size_runtimes (self):
 		return sp.getoutput("cd /var/lib/flatpak/runtime; flatpak list --app --columns=runtime | sort | uniq | xargs du -sh --total")
 
+	def export(self):
+		os.system("flatpak list --app --columns=application > ~/flatpak-list-bk.txt")
+
 	def n_things(self):
 		self.n_runtimes()
 		self.n_apps()
@@ -78,8 +81,10 @@ class Fk:
 			case "pg":
 				c = "flatpak remove --delete-data " + sys.argv[2]
 				os.system(c)
+			case "exp":
+				self.export()
 			case "convert-flathub":
-				os.system("flatpak list --app --columns=application > ~/flatpak-list-bk.txt")
+				self.export()
 				list = sp.getoutput("cat ~/flatpak-list-bk.txt | xargs")
 				c = "flatpak remove -y " + list
 				os.system(c)
