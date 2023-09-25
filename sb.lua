@@ -57,6 +57,10 @@ handlers = {
 		end
 	end,
 
+	["lc"] = function()
+		os.execute("rpm-ostree db diff")
+	end,
+
 	["help"] = function()
 		io.write([[
 Options:
