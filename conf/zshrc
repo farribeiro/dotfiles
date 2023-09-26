@@ -215,7 +215,7 @@ alias rm='rm -iv'
 alias sb-clean="rpm-ostree cleanup -p -b -m"
 alias sb-pin="sudo ostree admin pin 0"
 alias sb-preview="rpm-ostree upgrade --preview"
-alias sb-upg="rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf5 upgrade -y"
+alias sb-up="rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf5 up -y"
 alias sed="sed -r"
 # alias smbrefresh="sudo \"service smbd restart;service nmbd restart\""
 # alias svim="sudo vim"
@@ -314,13 +314,6 @@ lbrycontentstats (){
 	cd ~/git/static-exp &&\
 	python lbry-host-statics.py &&\
 	python -m http.server
-}
-
-sb-upg (){
-	# rpm-ostree refresh-md -f &&\
-	rpm-ostree upgrade &&\
-	flatpak update -y &&\
-	toolbox run sudo dnf update -y
 }
 
 git-pullall(){
