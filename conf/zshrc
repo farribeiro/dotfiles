@@ -202,7 +202,7 @@ alias fk-up="flatpak update"
 # alias gcc='gcc -Wall'
 alias hsize="df -h | grep /home"
 alias ls="ls -lahtF --group-directories-first --color=always"
-alias lsfor="\ls -1"
+alias ls2for="\ls -1"
 # alias mem_clear='sudo mem_clear'
 alias mkdir='mkdir -pv'
 # alias mozjpeg="/opt/libmozjpeg/bin/jpegtran"
