@@ -192,16 +192,14 @@ alias cp="cp -a"
 alias epc="java -jar /opt/epubcheck/epubcheck.jar -m opf -m xhtml -v 3.0"
 # alias fedorp="sudo \"package-cleanup --leaves -q | xargs yum remove -y;package-cleanup --orphans -q | xargs yum remove -y\""
 alias fk-b="flatpak-builder --install --user --force-clean build-dir $1"
-alias fk-in="flatpak install flathub $1"
-alias fk-pg="flatpak remove --unused --delete-data $1"
+alias fk-in="flatpak install flathub"
+alias fk-pg="flatpak remove --unused --delete-data"
 alias fk-purge="flatpak remove --unused --delete-data"
 alias fk-repair="flatpak repair --user && flatpak repair"
-alias fk-rm="flatpak remove --delete-data $1"
+alias fk-rm="flatpak remove --delete-data"
 alias fk-up="flatpak update"
 # alias ff="~/firefox/firefox"
 # alias gcc='gcc -Wall'
-alias gingadd="echo \"$1\" >> .gitignore"
-alias homeloc="locate $HOME | egrep $1"
 alias hsize="df -h | grep /home"
 alias ls="ls -lahtF --group-directories-first --color=always"
 alias lsfor="\ls -1"
@@ -333,6 +331,12 @@ mt-gen(){
 	cd ~/net.minetest.Minetest ;
 	flatpak-builder --user --install --force-clean build-dir net.minetest.Minetest.yaml
 }
+
+gingadd(){ echo "$@" >> .gitignore }
+
+homeloc(){locate $HOME | egrep $@ }
+
+nvim(){flatpak run io.neovim.nvim $@ }
 
 export DOCKER_HOST=Unix:///run/user/$UID/podman/podman.sock
 
