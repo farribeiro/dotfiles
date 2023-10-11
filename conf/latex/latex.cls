@@ -30,10 +30,6 @@
 	]{babel}
 
 \usepackage[
-	utf8
-	]{inputenc}
-
-\usepackage[
 	bottom=2cm,
 	top=3cm,
 	left=3cm,
