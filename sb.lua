@@ -115,8 +115,10 @@ oua, ostree-unpinall:
 
 -- Extra functions
 -- handlers["checkbranch"] = handlers['cb']
+handlers["oua"] = handlers["ostree-unpinall"]
 handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
+handlers["pw"] = handlers["preview"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
