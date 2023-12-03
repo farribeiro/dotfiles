@@ -21,6 +21,10 @@ handlers = {
 		os.execute(("ostree remote refs fedora | grep -E %d | grep -E x86_64/silverblue$"):format(sbversion()+1))
 	end,
 
+	["kv"] = function()
+		io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
+	end,
+
 	["nextsb"] = function()
 		os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+1))
 		--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
@@ -39,8 +43,8 @@ handlers = {
 	end,
 
 	["up"] = function()
-		io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
 		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
+		handlers["kv"]()
 	end,
 
 	["mesa-drm-freeworld"] = function()
