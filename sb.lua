@@ -55,6 +55,14 @@ handlers = {
 		os.execute(("rpm-ostree upgrade --install=%s"):format(arg[2]))
 	end,
 
+	["search"] = function()
+		os.execute(("rpm-ostree search %s"):format(arg[2]))
+	end,
+
+	["search-inrpm"] = function()
+		os.execute(("rpm -qa | grep -E %s"):format(arg[2]))
+	end,
+
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do
 			os.execute(("sudo ostree admin pin --unpin %d"):format(i))
@@ -85,6 +93,8 @@ mesa-drm-freeworld:
   Install RPMFusion's mesa-drm freeworld (need configure rpmfusion repo)
 search-inrpm:
   Search for installed package
+s, search:
+  Search for package
 can:
   Cancel transaction
 lc:
@@ -97,6 +107,7 @@ lc:
 -- Extra functions
 -- handlers["checkbranch"] = handlers['cb']
 handlers["c"] = handlers["clean"]
+handlers["s"] = handlers["search"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
