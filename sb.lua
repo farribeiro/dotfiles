@@ -31,7 +31,7 @@ handlers = {
 	end,
 
 	["clean"] = function()
-		os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\"")
+		os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all")
 	end,
 
 	["preview"] = function()
