@@ -43,8 +43,8 @@ handlers = {
 	end,
 
 	["up"] = function()
-		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
 		handlers["kv"]()
+		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf5 update -y")
 	end,
 
 	["mesa-drm-freeworld"] = function()
