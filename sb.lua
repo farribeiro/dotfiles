@@ -21,13 +21,17 @@ handlers = {
 		os.execute(("ostree remote refs fedora | grep -E %d | grep -E x86_64/silverblue$"):format(sbversion()+1))
 	end,
 
+	["kv"] = function()
+		io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
+	end,
+
 	["nextsb"] = function()
 		os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+1))
 		--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 	end,
-	
-	["cleanall"] = function()
-		os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\"")
+
+	["clean"] = function()
+		os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all")
 	end,
 
 	["preview"] = function()
@@ -39,8 +43,13 @@ handlers = {
 	end,
 
 	["up"] = function()
-		io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
-		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf update -y")
+		handlers["kv"]()
+		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf5 update -y")
+	end,
+
+	["c-up"] = function()
+		handlers["clean"]()
+		handlers["up"]()
 	end,
 
 	["mesa-drm-freeworld"] = function()
@@ -49,6 +58,14 @@ handlers = {
 
 	["in"] = function()
 		os.execute(("rpm-ostree upgrade --install=%s"):format(arg[2]))
+	end,
+
+	["search"] = function()
+		os.execute(("rpm-ostree search %s"):format(arg[2]))
+	end,
+
+	["search-inrpm"] = function()
+		os.execute(("rpm -qa | grep -E %s"):format(arg[2]))
 	end,
 
 	["ostree-unpinall"] = function()
@@ -66,25 +83,31 @@ handlers = {
 Options:
 
 cb:
-  check new branch
+  Check new branch
 nextsb:
-  upgrade to next version of silverblue
+  Upgrade to next version of silverblue
 up:
-  upgrade the role system to latest commit
-cleanall:
-  clean everting of rpm-ostree
-preview:
-  dry run of rpmostree upgrade
+  Upgrade the role system to latest commit
+in:
+  Install a layered package
+c, clean:
+  Cleanup ostree based metadatas and cache
+c-up:
+  Cleanup ostree based metadatas, cache and upgrade the role system to latest commit
+pw, preview:
+  Dry-run of rpmostree upgrade
 pin:
   Pin the Ostree Deployment
 mesa-drm-freeworld:
   Install RPMFusion's mesa-drm freeworld (need configure rpmfusion repo)
 search-inrpm:
   Search for installed package
-can:
-  Cancel transaction
+s, search:
+  Search for package
 lc:
   Show last changes in rpm-ostree
+oua, ostree-unpinall:
+  Unpin all pinned commits
 ]]
 		)
 	end
@@ -92,6 +115,10 @@ lc:
 
 -- Extra functions
 -- handlers["checkbranch"] = handlers['cb']
+handlers["oua"] = handlers["ostree-unpinall"]
+handlers["c"] = handlers["clean"]
+handlers["s"] = handlers["search"]
+handlers["pw"] = handlers["preview"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
