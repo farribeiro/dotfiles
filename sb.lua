@@ -25,8 +25,8 @@ handlers = {
 		os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+1))
 		--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 	end,
-	
-	["cleanall"] = function()
+
+	["clean"] = function()
 		os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\"")
 	end,
 
@@ -92,6 +92,7 @@ lc:
 
 -- Extra functions
 -- handlers["checkbranch"] = handlers['cb']
+handlers["c"] = handlers["clean"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
