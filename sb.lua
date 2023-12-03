@@ -47,6 +47,11 @@ handlers = {
 		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf5 update -y")
 	end,
 
+	["c-up"] = function()
+		handlers["clean"]()
+		handlers["up"]()
+	end,
+
 	["mesa-drm-freeworld"] = function()
 		os.execute("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg")
 	end,
