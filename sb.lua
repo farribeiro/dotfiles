@@ -83,15 +83,19 @@ handlers = {
 Options:
 
 cb:
-  check new branch
+  Check new branch
 nextsb:
-  upgrade to next version of silverblue
+  Upgrade to next version of silverblue
 up:
-  upgrade the role system to latest commit
-cleanall:
-  clean everting of rpm-ostree
-preview:
-  dry run of rpmostree upgrade
+  Upgrade the role system to latest commit
+in:
+  Install a layered package
+c, clean:
+  Cleanup ostree based metadatas and cache
+c-up:
+  Cleanup ostree based metadatas, cache and upgrade the role system to latest commit
+pw, preview:
+  Dry-run of rpmostree upgrade
 pin:
   Pin the Ostree Deployment
 mesa-drm-freeworld:
@@ -100,10 +104,10 @@ search-inrpm:
   Search for installed package
 s, search:
   Search for package
-can:
-  Cancel transaction
 lc:
   Show last changes in rpm-ostree
+oua, ostree-unpinall:
+  Unpin all pinned commits
 ]]
 		)
 	end
