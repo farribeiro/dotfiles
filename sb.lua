@@ -52,7 +52,8 @@ handlers = {
 
 	["up"] = function()
 		kv()
-		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf5 update -y")
+		os.execute("rpm-ostree upgrade && flatpak update -y")
+		-- && toolbox run sudo dnf5 update -y")
 	end,
 
 	["c-up"] = function()
