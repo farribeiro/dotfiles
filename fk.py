@@ -83,11 +83,13 @@ class Fk:
 				os.system(c)
 			case "exp":
 				self.export()
-			case "convert-flathub":
+			case "remove-fedora":
 				self.export()
 				list = sp.getoutput("cat ~/flatpak-list-bk.txt | xargs")
 				c = "flatpak remove -y " + list
 				os.system(c)
+			case "convert-flathub":
+				self.remove-fedora()
 				c = "flatpak install flathub --system -y " + list
 				os.system(c)
 
