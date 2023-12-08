@@ -9,7 +9,13 @@ handlers = {
 	end,
 
 	["in"] = function()
-		os.execute("rpm-ostree upgrade --install=make --install=libtirpc --install=libtirpc-devel --install=policycoreutils-python-utils --install=gcc --install=python3-fedora --install=neofetch && systemctl reboot")
+		os.execute([[rpm-ostree upgrade\
+		--install=make\
+		--install=libtirpc-devel\
+		--install=gcc\
+		--install=python3-fedora\
+		--install=neofetch &&\
+		systemctl reboot]])
 	end,
 
 	["kr"] = function()
