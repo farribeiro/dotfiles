@@ -33,7 +33,7 @@ handlers = {
 		rebasesb(0)
 	end,
 
-	["nextsb"] = function()
+	["nexttest"] = function()
 		rebasesb(1)
 		--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 	end,
@@ -92,7 +92,9 @@ Options:
 
 cb:
   Check new branch
-nextsb:
+testsb:
+  Rebase to testing branch
+nt, nexttest:
   Upgrade to next version of silverblue
 up:
   Upgrade the role system to latest commit
@@ -127,6 +129,7 @@ handlers["oua"] = handlers["ostree-unpinall"]
 handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
+handlers["nt"] = handlers["nexttest"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
