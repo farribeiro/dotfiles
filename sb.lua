@@ -14,6 +14,10 @@ function getoutput(command)
 	return result
 end
 
+function kv ()
+	io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
+end,
+
 function rebasesb(plus)
 	os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+plus))
 end
@@ -26,8 +30,6 @@ handlers = {
 	end,
 
 	["testsb"] = function()
-	["kv"] = function()
-		io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
 		rebasesb(0)
 	end,
 
@@ -49,7 +51,7 @@ handlers = {
 	end,
 
 	["up"] = function()
-		handlers["kv"]()
+		kv()
 		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf5 update -y")
 	end,
 
