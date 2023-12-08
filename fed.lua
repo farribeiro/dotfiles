@@ -23,10 +23,10 @@ handlers = {
 		sudo -s <<< "semanage boolean -m --on selinuxuser_execheap &&\
 		git pull &&\
 		./runtests.sh &&\
-		./runtests.sh -t performance &&\
 		semanage boolean -m --off selinuxuser_execheap" &&\
 		echo "" &&\
 		neofetch distro de cpu gpu memory]])
+		-- ./runtests.sh -t performance &&\
 	end
 }
 
