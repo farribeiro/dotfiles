@@ -9,7 +9,13 @@ handlers = {
 	end,
 
 	["in"] = function()
-		os.execute("rpm-ostree upgrade --install=make --install=libtirpc --install=libtirpc-devel --install=policycoreutils-python-utils --install=gcc --install=python3-fedora --install=neofetch && systemctl reboot")
+		os.execute([[rpm-ostree upgrade\
+		--install=make\
+		--install=libtirpc-devel\
+		--install=gcc\
+		--install=python3-fedora\
+		--install=neofetch &&\
+		systemctl reboot]])
 	end,
 
 	["kr"] = function()
@@ -17,10 +23,8 @@ handlers = {
 		sudo -s <<< "semanage boolean -m --on selinuxuser_execheap &&\
 		git pull &&\
 		./runtests.sh &&\
-		./runtests.sh -t performance &&\
-		semanage boolean -m --off selinuxuser_execheap" &&\
-		echo "" &&\
-		neofetch distro de cpu gpu memory]])
+		semanage boolean -m --off selinuxuser_execheap"]])
+		-- ./runtests.sh -t performance &&\
 	end
 }
 
