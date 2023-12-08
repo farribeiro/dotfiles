@@ -14,6 +14,14 @@ function getoutput(command)
 	return result
 end
 
+function kv ()
+	io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
+end,
+
+function rebasesb(plus)
+	os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+plus))
+end
+
 handlers = {
 -- ["reinstall"] = function() os.execute("rpm-ostree upgrade --install=flatpak-builder") end
 
@@ -21,12 +29,12 @@ handlers = {
 		os.execute(("ostree remote refs fedora | grep -E %d | grep -E x86_64/silverblue$"):format(sbversion()+1))
 	end,
 
-	["kv"] = function()
-		io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
+	["testsb"] = function()
+		rebasesb(0)
 	end,
 
-	["nextsb"] = function()
-		os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+1))
+	["nexttest"] = function()
+		rebasesb(1)
 		--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 	end,
 
@@ -43,8 +51,9 @@ handlers = {
 	end,
 
 	["up"] = function()
-		handlers["kv"]()
-		os.execute("rpm-ostree upgrade && flatpak update -y && toolbox run sudo dnf5 update -y")
+		kv()
+		os.execute("rpm-ostree upgrade && flatpak update -y")
+		-- && toolbox run sudo dnf5 update -y")
 	end,
 
 	["c-up"] = function()
@@ -84,7 +93,9 @@ Options:
 
 cb:
   Check new branch
-nextsb:
+testsb:
+  Rebase to testing branch
+nt, nexttest:
   Upgrade to next version of silverblue
 up:
   Upgrade the role system to latest commit
@@ -119,6 +130,7 @@ handlers["oua"] = handlers["ostree-unpinall"]
 handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
+handlers["nt"] = handlers["nexttest"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
