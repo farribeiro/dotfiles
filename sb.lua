@@ -16,7 +16,7 @@ end
 
 function kv ()
 	io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
-end,
+end
 
 function rebasesb(plus)
 	os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+plus))
