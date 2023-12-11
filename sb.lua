@@ -14,6 +14,11 @@ local function getoutput(command)
 	return result
 end
 
+local function lastdeploy ()
+	local output = getoutput("cat /etc/os-release")
+	io.write(("Data do último deploy: %s"):format(output:match("VERSION=\"(.-)\"")))
+end
+
 	io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
 local function kv ()
 end
@@ -52,6 +57,7 @@ local handlers = {
 
 	["up"] = function()
 		kv()
+		lastdeploy()
 		os.execute("rpm-ostree upgrade && flatpak update -y")
 		-- && toolbox run sudo dnf5 update -y")
 	end,
@@ -87,6 +93,11 @@ local handlers = {
 		os.execute("rpm-ostree db diff")
 	end,
 
+	["lastdeploy"] = function ()
+		lastdeploy()
+		io.write("\n")
+	end,
+
 	["help"] = function()
 		io.write([[
 Options:
@@ -117,6 +128,8 @@ s, search:
   Search for package
 lc:
   Show last changes in rpm-ostree
+ld, lastdeploy:
+  Show the last deploy in Silverblue
 oua, ostree-unpinall:
   Unpin all pinned commits
 ]]
@@ -131,6 +144,7 @@ handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
 handlers["nt"] = handlers["nexttest"]
+handlers["ld"] = handlers["lastdeploy"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
