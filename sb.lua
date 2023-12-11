@@ -3,26 +3,26 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
-function sbversion()
+local function sbversion()
 	return tonumber(getoutput("rpm -E %fedora"))
 end
 
-function getoutput(command)
+local function getoutput(command)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
 	handle:close()
 	return result
 end
 
-function kv ()
 	io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
+local function kv ()
 end
 
-function rebasesb(plus)
+local function rebasesb(plus)
 	os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+plus))
 end
 
-handlers = {
+local handlers = {
 -- ["reinstall"] = function() os.execute("rpm-ostree upgrade --install=flatpak-builder") end
 
 	["cb"] = function()
