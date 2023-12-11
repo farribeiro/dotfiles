@@ -75,6 +75,8 @@ class Fk:
 				os.system(c)
 			case "up":
 				os.system("flatpak update")
+			case "fup":
+				os.system("flatpak update --no-static-deltas")
 			case "in":
 				c = "flatpak install flathub " + sys.argv[2]
 				os.system(c)
