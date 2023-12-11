@@ -67,14 +67,16 @@ class Fk:
 				print ("Apps installed:\n")
 				print (self.list_apps())
 			case "repair":
-				os.system("flatpak repair --user && flatpak repair")
+				os.system("flatpak repair --user && sudo flatpak repair")
 			case "cleanall":
 				os.system("flatpak remove --unused --delete-data")
 			case "b":
-				c = "flatpak-builder --install --user --force-clean build-dir " + sys.argv[2]
+				c = "flatpak run org.flatpak.Builder --install --user --force-clean build-dir " + sys.argv[2]
 				os.system(c)
 			case "up":
 				os.system("flatpak update")
+			case "fup":
+				os.system("flatpak update --no-static-deltas")
 			case "in":
 				c = "flatpak install flathub " + sys.argv[2]
 				os.system(c)
