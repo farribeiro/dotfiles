@@ -19,8 +19,8 @@ local function lastdeploy ()
 	io.write(("Data do último deploy: %s"):format(output:match("VERSION=\"(.-)\"")))
 end
 
-	io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
 local function kv ()
+	io.write (("Versão do kernel: %s"):format(getoutput("uname -r")))
 end
 
 local function rebasesb(plus)
@@ -58,6 +58,7 @@ local handlers = {
 	["up"] = function()
 		kv()
 		lastdeploy()
+		io.write("\n\n")
 		os.execute("rpm-ostree upgrade && flatpak update -y")
 		-- && toolbox run sudo dnf5 update -y")
 	end,
