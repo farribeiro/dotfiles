@@ -3,26 +3,31 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
-function sbversion()
+local function sbversion()
 	return tonumber(getoutput("rpm -E %fedora"))
 end
 
-function getoutput(command)
+local function getoutput(command)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
 	handle:close()
 	return result
 end
 
-function kv ()
-	io.write (("Versão do kernel: %s\n"):format(getoutput("uname -r")))
+local function lastdeploy ()
+	local output = getoutput("cat /etc/os-release")
+	io.write(("Data do último deploy: %s"):format(output:match("VERSION=\"(.-)\"")))
 end
 
-function rebasesb(plus)
+local function kv ()
+	io.write (("Versão do kernel: %s"):format(getoutput("uname -r")))
+end
+
+local function rebasesb(plus)
 	os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+plus))
 end
 
-handlers = {
+local handlers = {
 -- ["reinstall"] = function() os.execute("rpm-ostree upgrade --install=flatpak-builder") end
 
 	["cb"] = function()
@@ -52,6 +57,8 @@ handlers = {
 
 	["up"] = function()
 		kv()
+		lastdeploy()
+		io.write("\n\n")
 		os.execute("rpm-ostree upgrade && flatpak update -y")
 		-- && toolbox run sudo dnf5 update -y")
 	end,
@@ -87,6 +94,11 @@ handlers = {
 		os.execute("rpm-ostree db diff")
 	end,
 
+	["lastdeploy"] = function ()
+		lastdeploy()
+		io.write("\n")
+	end,
+
 	["help"] = function()
 		io.write([[
 Options:
@@ -117,6 +129,8 @@ s, search:
   Search for package
 lc:
   Show last changes in rpm-ostree
+ld, lastdeploy:
+  Show the last deploy in Silverblue
 oua, ostree-unpinall:
   Unpin all pinned commits
 ]]
@@ -131,6 +145,7 @@ handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
 handlers["nt"] = handlers["nexttest"]
+handlers["ld"] = handlers["lastdeploy"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
