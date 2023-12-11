@@ -67,7 +67,7 @@ class Fk:
 				print ("Apps installed:\n")
 				print (self.list_apps())
 			case "repair":
-				os.system("flatpak repair --user && flatpak repair")
+				os.system("flatpak repair --user && sudo flatpak repair")
 			case "cleanall":
 				os.system("flatpak remove --unused --delete-data")
 			case "b":
