@@ -46,6 +46,12 @@ class Fk:
 	def export(self):
 		os.system("flatpak list --app --columns=application > ~/flatpak-list-bk.txt")
 
+	def remove_fedora(self):
+		self.export()
+		self.exp_list = sp.getoutput("cat ~/flatpak-list-bk.txt | xargs")
+		c = "flatpak remove -y " + list
+		os.system(c)
+
 	def n_things(self):
 		self.n_runtimes()
 		self.n_apps()
@@ -86,13 +92,10 @@ class Fk:
 			case "exp":
 				self.export()
 			case "remove-fedora":
-				self.export()
-				list = sp.getoutput("cat ~/flatpak-list-bk.txt | xargs")
-				c = "flatpak remove -y " + list
-				os.system(c)
+				self.remove_fedora()
 			case "convert-flathub":
-				self.remove-fedora()
-				c = "flatpak install flathub --system -y " + list
+				self.remove_fedora()
+				c = "flatpak install flathub --system -y " + self.exp_list
 				os.system(c)
 
 f = Fk()
