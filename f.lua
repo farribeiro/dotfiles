@@ -3,6 +3,10 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
+local function sbversion()
+	return tonumber(getoutput("rpm -E %fedora"))
+end
+
 handlers = {
 	["off"] = function()
 		os.execute("semanage boolean -m --off selinuxuser_execheap")
@@ -21,16 +25,16 @@ handlers = {
 	end,
 
 	["ok"] = function()
-		kv = tonumber(arg[2]:match("(%d)+"))
+		kv = tonumber(string.match(arg[2], "(%d)+"))
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test &&\
-		koji download-build --arch=$(uname -m) kernel-%s-300.fc39 &&\ 
+		koji download-build --arch=$(uname -m) kernel-%s-300.fc%d &&\ 
 		rpm-ostree override replace\
 		kernel-modules-core-%d*.rpm\
 		kernel-core-%d*.rpm\
 		kernel-modules-%d*.rpm\
 		kernel-%d*.rpm\
-		kernel-modules-extra-6*.rpm]]):format(arg[2], kv, kv, kv, kv))
+		kernel-modules-extra-6*.rpm]]):format(arg[2], sbversion(), kv, kv, kv, kv))
 	end,
 
 	["kr"] = function()
