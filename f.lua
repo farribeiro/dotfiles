@@ -14,9 +14,21 @@ handlers = {
 		--install=libtirpc-devel\
 		--install=gcc\
 		--install=python3-fedora\
+		--install=koji\
 		--install=fastfetch &&\
 		cd ~ ; git clone https://pagure.io/kernel-tests.git &&\
 		systemctl reboot]])
+	end,
+
+	["ok"] = function()
+		os.execute(([[mkdir -p ~/work/kernel_test &&\
+		cd ~/work/kernel_test &&\
+		koji download-build --arch=$(uname -m) %s &&\ 
+		sudo rpm-ostree override replace kernel-modules-core-6*.rpm\
+		kernel-core-6*.rpm\
+		kernel-modules-6*.rpm\
+		kernel-6*.rpm\
+		kernel-modules-extra-6*.rpm]]):format(arg[2]))
 	end,
 
 	["kr"] = function()
