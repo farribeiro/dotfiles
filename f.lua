@@ -7,6 +7,13 @@ local function sbversion()
 	return tonumber(getoutput("rpm -E %fedora"))
 end
 
+local function getoutput(command)
+	local handle = io.popen(command)
+	local result = handle:read("*a")
+	handle:close()
+	return result
+end
+
 handlers = {
 	["off"] = function()
 		os.execute("semanage boolean -m --off selinuxuser_execheap")
