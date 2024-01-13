@@ -21,6 +21,7 @@ handlers = {
 	end,
 
 	["ok"] = function()
+		kv = tonumber(arg[2]:match("(%d)+"))
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test &&\
 		koji download-build --arch=$(uname -m) kernel-%s-300.fc39 &&\ 
@@ -29,7 +30,7 @@ handlers = {
 		kernel-core-%d*.rpm\
 		kernel-modules-%d*.rpm\
 		kernel-%d*.rpm\
-		kernel-modules-extra-6*.rpm]]):format(arg[2], tonumber(arg[2]:match("(%d)+"))))
+		kernel-modules-extra-6*.rpm]]):format(arg[2], kv, kv, kv, kv))
 	end,
 
 	["kr"] = function()
