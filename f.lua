@@ -23,7 +23,7 @@ handlers = {
 	["ok"] = function()
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test &&\
-		koji download-build --arch=$(uname -m) %s &&\ 
+		koji download-build --arch=$(uname -m) kernel-%s-300.fc39 &&\ 
 		sudo rpm-ostree override replace kernel-modules-core-6*.rpm\
 		kernel-core-6*.rpm\
 		kernel-modules-6*.rpm\
