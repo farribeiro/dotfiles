@@ -14,7 +14,8 @@ handlers = {
 		--install=libtirpc-devel\
 		--install=gcc\
 		--install=python3-fedora\
-		--install=neofetch &&\
+		--install=fastfetch &&\
+		cd ~ ; git clone https://pagure.io/kernel-tests.git &&\
 		systemctl reboot]])
 	end,
 
