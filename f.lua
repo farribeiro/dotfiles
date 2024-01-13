@@ -32,7 +32,7 @@ handlers = {
 	end,
 
 	["ok"] = function()
-		kv = tonumber(string.match(arg[2], "(%d)+"))
+		kv = tonumber(arg[2]:match("^(%d)"))
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test &&\
 		koji download-build --arch=$(uname -m) kernel-%s-300.fc%d &&\ 
