@@ -45,7 +45,7 @@ handlers = {
 		kernel-core-%d*.rpm\
 		kernel-modules-%d*.rpm\
 		kernel-%d*.rpm\
-		kernel-modules-extra-6*.rpm]]):format(sbarch, arg[2], sbversion(), kv, kv, kv, kv))
+		kernel-modules-extra-6*.rpm]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv))
 	end,
 
 	["kr"] = function()
