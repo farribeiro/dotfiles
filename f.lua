@@ -14,6 +14,10 @@ local function sbversion()
 	return tonumber(getoutput("rpm -E %fedora"))
 end
 
+local function sbarch()
+	return getoutput("uname -m")
+end
+
 handlers = {
 	["off"] = function()
 		os.execute("semanage boolean -m --off selinuxuser_execheap")
@@ -35,13 +39,13 @@ handlers = {
 		kv = tonumber(arg[2]:match("^(%d)"))
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test &&\
-		koji download-build --arch=$(uname -m) kernel-%s-300.fc%d &&\ 
+		koji download-build --arch=%s kernel-%s-300.fc%d &&\ 
 		rpm-ostree override replace\
 		kernel-modules-core-%d*.rpm\
 		kernel-core-%d*.rpm\
 		kernel-modules-%d*.rpm\
 		kernel-%d*.rpm\
-		kernel-modules-extra-6*.rpm]]):format(arg[2], sbversion(), kv, kv, kv, kv))
+		kernel-modules-extra-6*.rpm]]):format(sbarch, arg[2], sbversion(), kv, kv, kv, kv))
 	end,
 
 	["kr"] = function()
