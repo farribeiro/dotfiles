@@ -15,7 +15,7 @@ local function sbversion()
 end
 
 local function sbarch()
-	return getoutput("uname -m")
+	return getoutput("uname -m") .. " \ "
 end
 
 handlers = {
@@ -38,16 +38,16 @@ handlers = {
 	["ok"] = function()
 		kv = tonumber(arg[2]:match("^(%d)"))
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
-		cd ~/work/kernel_test &&\
+		cd ~/work/kernel_test ;\
 		koji download-build --arch=%s kernel-%s.fc%d &&\ 
-		rpm-ostree override replace\
-		kernel-modules-core-%d*.rpm\
-		kernel-core-%d*.rpm\
-		kernel-modules-%d*.rpm\
-		kernel-%d*.rpm\
-		kernel-modules-extra-6*.rpm &&\
+		rpm-ostree override replace \
+		kernel-modules-core-%d*.rpm \
+		kernel-core-%d*.rpm \
+		kernel-modules-%d*.rpm \
+		kernel-%d*.rpm \
+		kernel-modules-extra-%d*.rpm &&\
 		cd ~; rm -rf work &&\
-		systemctl reboot]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv))
+		systemctl reboot]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv, kv))
 	end,
 
 	["kr"] = function()
