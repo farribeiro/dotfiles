@@ -18,7 +18,7 @@ local function sbarch()
 	return getoutput("uname -m"):gsub("[\n\r]", "")
 end
 
-handlers = {
+local handlers = {
 	["off"] = function()
 		os.execute("semanage boolean -m --off selinuxuser_execheap")
 	end,
@@ -36,7 +36,7 @@ handlers = {
 	end,
 
 	["ok"] = function()
-		kv = tonumber(arg[2]:match("^(%d)"))
+		local kv = tonumber(arg[2]:match("^(%d)"))
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test ;\
 		koji download-build --arch=%s kernel-%s.fc%d &&\ 
