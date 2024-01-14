@@ -1,7 +1,7 @@
 #!/usr/bin/lua
 
 -- SPDX-License-Identifier: GPL-2.0
--- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
+-- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
 local function getoutput(command)
 	local handle = io.popen(command)
