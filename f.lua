@@ -1,7 +1,22 @@
 #!/usr/bin/lua
 
 -- SPDX-License-Identifier: GPL-2.0
--- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
+-- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
+
+local function getoutput(command)
+	local handle = io.popen(command)
+	local result = handle:read("*a")
+	handle:close()
+	return result
+end
+
+local function sbversion()
+	return tonumber(getoutput("rpm -E %fedora"))
+end
+
+local function sbarch()
+	return getoutput("uname -m"):gsub("[\n\r]", "")
+end
 
 handlers = {
 	["off"] = function()
@@ -14,8 +29,25 @@ handlers = {
 		--install=libtirpc-devel\
 		--install=gcc\
 		--install=python3-fedora\
-		--install=neofetch &&\
+		--install=koji\
+		--install=fastfetch &&\
+		cd ~ ; git clone https://pagure.io/kernel-tests.git &&\
 		systemctl reboot]])
+	end,
+
+	["ok"] = function()
+		kv = tonumber(arg[2]:match("^(%d)"))
+		os.execute(([[mkdir -p ~/work/kernel_test &&\
+		cd ~/work/kernel_test ;\
+		koji download-build --arch=%s kernel-%s.fc%d &&\ 
+		rpm-ostree override replace \
+		kernel-modules-core-%d*.rpm \
+		kernel-core-%d*.rpm \
+		kernel-modules-%d*.rpm \
+		kernel-%d*.rpm \
+		kernel-modules-extra-%d*.rpm &&\
+		cd ~; rm -rf work &&\
+		systemctl reboot]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv, kv))
 	end,
 
 	["kr"] = function()
