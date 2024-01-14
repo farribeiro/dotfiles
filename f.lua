@@ -15,7 +15,7 @@ local function sbversion()
 end
 
 local function sbarch()
-	return getoutput("uname -m") .. " \ "
+	return getoutput("uname -m"):gsub("[\n\r]", "")
 end
 
 handlers = {
