@@ -35,6 +35,10 @@ local handlers = {
 		systemctl reboot]])
 	end,
 
+	["ck"] = function()
+		os.execute(([[koji list-builds --package=kernel --pattern "kernel-%s*"]]):format(arg[2]))
+	end,
+
 	["ok"] = function()
 		local kv = tonumber(arg[2]:match("^(%d)"))
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
