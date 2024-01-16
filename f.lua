@@ -43,7 +43,8 @@ local handlers = {
 		local kv = tonumber(arg[2]:match("^(%d)"))
 		os.execute(([[mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test ;\
-		koji download-build --arch=%s kernel-%s.fc%d &&\ 
+		koji download-build --arch=%s kernel-%s.fc%d &&\
+		rpm-ostree upgrade &&\
 		rpm-ostree override replace \
 		kernel-modules-core-%d*.rpm \
 		kernel-core-%d*.rpm \
