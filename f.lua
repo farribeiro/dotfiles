@@ -37,12 +37,13 @@ local handlers = {
 
 	["ck"] = function()
 		os.execute(([[koji list-builds --package=kernel --pattern "kernel-%s*" | grep fc%d]]):format(arg[2], sbversion()))
-		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8 ")
+		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
 	end,
 
 	["ok"] = function()
 		local kv = tonumber(arg[2]:match("^(%d)"))
-		os.execute(([[mkdir -p ~/work/kernel_test &&\
+		os.execute(([[cd ~; rm -rf work &&\
+		mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test ;\
 		koji download-build --arch=%s kernel-%s.fc%d &&\
 		rpm-ostree upgrade &&\
@@ -51,9 +52,7 @@ local handlers = {
 		kernel-core-%d*.rpm \
 		kernel-modules-%d*.rpm \
 		kernel-%d*.rpm \
-		kernel-modules-extra-%d*.rpm &&\
-		cd ~; rm -rf work &&\
-		systemctl reboot]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv, kv))
+		kernel-modules-extra-%d*.rpm]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv, kv))
 	end,
 
 	["kr"] = function()
