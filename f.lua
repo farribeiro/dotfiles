@@ -18,7 +18,7 @@ local function sbarch()
 	return getoutput("uname -m"):gsub("[\n\r]", "")
 end
 
-handlers = {
+local handlers = {
 	["off"] = function()
 		os.execute("semanage boolean -m --off selinuxuser_execheap")
 	end,
@@ -35,19 +35,24 @@ handlers = {
 		systemctl reboot]])
 	end,
 
+	["ck"] = function()
+		os.execute(([[koji list-builds --package=kernel --pattern "kernel-%s*" | grep fc%d]]):format(arg[2], sbversion()))
+		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
+	end,
+
 	["ok"] = function()
-		kv = tonumber(arg[2]:match("^(%d)"))
-		os.execute(([[mkdir -p ~/work/kernel_test &&\
+		local kv = tonumber(arg[2]:match("^(%d)"))
+		os.execute(([[cd ~; rm -rf work &&\
+		mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test ;\
-		koji download-build --arch=%s kernel-%s.fc%d &&\ 
+		koji download-build --arch=%s kernel-%s.fc%d &&\
+		rpm-ostree upgrade &&\
 		rpm-ostree override replace \
 		kernel-modules-core-%d*.rpm \
 		kernel-core-%d*.rpm \
 		kernel-modules-%d*.rpm \
 		kernel-%d*.rpm \
-		kernel-modules-extra-%d*.rpm &&\
-		cd ~; rm -rf work &&\
-		systemctl reboot]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv, kv))
+		kernel-modules-extra-%d*.rpm]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv, kv))
 	end,
 
 	["kr"] = function()
