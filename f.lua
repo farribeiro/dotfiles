@@ -56,7 +56,7 @@ local handlers = {
 
 		table.insert(kp, ("kernel-%d*"):format(kv))
 
-		print(([[cd ~; rm -rf work &&\
+		os.execute(([[cd ~; rm -rf work &&\
 		mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test ;\
 		koji download-build --arch=%s kernel-%s.fc%d &&\
