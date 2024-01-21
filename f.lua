@@ -42,17 +42,26 @@ local handlers = {
 
 	["ok"] = function()
 		local kv = tonumber(arg[2]:match("^(%d)"))
-		os.execute(([[cd ~; rm -rf work &&\
+
+		local kp = {
+			"modules-core",
+			"core",
+			"modules",
+			"modules-extra"
+		}
+
+		for i, item in ipairs(kp) do
+			kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv)
+		end
+
+		table.insert(kp, ("kernel-%d*"):format(kv))
+
+		print(([[cd ~; rm -rf work &&\
 		mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test ;\
 		koji download-build --arch=%s kernel-%s.fc%d &&\
 		rpm-ostree upgrade &&\
-		rpm-ostree override replace \
-		kernel-modules-core-%d*.rpm \
-		kernel-core-%d*.rpm \
-		kernel-modules-%d*.rpm \
-		kernel-%d*.rpm \
-		kernel-modules-extra-%d*.rpm]]):format(sbarch(), arg[2], sbversion(), kv, kv, kv, kv, kv))
+		rpm-ostree override replace %s]]):format(sbarch(), arg[2], sbversion(), table.concat(kp, " ")))
 	end,
 
 	["kr"] = function()
