@@ -3,6 +3,13 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+kp = {
+	"modules-core",
+	"core",
+	"modules",
+	"modules-extra"
+}
+
 local function getoutput(command)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
@@ -40,15 +47,18 @@ local handlers = {
 		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
 	end,
 
+	["ork"] = function()
+		for i, item in ipairs(kp) do
+			kp[i] = ("kernel-%s"):format(kp[i])
+		end
+
+		table.insert(kp, "kernel")
+
+		os.execute(("rpm-ostree override reset %s"):format(table.concat(kp, " ")))
+	end,
+
 	["ok"] = function()
 		local kv = tonumber(arg[2]:match("^(%d)"))
-
-		local kp = {
-			"modules-core",
-			"core",
-			"modules",
-			"modules-extra"
-		}
 
 		for i, item in ipairs(kp) do
 			kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv)
