@@ -31,15 +31,18 @@ local handlers = {
 	end,
 
 	["in"] = function()
-		os.execute([[rpm-ostree upgrade\
-		--install=make\
-		--install=libtirpc-devel\
-		--install=gcc\
-		--install=python3-fedora\
-		--install=koji\
-		--install=fastfetch &&\
-		cd ~ ; git clone https://pagure.io/kernel-tests.git &&\
-		systemctl reboot]])
+		local list ={
+			"make",
+			"libtirpc-devel",
+			"gcc",
+			"python3-fedora",
+			"koji",
+			"fastfetch"
+			}
+		
+		s = " \\\n--install="
+		print(([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]])
+		:format(s, table.concat(list, s)))
 	end,
 
 	["ck"] = function()
