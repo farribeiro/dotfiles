@@ -46,7 +46,7 @@ local handlers = {
 	end,
 
 	["ck"] = function()
-		os.execute(([[koji list-builds --package=kernel --pattern "kernel-%s*" | grep fc%d]]):format(arg[2], sbversion()))
+		os.execute(("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion()))
 		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
 	end,
 
