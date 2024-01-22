@@ -150,6 +150,5 @@ handlers["ld"] = handlers["lastdeploy"]
 if not arg or #arg == 0 then
 	handlers["help"]()
 	os.exit(1)
-else
-	handlers[arg[1]]()
 end
+handlers[arg[1]]()
