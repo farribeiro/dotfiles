@@ -41,13 +41,14 @@ local handlers = {
 			}
 		
 		s = " \\\n--install="
-		print(([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]])
-		:format(s, table.concat(list, s)))
+		return ([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]])
+		:format(s, table.concat(list, s))
 	end,
 
 	["ck"] = function()
-		os.execute(("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion()))
 		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
+
+		return ("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
 	end,
 
 	["ork"] = function()
@@ -57,7 +58,7 @@ local handlers = {
 
 		table.insert(kp, "kernel")
 
-		os.execute(("rpm-ostree override reset %s"):format(table.concat(kp, " ")))
+		return ("rpm-ostree override reset %s"):format(table.concat(kp, " "))
 	end,
 
 	["ok"] = function()
@@ -69,16 +70,16 @@ local handlers = {
 
 		table.insert(kp, ("kernel-%d*"):format(kv))
 
-		os.execute(([[cd ~; rm -rf work &&\
+		return ([[cd ~; rm -rf work &&\
 		mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test ;\
 		koji download-build --arch=%s kernel-%s.fc%d &&\
 		rpm-ostree upgrade &&\
-		rpm-ostree override replace %s]]):format(sbarch(), arg[2], sbversion(), table.concat(kp, " ")))
+		rpm-ostree override replace %s]]):format(sbarch(), arg[2], sbversion(), table.concat(kp, " "))
 	end,
 
 	["kr"] = function()
-		os.execute([[cd ~/kernel-tests;
+		return ([[cd ~/kernel-tests;
 		sudo -s <<< "semanage boolean -m --on selinuxuser_execheap &&\
 		git pull &&\
 		./runtests.sh &&\
@@ -94,4 +95,4 @@ if not arg or #arg == 0 then
 	handlers["help"]()
 	os.exit(1)
 end
-handlers[arg[1]]()
+os.execute(handlers[arg[1]]())
