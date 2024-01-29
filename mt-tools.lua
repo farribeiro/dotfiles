@@ -3,117 +3,59 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
-function loadmodformat(name)
-	return ("load_mod_%s = true"):format(name)
+function notarq()
+	if not arquivo then
+		print("Erro ao abrir o arquivo.")
+		return nil
+	end
 end
 
 local handlers ={
 	["bootstrap"] = function ()
-		local list = {}
-		local world = {}
+		local modules = {}
 
-		local function listadd(n, u)
-			table.insert(list, {name = n, url = u})
+		local arquivo = io.open("git.txt", "r") -- Abre o arquivo para leitura
+		if not arquivo then
+			print("Erro ao abrir o arquivo.")
+			return nil
+		end
+		for linha in arquivo:lines() do
+			os.execute(("git clone %s"):format(linha)) -- Clona repositório
 		end
 
-		listadd("accountmgr", "https://gitlab.com/rubenwardy/accountmgr.git")
-		listadd("areas", "https://github.com/minetest-mods/areas.git")
-		listadd("automobiles_pck", "https://github.com/APercy/automobiles_pck.git")
-		listadd("biofuel", "https://github.com/Lokrates/Biofuel.git")
-		listadd("bonemeal", "https://codeberg.org/tenplus1/bonemeal.git")
-		listadd("digilines", "https://github.com/minetest-mods/digilines.git")
-		listadd("digistuff", "https://cheapiesystems.com/git/digistuff")
-		listadd("drawers", "https://github.com/minetest-mods/drawers.git")
-		listadd("mesecons", "https://github.com/minetest-mods/mesecons.git")
-		listadd("pipeworks", "https://github.com/mt-mods/pipeworks.git")
-		listadd("void_chest", "https://github.com/MeseCraft/void_chest.git")
-		listadd("worldedit", "https://github.com/Uberi/Minetest-WorldEdit.git")
-		listadd("tpr", "https://github.com/minetest-mods/teleport-request.git")
-		listadd("unified_inventory", "https://github.com/minetest-mods/unified_inventory.git")
-		listadd("ethereal", "https://codeberg.org/tenplus1/ethereal")
-		listadd("etherium_stuff", "https://gitlab.com/alerikaisattera/etherium_stuff.git")
-		listadd("steampunk_blimp", "https://github.com/APercy/steampunk_blimp.git")
-		listadd("airutils", "https://github.com/APercy/airutils.git")
+		arquivo:close()
+		arquivo = nil
 
-		for i, item in ipairs(list) do
-			table.insert(world, loadmodformat(item.name))
+		local arquivo = io.open("modules.txt", "r") -- Abre o arquivo para leitura
+		if not arquivo then
+			print("Erro ao abrir o arquivo.")
+			return nil
 		end
-
-		for i, item in ipairs(list) do
-			os.execute(("git clone %s"):format(item.url))
+		-- Loop através das linhas do arquivo
+		for linha in arquivo:lines() do
+			table.insert(modules, linha) -- Adiciona a linha à tabela
 		end
+		arquivo:close()
 
-		local submodules ={
-			"automobiles_beetle",
-			"automobiles_buggy",
-			"automobiles_catrelle",
-			"automobiles_coupe",
-			"automobiles_delorean",
-			"automobiles_lib",
-			"automobiles_motorcycle",
-			"automobiles_roadster",
-			"automobiles_trans_am",
-			"automobiles_vespa",
-			"mesecons_alias",
-			"mesecons_blinkyplant",
-			"mesecons_button",
-			"mesecons_commandblock",
-			"mesecons_delayer",
-			"mesecons_detector",
-			"mesecons_doors",
-			"mesecons_extrawires",
-			"mesecons_fpga",
-			"mesecons_gamecompat",
-			"mesecons_gates",
-			"mesecons_hydroturbine",
-			"mesecons_insulated",
-			"mesecons_lamp",
-			"mesecons_lightstone",
-			"mesecons_luacontroller",
-			"mesecons_materials",
-			"mesecons_microcontroller",
-			"mesecons_movestones",
-			"mesecons_mvps",
-			"mesecons_noteblock",
-			"mesecons_pistons",
-			"mesecons_powerplant",
-			"mesecons_pressureplates",
-			"mesecons_random",
-			"mesecons_receiver",
-			"mesecons_solarpanel",
-			"mesecons_stickyblocks",
-			"mesecons_switch",
-			"mesecons_torch",
-			"mesecons_walllever",
-			"mesecons_wires",
-			"worldedit_brush", 
-			"worldedit_commands",
-			"worldedit_gui",
-			"worldedit_shortcommands"
-		}
-
-		for i, item in ipairs(submodules) do
-			submodules[i] = loadmodformat(submodules[i])
+		for i, item in ipairs(modules) do
+			modules[i] = ("load_mod_%s = true"):format(modules[i])
 		end
 
 		-- Abre ou cria um arquivo chamado "exemplo.txt" no modo de escrita ("w")
 		local arquivo = io.open("world.mt", "w")
-
-		-- Verifica se o arquivo foi aberto com sucesso
-		if arquivo then
-			-- Escreve no arquivo
-			arquivo:write("gameid = minetest\nworld_name =\n\n")
-			arquivo:write(table.concat(world, "\n"))
-			arquivo:write(table.concat(submodules, "\n"))
-
-			-- Fecha o arquivo após terminar de escrever
-			arquivo:close()
-
-			print("world.mt criado com sucesso.")
-		else
+		if not arquivo then
 			print("Erro ao abrir o arquivo.")
+			return nil
 		end
-	end, 
+
+		-- Escreve no arquivo
+		arquivo:write("gameid = minetest\nworld_name =\n\n")
+		arquivo:write(table.concat(modules, "\n"))
+		-- Fecha o arquivo após terminar de escrever
+		arquivo:close()
+
+		print("world.mt criado com sucesso.")
+	end,
 
 	["up-mods"] = function()
 		os.execute("find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;")
