@@ -70,6 +70,19 @@ local handlers ={
 		handlers["up-secfix"]()
 	end,
 
+	["start"] = function()
+		os.execute("minetest --server --terminal --gameid minetest")
+	end,
+
+	["stop"] = function()
+		os.execute("killall minetest")
+	end,
+
+	["restart"] = function()
+		handlers["stop"]()
+		handlers["start"]()
+	end,
+
 --[[
 	["in-up-game"]
 		print(sudo dnf install make \
