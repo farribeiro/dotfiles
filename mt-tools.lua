@@ -3,13 +3,6 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
-function notarq()
-	if not arquivo then
-		print("Erro ao abrir o arquivo.")
-		return nil
-	end
-end
-
 local handlers ={
 	["bootstrap"] = function ()
 		local modules = {}
