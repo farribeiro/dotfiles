@@ -81,7 +81,7 @@ local handlers ={
 	["restart"] = function()
 		handlers["stop"]()
 		handlers["start"]()
-	end,
+	end
 
 --[[
 	["in-up-game"]
