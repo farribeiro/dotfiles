@@ -3,51 +3,55 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+local function readLinesFromFile(filename)
+	local file = io.open(filename, "r")
+	if not file then
+			error("Erro ao abrir o arquivo: " .. filename)
+	end
+
+	local lines = {}
+	for line in file:lines() do
+			table.insert(lines, line)
+	end
+
+	file:close()
+	return lines
+end
+
+local function cloneRepositories(filename)
+	local repositories = readLinesFromFile(filename)
+
+	for _, repo in ipairs(repositories) do
+			os.execute(("git clone %s"):format(repo))
+	end
+end
+
+local function writeWorldMtFile(modules)
+	local file = io.open("world.mt", "w")
+	if not file then
+			error("Erro ao abrir o arquivo world.mt para escrita.")
+	end
+
+	file:write("gameid = minetest\nworld_name =\n\n")
+	file:write(table.concat(modules, "\n"))
+
+	file:close()
+	print("world.mt criado com sucesso.")
+end
+
 local handlers ={
 	["bootstrap"] = function ()
-		local modules = {}
+		local repositoriesFile = "git.txt"
+		local modulesFile = "modules.txt"
 
-		local arquivo = io.open("git.txt", "r") -- Abre o arquivo para leitura
-		if not arquivo then
-			print("Erro ao abrir o arquivo.")
-			return nil
-		end
-		for linha in arquivo:lines() do
-			os.execute(("git clone %s"):format(linha)) -- Clona repositório
-		end
+		cloneRepositories(repositoriesFile)
 
-		arquivo:close()
-		arquivo = nil
-
-		local arquivo = io.open("modules.txt", "r") -- Abre o arquivo para leitura
-		if not arquivo then
-			print("Erro ao abrir o arquivo.")
-			return nil
-		end
-		-- Loop através das linhas do arquivo
-		for linha in arquivo:lines() do
-			table.insert(modules, linha) -- Adiciona a linha à tabela
-		end
-		arquivo:close()
-
+		local modules = readLinesFromFile(modulesFile)
 		for i, item in ipairs(modules) do
-			modules[i] = ("load_mod_%s = true"):format(modules[i])
+				modules[i] = ("load_mod_%s = true"):format(modules[i])
 		end
 
-		-- Abre ou cria um arquivo chamado "exemplo.txt" no modo de escrita ("w")
-		local arquivo = io.open("world.mt", "w")
-		if not arquivo then
-			print("Erro ao abrir o arquivo.")
-			return nil
-		end
-
-		-- Escreve no arquivo
-		arquivo:write("gameid = minetest\nworld_name =\n\n")
-		arquivo:write(table.concat(modules, "\n"))
-		-- Fecha o arquivo após terminar de escrever
-		arquivo:close()
-
-		print("world.mt criado com sucesso.")
+		writeWorldMtFile(modules)
 	end,
 
 	["up-mods"] = function()
