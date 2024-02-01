@@ -10,6 +10,13 @@ kp = {
 	"modules-extra"
 }
 
+local function kernelpackages()
+	for i, item in ipairs(kp) do
+		kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv)
+	end
+	table.insert(kp, ("kernel-%d*"):format(kv))
+end
+
 local function getoutput(command)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
@@ -47,7 +54,6 @@ local handlers = {
 
 	["ck"] = function()
 		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
-
 		return ("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
 	end,
 
@@ -55,22 +61,19 @@ local handlers = {
 		for i, item in ipairs(kp) do
 			kp[i] = ("kernel-%s"):format(kp[i])
 		end
-
 		table.insert(kp, "kernel")
-
 		return ("rpm-ostree override reset %s"):format(table.concat(kp, " "))
+	end,
+
+	["fok"] = function ()
+		kernelpackages()
+		return "rpm-ostree override replace %s"):format(table.concat(kp, " "))
 	end,
 
 	["ok"] = function()
 		local kv = tonumber(arg[2]:match("^(%d)"))
-
-		for i, item in ipairs(kp) do
-			kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv)
-		end
-
-		table.insert(kp, ("kernel-%d*"):format(kv))
-
-		return ([[cd ~; rm -rf work &&\
+		kernelpackages()
+		return ([[rm -rf ~/work &&\
 		mkdir -p ~/work/kernel_test &&\
 		cd ~/work/kernel_test ;\
 		koji download-build --arch=%s kernel-%s.fc%d &&\
