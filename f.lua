@@ -67,7 +67,7 @@ local handlers = {
 
 	["fok"] = function ()
 		kernelpackages()
-		return "rpm-ostree override replace %s"):format(table.concat(kp, " "))
+		return ("rpm-ostree override replace %s"):format(table.concat(kp, " "))
 	end,
 
 	["ok"] = function()
