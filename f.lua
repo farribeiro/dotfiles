@@ -11,6 +11,7 @@ kp = {
 }
 
 local function kernelpackages()
+	local kv = tonumber(arg[2]:match("^(%d)"))
 	for i, item in ipairs(kp) do
 		kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv)
 	end
@@ -67,11 +68,10 @@ local handlers = {
 
 	["fok"] = function ()
 		kernelpackages()
-		return ("rpm-ostree override replace %s"):format(table.concat(kp, " "))
+		return ("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))
 	end,
 
 	["ok"] = function()
-		local kv = tonumber(arg[2]:match("^(%d)"))
 		kernelpackages()
 		return ([[rm -rf ~/work &&\
 		mkdir -p ~/work/kernel_test &&\
