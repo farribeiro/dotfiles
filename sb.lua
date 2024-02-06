@@ -4,7 +4,7 @@
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
 local function sbversion()
-	return tonumber(getoutput("rpm -E %fedora"))
+	return getoutput("rpm -E %fedora")
 end
 
 local function getoutput(command)
