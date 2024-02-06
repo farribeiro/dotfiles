@@ -33,6 +33,15 @@ local function sbarch()
 	return getoutput("uname -m"):gsub("[\n\r]", "")
 end
 
+local function upoverride()
+	os.execute(("rpm-ostree upgrade && cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " ")))
+end
+
+function prepareworkdir()
+	kernelpackages()
+	os.execute("rm -rf ~/work && mkdir -p ~/work/kernel_test")
+end
+
 local handlers = {
 	["off"] = function()
 		os.execute("semanage boolean -m --off selinuxuser_execheap")
@@ -49,13 +58,13 @@ local handlers = {
 			}
 		
 		s = " \\\n--install="
-		return ([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]])
+		os.execute([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]])
 		:format(s, table.concat(list, s))
 	end,
 
 	["ck"] = function()
+		os.execute("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
 		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
-		return ("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
 	end,
 
 	["ork"] = function()
@@ -63,26 +72,37 @@ local handlers = {
 			kp[i] = ("kernel-%s"):format(kp[i])
 		end
 		table.insert(kp, "kernel")
-		return ("rpm-ostree override reset %s"):format(table.concat(kp, " "))
+		os.execute("rpm-ostree override reset %s"):format(table.concat(kp, " "))
 	end,
 
 	["fok"] = function ()
 		kernelpackages()
-		return ("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))
+		upoverride()
 	end,
 
-	["ok"] = function()
-		kernelpackages()
-		return ([[rm -rf ~/work &&\
-		mkdir -p ~/work/kernel_test &&\
-		cd ~/work/kernel_test ;\
-		koji download-build --arch=%s kernel-%s.fc%d &&\
-		rpm-ostree upgrade &&\
-		rpm-ostree override replace %s]]):format(sbarch(), arg[2], sbversion(), table.concat(kp, " "))
+	["onp"] = function()
+		-- Executa o comando uname -r para obter a versão do kernel
+		local kernelVersion = getoutput("uname -r")
+
+		-- Divide a versão do kernel em partes usando o ponto como delimitador
+		local major, minor, patch = kernelVersion:match("(%d+)%.(%d+)%.(%d+)")
+
+		-- Converte o valor do Patch para número e incrementa 1
+		-- Constrói a nova versão do kernel
+
+		prepareworkdir()
+		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s-200.fc%d"):format(sbarch(), ("%s.%s.%d"):format(major, minor, tonumber(patch) + 1), sbversion()))
+		upoverride()
+	end,
+
+	["onk"] = function()
+		prepareworkdir()
+		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s.fc%d"):format(sbarch(), arg[2], sbversion()))
+		upoverride()
 	end,
 
 	["kr"] = function()
-		return ([[cd ~/kernel-tests;
+		os.execute([[cd ~/kernel-tests;
 		sudo -s <<< "semanage boolean -m --on selinuxuser_execheap &&\
 		git pull &&\
 		./runtests.sh &&\
@@ -98,4 +118,4 @@ if not arg or #arg == 0 then
 	handlers["help"]()
 	os.exit(1)
 end
-os.execute(handlers[arg[1]]())
+handlers[arg[1]]()
