@@ -26,7 +26,7 @@ local function getoutput(command)
 end
 
 local function sbversion()
-	return tonumber(getoutput("rpm -E %fedora"))
+	return getoutput("rpm -E %fedora")
 end
 
 local function sbarch()
@@ -55,8 +55,8 @@ local handlers = {
 			"python3-fedora",
 			"koji",
 			"fastfetch"
-			}
-		
+		}
+
 		s = " \\\n--install="
 		os.execute([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]])
 		:format(s, table.concat(list, s))
@@ -91,7 +91,7 @@ local handlers = {
 		-- Constrói a nova versão do kernel
 
 		prepareworkdir()
-		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s-200.fc%d"):format(sbarch(), ("%s.%s.%d"):format(major, minor, tonumber(patch) + 1), sbversion()))
+		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s-200.fc%d"):format(sbarch(), ("%s.%s.%d"):format(major, minor, patch + 1), sbversion()))
 		upoverride()
 	end,
 
