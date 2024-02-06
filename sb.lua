@@ -3,15 +3,15 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
-local function sbversion()
-	return getoutput("rpm -E %fedora")
-end
-
 local function getoutput(command)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
 	handle:close()
 	return result
+end
+
+local function sbversion()
+	return getoutput("rpm -E %fedora")
 end
 
 local function lastdeploy ()
