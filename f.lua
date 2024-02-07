@@ -43,11 +43,11 @@ function prepareworkdir()
 end
 
 local handlers = {
-	["off"] = function()
+	["off-selinux"] = function()
 		os.execute("semanage boolean -m --off selinuxuser_execheap")
 	end,
 
-	["in"] = function()
+	["install-tools"] = function()
 		local list ={
 			"make",
 			"libtirpc-devel",
@@ -62,12 +62,12 @@ local handlers = {
 		:format(s, table.concat(list, s))
 	end,
 
-	["ck"] = function()
+	["check"] = function()
 		os.execute("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
 		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
 	end,
 
-	["ork"] = function()
+	["override-reset"] = function()
 		for i, item in ipairs(kp) do
 			kp[i] = ("kernel-%s"):format(kp[i])
 		end
@@ -75,12 +75,12 @@ local handlers = {
 		os.execute("rpm-ostree override reset %s"):format(table.concat(kp, " "))
 	end,
 
-	["fok"] = function ()
+	["force-override"] = function ()
 		kernelpackages()
 		upoverride()
 	end,
 
-	["onp"] = function()
+	["newer-patch"] = function()
 		-- Executa o comando uname -r para obter a versão do kernel
 		local kernelVersion = getoutput("uname -r")
 
@@ -90,29 +90,54 @@ local handlers = {
 		-- Converte o valor do Patch para número e incrementa 1
 		-- Constrói a nova versão do kernel
 
+		arg[2] = major
 		prepareworkdir()
 		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s-200.fc%d"):format(sbarch(), ("%s.%s.%d"):format(major, minor, patch + 1), sbversion()))
 		upoverride()
 	end,
 
-	["onk"] = function()
+	["newer"] = function()
 		prepareworkdir()
 		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s.fc%d"):format(sbarch(), arg[2], sbversion()))
 		upoverride()
 	end,
 
-	["kr"] = function()
+	["kernel-regressions"] = function()
 		os.execute([[cd ~/kernel-tests;
 		sudo -s <<< "semanage boolean -m --on selinuxuser_execheap &&\
 		git pull &&\
 		./runtests.sh &&\
 		./runtests.sh -t performance &&\
 		semanage boolean -m --off selinuxuser_execheap"]])
+	end,
+
+	["help"] = function()
+		io.write([[Options:
+
+n, newer:
+  Download and Install a newer kernel (eg f.lua n 6.8.1-200)
+np, newer-patch:
+  Download and Install a newer kernel patch (eg. f.lua np)
+fo, force-override:
+  Force a kernel installation
+or, override-reset:
+  Reset the installed kernel and goes to repo kernel
+kr, kernel-regressions:
+  Performs test regressions
+
+]])
 	end
 }
 
 -- Extra functions
 handlers["off-selinux"] = handlers["off"]
+handlers["np"] = handlers["newer-patch"]
+handlers["n"] = handlers["newer"]
+handlers["c"] = handlers["check"]
+handlers["kr"] = handlers["kernel-regressions"]
+handlers["fo"] = handlers["force-override"]
+handlers["or"] = handlers["override-reset"]
+handlers["in"] = handlers["install-tools"]
 
 if not arg or #arg == 0 then
 	handlers["help"]()
