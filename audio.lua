@@ -23,4 +23,4 @@ handelrs["celular"] = handelrs["opus"]
 if not arg or #arg == 0 then
 	os.exit(1)
 end
-os.execute(handelrs[arg[1]])
+os.execute(handelrs[arg[1]]())
