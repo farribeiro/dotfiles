@@ -3,15 +3,15 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2023-2024 - Fábio Rodrigues Ribeiro and contributors
 
-local yt = "yt-dlp -x --embed-thumbnail --embed-metadata --audio-format %s %s"
+local yt = "yt-dlp -x --embed-thumbnail --embed-metadata --audio-format %s " .. arg[2]
 
 local handelrs ={
 	["mp3"] = function()
-		 return yt:format("mp3", arg[2])
+		 return yt:format("mp3")
 	end,
 
 	["opus"] = function()
-		return yt:format("opus", arg[2])
+		return yt:format("opus")
 	end
 }
 
