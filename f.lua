@@ -12,9 +12,7 @@ kp = {
 
 local function kernelpackages()
 	local kv = tonumber(arg[2]:match("^(%d)"))
-	for i, item in ipairs(kp) do
-		kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv)
-	end
+	for i, item in ipairs(kp) do kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv) end
 	table.insert(kp, ("kernel-%d*"):format(kv))
 end
 
