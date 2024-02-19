@@ -84,10 +84,7 @@ local handlers = {
 
 	["newer-patch"] = function()
 		-- Executa o comando uname -r para obter a versão do kernel
-		local kernelVersion = getoutput("uname -r")
-
-		-- Divide a versão do kernel em partes usando o ponto como delimitador
-		local major, minor, patch = kernelVersion:match("(%d+)%.(%d+)%.(%d+)")
+		local major, minor, patch = getoutput("uname -r"):match("(%d+)%.(%d+)%.(%d+)")
 
 		-- Converte o valor do Patch para número e incrementa 1
 		-- Constrói a nova versão do kernel
