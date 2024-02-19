@@ -28,11 +28,7 @@ end
 local function sbversion() return getoutput("rpm -E %fedora") end
 local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function upoverride() os.execute(("rpm-ostree upgrade && cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
-
-function prepareworkdir()
-	kernelpackages()
-	os.execute("rm -rf ~/work && mkdir -p ~/work/kernel_test")
-end
+function prepareworkdir() kernelpackages() os.execute("rm -rf ~/work && mkdir -p ~/work/kernel_test") end
 
 local handlers = {
 	["off-selinux"] = function()
