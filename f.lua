@@ -3,12 +3,7 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
-kp = {
-	"modules-core",
-	"core",
-	"modules",
-	"modules-extra"
-}
+kp = {"modules-core", "core", "modules", "modules-extra" }
 
 local function kernelpackages()
 	local kv = tonumber(arg[2]:match("^(%d)"))
@@ -29,9 +24,7 @@ local function upoverride() os.execute(("rpm-ostree upgrade && cd ~/work/kernel_
 function prepareworkdir() kernelpackages() os.execute("rm -rf ~/work && mkdir -p ~/work/kernel_test") end
 
 local handlers = {
-	["off-selinux"] = function()
-		os.execute("semanage boolean -m --off selinuxuser_execheap")
-	end,
+	["off-selinux"] = function() os.execute("semanage boolean -m --off selinuxuser_execheap") end,
 
 	["install-tools"] = function()
 		local list = { "make", "libtirpc-devel", "gcc", "python3-fedora", "koji", "fastfetch" }
@@ -55,8 +48,7 @@ local handlers = {
 	["force-override"] = function ()
 		-- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
 		arg[2] = getoutput("uname -r"):match("(%d+)")
-		kernelpackages()
-		upoverride()
+		kernelpackages() upoverride()
 	end,
 
 	["newer-patch"] = function()
