@@ -22,11 +22,10 @@ end
 
 local handlers = {
 -- ["reinstall"] = function() os.execute("rpm-ostree upgrade --install=flatpak-builder") end
-
+--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 	["cb"] = function() os.execute(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1), sbarch()) end,
 	["testsb"] = function() rebasesb(0) end,
 	["nexttest"] = function() rebasesb(1) end,
-	--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 	["clean"] = function() os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all") end,
 	["preview"] = function() os.execute("rpm-ostree upgrade --preview") end,
 	["pin"] = function() os.execute("sudo ostree admin pin 0") end,
@@ -35,6 +34,8 @@ local handlers = {
 	["search"] = function() os.execute(("rpm-ostree search %s"):format(arg[2])) end,
 	["search-inrpm"] = function() os.execute(("rpm -qa | grep -E %s"):format(arg[2])) end,
 	["lc"] = function() os.execute("rpm-ostree db diff") end,
+	["lastdeploy"] = function () lastdeploy() io.write("\n") end,
+	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, Funciona mas precisa fazer funções fora da tabela
 
 	["up"] = function()
 		kv()
@@ -44,18 +45,8 @@ local handlers = {
 		-- && toolbox run sudo dnf5 update -y")
 	end,
 
-	["c-up"] = function()
-		handlers["clean"]()
-		handlers["up"]()
-	end,
-
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do	os.execute(("sudo ostree admin pin --unpin %d"):format(i)) end
-	end,
-
-	["lastdeploy"] = function ()
-		lastdeploy()
-		io.write("\n")
 	end,
 
 	["help"] = function()
