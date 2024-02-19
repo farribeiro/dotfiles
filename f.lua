@@ -76,6 +76,8 @@ local handlers = {
 	end,
 
 	["force-override"] = function ()
+		-- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
+		arg[2] = getoutput("uname -r"):match("(%d+)")
 		kernelpackages()
 		upoverride()
 	end,
