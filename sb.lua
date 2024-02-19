@@ -14,6 +14,10 @@ local function sbversion()
 	return getoutput("rpm -E %fedora")
 end
 
+local function sbarch()
+	return getoutput("uname -m"):gsub("[\n\r]", "")
+end
+
 local function lastdeploy ()
 	local output = getoutput("cat /etc/os-release")
 	io.write(("Data do último deploy: %s"):format(output:match("VERSION=\"(.-)\"")))
@@ -24,36 +28,24 @@ local function kv ()
 end
 
 local function rebasesb(plus)
-	os.execute(("rpm-ostree rebase fedora:fedora/%d/x86_64/testing/silverblue"):format(sbversion()+plus))
+	os.execute(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus), sbarch())
 end
 
 local handlers = {
 -- ["reinstall"] = function() os.execute("rpm-ostree upgrade --install=flatpak-builder") end
 
-	["cb"] = function()
-		os.execute(("ostree remote refs fedora | grep -E %d | grep -E x86_64/silverblue$"):format(sbversion()+1))
-	end,
-
-	["testsb"] = function()
-		rebasesb(0)
-	end,
-
-	["nexttest"] = function()
-		rebasesb(1)
-		--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
-	end,
-
-	["clean"] = function()
-		os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all")
-	end,
-
-	["preview"] = function()
-		os.execute("rpm-ostree upgrade --preview")
-	end,
-
-	["pin"] = function()
-		os.execute("sudo ostree admin pin 0")
-	end,
+	["cb"] = function() os.execute(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1), sbarch()) end,
+	["testsb"] = function() rebasesb(0) end,
+	["nexttest"] = function() rebasesb(1) end,
+	--uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
+	["clean"] = function() os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all") end,
+	["preview"] = function() os.execute("rpm-ostree upgrade --preview") end,
+	["pin"] = function() os.execute("sudo ostree admin pin 0") end,
+	["mesa-drm-freeworld"] = function() os.execute("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg") end,
+	["in"] = function() os.execute(("rpm-ostree upgrade --install=%s"):format(arg[2])) end,
+	["search"] = function() os.execute(("rpm-ostree search %s"):format(arg[2])) end,
+	["search-inrpm"] = function() os.execute(("rpm -qa | grep -E %s"):format(arg[2])) end,
+	["lc"] = function() os.execute("rpm-ostree db diff") end,
 
 	["up"] = function()
 		kv()
@@ -68,30 +60,10 @@ local handlers = {
 		handlers["up"]()
 	end,
 
-	["mesa-drm-freeworld"] = function()
-		os.execute("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg")
-	end,
-
-	["in"] = function()
-		os.execute(("rpm-ostree upgrade --install=%s"):format(arg[2]))
-	end,
-
-	["search"] = function()
-		os.execute(("rpm-ostree search %s"):format(arg[2]))
-	end,
-
-	["search-inrpm"] = function()
-		os.execute(("rpm -qa | grep -E %s"):format(arg[2]))
-	end,
-
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do
 			os.execute(("sudo ostree admin pin --unpin %d"):format(i))
 		end
-	end,
-
-	["lc"] = function()
-		os.execute("rpm-ostree db diff")
 	end,
 
 	["lastdeploy"] = function ()
