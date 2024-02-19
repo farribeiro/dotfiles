@@ -40,14 +40,7 @@ local handlers = {
 	end,
 
 	["install-tools"] = function()
-		local list ={
-			"make",
-			"libtirpc-devel",
-			"gcc",
-			"python3-fedora",
-			"koji",
-			"fastfetch"
-		}
+		local list = { "make", "libtirpc-devel", "gcc", "python3-fedora", "koji", "fastfetch" }
 
 		s = " \\\n--install="
 		os.execute([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]])
