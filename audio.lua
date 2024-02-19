@@ -11,7 +11,7 @@ local handlers ={
 }
 
 handlers["r"] = handlers["mp3"] handlers["radinho"] = handlers["mp3"]
-handlers["c"] = handlers["opus"] handlers["celular"] = handelers["opus"]
+handlers["c"] = handlers["opus"] handlers["celular"] = handlers["opus"]
 
 if not arg or #arg == 0 then os.exit(1) end
 os.execute(handelrs[arg[1]]())
