@@ -53,9 +53,7 @@ local handlers = {
 	end,
 
 	["override-reset"] = function()
-		for i, item in ipairs(kp) do
-			kp[i] = ("kernel-%s"):format(kp[i])
-		end
+		for i, item in ipairs(kp) do kp[i] = ("kernel-%s"):format(kp[i]) end
 		table.insert(kp, "kernel")
 		os.execute(("rpm-ostree override reset %s"):format(table.concat(kp, " ")))
 	end,
