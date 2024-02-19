@@ -36,13 +36,7 @@ local handlers = {
 	["lc"] = function() os.execute("rpm-ostree db diff") end,
 	["lastdeploy"] = function () lastdeploy() io.write("\n") end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, Funciona mas precisa fazer funções fora da tabela
-
-	["up"] = function()
-		kv()
-		lastdeploy()
-		io.write("\n\n")
-		os.execute("rpm-ostree upgrade && flatpak update -y")
-		-- && toolbox run sudo dnf5 update -y")
+	["up"] = function() kv() lastdeploy() io.write("\n\n") os.execute("rpm-ostree upgrade && flatpak update -y") -- && toolbox run sudo dnf5 update -y")
 	end,
 
 	["ostree-unpinall"] = function()
