@@ -10,25 +10,14 @@ local function getoutput(command)
 	return result
 end
 
-local function sbversion()
-	return getoutput("rpm -E %fedora")
-end
-
-local function sbarch()
-	return getoutput("uname -m"):gsub("[\n\r]", "")
-end
+local function sbversion() return getoutput("rpm -E %fedora") end
+local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
+local function kv () io.write (("Versão do kernel: %s"):format(getoutput("uname -r"))) end
+local function rebasesb(plus) os.execute(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus), sbarch()) end
 
 local function lastdeploy ()
 	local output = getoutput("cat /etc/os-release")
 	io.write(("Data do último deploy: %s"):format(output:match("VERSION=\"(.-)\"")))
-end
-
-local function kv ()
-	io.write (("Versão do kernel: %s"):format(getoutput("uname -r")))
-end
-
-local function rebasesb(plus)
-	os.execute(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus), sbarch())
 end
 
 local handlers = {
@@ -61,9 +50,7 @@ local handlers = {
 	end,
 
 	["ostree-unpinall"] = function()
-		for i = 2, 5 do
-			os.execute(("sudo ostree admin pin --unpin %d"):format(i))
-		end
+		for i = 2, 5 do	os.execute(("sudo ostree admin pin --unpin %d"):format(i)) end
 	end,
 
 	["lastdeploy"] = function ()
