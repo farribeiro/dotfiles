@@ -10,10 +10,8 @@ local handelrs ={
 	["opus"] = function() return yt:format("opus") end
 }
 
-handelrs["r"] = handelrs["mp3"]
-handelrs["radinho"] = handelrs["mp3"]
-handelrs["c"] = handelrs["opus"]
-handelrs["celular"] = handelrs["opus"]
+handelrs["r"], handelrs["radinho"] = handelrs["mp3"]
+handelrs["c"], handelrs["celular"] = handelrs["opus"]
 
 if not arg or #arg == 0 then os.exit(1) end
 os.execute(handelrs[arg[1]]())
