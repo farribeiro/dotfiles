@@ -20,7 +20,7 @@ end
 
 local function sbversion() return getoutput("rpm -E %fedora") end
 local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
-local function upoverride() os.execute(("rpm-ostree upgrade && cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
+local function override() os.execute(("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
 function prepareworkdir() kernelpackages() os.execute("rm -rf ~/work && mkdir -p ~/work/kernel_test") end
 
 local handlers = {
@@ -28,10 +28,8 @@ local handlers = {
 
 	["install-tools"] = function()
 		local list = { "make", "libtirpc-devel", "gcc", "python3-fedora", "koji", "fastfetch" }
-
-		s = " \\\n--install="
-		os.execute([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]])
-		:format(s, table.concat(list, s))
+		local s = " \\\n--install="
+		os.execute([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]]):format(s, table.concat(list, s))
 	end,
 
 	["check"] = function()
@@ -48,7 +46,7 @@ local handlers = {
 	["force-override"] = function ()
 		-- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
 		arg[2] = getoutput("uname -r"):match("(%d+)")
-		kernelpackages() upoverride()
+		kernelpackages() override()
 	end,
 
 	["newer-patch"] = function()
@@ -61,13 +59,13 @@ local handlers = {
 		arg[2] = major
 		prepareworkdir()
 		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s-200.fc%d"):format(sbarch(), ("%s.%s.%d"):format(major, minor, patch + 1), sbversion()))
-		upoverride()
+		override()
 	end,
 
 	["newer"] = function()
 		prepareworkdir()
 		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s.fc%d"):format(sbarch(), arg[2], sbversion()))
-		upoverride()
+		override()
 	end,
 
 	["kernel-regressions"] = function()
@@ -98,17 +96,14 @@ kr, kernel-regressions:
 }
 
 -- Extra functions
-handlers["off-selinux"] = handlers["off"]
-handlers["np"] = handlers["newer-patch"]
-handlers["n"] = handlers["newer"]
 handlers["c"] = handlers["check"]
-handlers["kr"] = handlers["kernel-regressions"]
 handlers["fo"] = handlers["force-override"]
-handlers["or"] = handlers["override-reset"]
 handlers["in"] = handlers["install-tools"]
+handlers["kr"] = handlers["kernel-regressions"]
+handlers["n"] = handlers["newer"]
+handlers["np"] = handlers["newer-patch"]
+handlers["off"] = handlers["off-selinux"]
+handlers["or"] = handlers["override-reset"]
 
-if not arg or #arg == 0 then
-	handlers["help"]()
-	os.exit(1)
-end
+if not arg or #arg == 0 then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()
