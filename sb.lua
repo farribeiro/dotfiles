@@ -13,7 +13,7 @@ end
 local function sbversion() return getoutput("rpm -E %fedora") end
 local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function kv () io.write (("Versão do kernel: %s"):format(getoutput("uname -r"))) end
-local function rebasesb(plus) os.execute(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus), sbarch()) end
+local function rebasesb(plus) os.execute(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, sbarch())) end
 
 local function lastdeploy ()
 	local output = getoutput("cat /etc/os-release")
@@ -23,7 +23,7 @@ end
 local handlers = {
 -- ["reinstall"] = function() os.execute("rpm-ostree upgrade --install=flatpak-builder") end
 --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
-	["cb"] = function() os.execute(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1), sbarch()) end,
+	["cb"] = function() os.execute(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1, sbarch())) end,
 	["testsb"] = function() rebasesb(0) end,
 	["nexttest"] = function() rebasesb(1) end,
 	["clean"] = function() os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all") end,
@@ -36,8 +36,8 @@ local handlers = {
 	["lc"] = function() os.execute("rpm-ostree db diff") end,
 	["lastdeploy"] = function () lastdeploy() io.write("\n") end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, Funciona mas precisa fazer funções fora da tabela
-	["up"] = function() kv() lastdeploy() io.write("\n\n") os.execute("rpm-ostree upgrade && flatpak update -y") -- && toolbox run sudo dnf5 update -y")
-	end,
+	["up"] = function() kv() lastdeploy() io.write("\n\n") os.execute("rpm-ostree upgrade && flatpak update -y") end,-- && toolbox run sudo dnf5 update -y")
+	["up-r"] = function() kv() lastdeploy() io.write("\n\n") os.execute("rpm-ostree upgrade -r") end, -- && flatpak update -y" && toolbox run sudo dnf5 update -y")
 
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do	os.execute(("sudo ostree admin pin --unpin %d"):format(i)) end
@@ -55,6 +55,8 @@ nt, nexttest:
   Upgrade to next version of silverblue
 up:
   Upgrade the role system to latest commit
+up-r:
+  Upgrade the role system to latest commit and reboot
 in:
   Install a layered package
 c, clean:
@@ -77,22 +79,20 @@ ld, lastdeploy:
   Show the last deploy in Silverblue
 oua, ostree-unpinall:
   Unpin all pinned commits
-]]
-		)
+
+]])
 	end
 }
 
 -- Extra functions
--- handlers["checkbranch"] = handlers['cb']
+-- handlers['cb'] = handlers["check-branch"]
 handlers["oua"] = handlers["ostree-unpinall"]
 handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
 handlers["nt"] = handlers["nexttest"]
 handlers["ld"] = handlers["lastdeploy"]
+handlers["clog"] = handlers["changelog"]
 
-if not arg or #arg == 0 then
-	handlers["help"]()
-	os.exit(1)
-end
+if not arg or #arg == 0 then handlers["help"]() os.exit(1) end 
 handlers[arg[1]]()
