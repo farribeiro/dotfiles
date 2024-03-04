@@ -3,6 +3,8 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
+local x = os.execute
+
 local function getoutput(command)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
@@ -13,7 +15,7 @@ end
 local function sbversion() return getoutput("rpm -E %fedora") end
 local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function kv () io.write (("Versão do kernel: %s"):format(getoutput("uname -r"))) end
-local function rebasesb(plus) os.execute(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, sbarch())) end
+local function rebasesb(plus) x(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, sbarch())) end
 
 local function lastdeploy ()
 	local output = getoutput("cat /etc/os-release")
@@ -21,26 +23,26 @@ local function lastdeploy ()
 end
 
 local handlers = {
--- ["reinstall"] = function() os.execute("rpm-ostree upgrade --install=flatpak-builder") end
+-- ["reinstall"] = function() x("rpm-ostree upgrade --install=flatpak-builder") end
 --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
-	["cb"] = function() os.execute(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1, sbarch())) end,
+	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1, sbarch())) end,
 	["testsb"] = function() rebasesb(0) end,
 	["nexttest"] = function() rebasesb(1) end,
-	["clean"] = function() os.execute("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all") end,
-	["preview"] = function() os.execute("rpm-ostree upgrade --preview") end,
-	["pin"] = function() os.execute("sudo ostree admin pin 0") end,
-	["mesa-drm-freeworld"] = function() os.execute("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg") end,
-	["in"] = function() os.execute(("rpm-ostree upgrade --install=%s"):format(arg[2])) end,
-	["search"] = function() os.execute(("rpm-ostree search %s"):format(arg[2])) end,
-	["search-inrpm"] = function() os.execute(("rpm -qa | grep -E %s"):format(arg[2])) end,
-	["lc"] = function() os.execute("rpm-ostree db diff") end,
+	["clean"] = function() x("sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all") end,
+	["preview"] = function() x("rpm-ostree upgrade --preview") end,
+	["pin"] = function() x("sudo ostree admin pin 0") end,
+	["mesa-drm-freeworld"] = function() x("rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg") end,
+	["in"] = function() x(("rpm-ostree upgrade --install=%s"):format(arg[2])) end,
+	["search"] = function() x(("rpm-ostree search %s"):format(arg[2])) end,
+	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(arg[2])) end,
+	["lc"] = function() x("rpm-ostree db diff") end,
 	["lastdeploy"] = function () lastdeploy() io.write("\n") end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, Funciona mas precisa fazer funções fora da tabela
-	["up"] = function() kv() lastdeploy() io.write("\n\n") os.execute("rpm-ostree upgrade && flatpak update -y") end,-- && toolbox run sudo dnf5 update -y")
-	["up-r"] = function() kv() lastdeploy() io.write("\n\n") os.execute("rpm-ostree upgrade -r") end, -- && flatpak update -y" && toolbox run sudo dnf5 update -y")
+	["up"] = function() kv() lastdeploy() io.write("\n\n") x("rpm-ostree upgrade && flatpak update -y") end,-- && toolbox run sudo dnf5 update -y")
+	["up-r"] = function() kv() lastdeploy() io.write("\n\n") x("rpm-ostree upgrade -r") end, -- && flatpak update -y" && toolbox run sudo dnf5 update -y")
 
 	["ostree-unpinall"] = function()
-		for i = 2, 5 do	os.execute(("sudo ostree admin pin --unpin %d"):format(i)) end
+		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
 	end,
 
 	["help"] = function()

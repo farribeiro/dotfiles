@@ -3,6 +3,8 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+local x = os.execute
+
 kp = {"modules-core", "core", "modules", "modules-extra" }
 
 local function kernelpackages()
@@ -20,27 +22,27 @@ end
 
 local function sbversion() return getoutput("rpm -E %fedora") end
 local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
-local function override() os.execute(("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
-function prepareworkdir() kernelpackages() os.execute("rm -rf ~/work && mkdir -p ~/work/kernel_test") end
+local function override() x(("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
+function prepareworkdir() kernelpackages() x("rm -rf ~/work && mkdir -p ~/work/kernel_test") end
 
 local handlers = {
-	["off-selinux"] = function() os.execute("semanage boolean -m --off selinuxuser_execheap") end,
+	["off-selinux"] = function() x("semanage boolean -m --off selinuxuser_execheap") end,
 
 	["install-tools"] = function()
 		local list = { "make", "libtirpc-devel", "gcc", "python3-fedora", "koji", "fastfetch" }
 		local s = " \\\n--install="
-		os.execute([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]]):format(s, table.concat(list, s))
+		x([[rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git && systemctl reboot]]):format(s, table.concat(list, s))
 	end,
 
 	["check"] = function()
-		os.execute("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
+		x("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
 		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
 	end,
 
 	["override-reset"] = function()
 		for i, item in ipairs(kp) do kp[i] = ("kernel-%s"):format(kp[i]) end
 		table.insert(kp, "kernel")
-		os.execute(("rpm-ostree override reset %s"):format(table.concat(kp, " ")))
+		x(("rpm-ostree override reset %s"):format(table.concat(kp, " ")))
 	end,
 
 	["force-override"] = function ()
@@ -58,18 +60,18 @@ local handlers = {
 
 		arg[2] = major
 		prepareworkdir()
-		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s-200.fc%d"):format(sbarch(), ("%s.%s.%d"):format(major, minor, patch + 1), sbversion()))
+		x(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s-200.fc%d"):format(sbarch(), ("%s.%s.%d"):format(major, minor, patch + 1), sbversion()))
 		override()
 	end,
 
 	["newer"] = function()
 		prepareworkdir()
-		os.execute(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s.fc%d"):format(sbarch(), arg[2], sbversion()))
+		x(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s.fc%d"):format(sbarch(), arg[2], sbversion()))
 		override()
 	end,
 
 	["kernel-regressions"] = function()
-		os.execute([[cd ~/kernel-tests;
+		x([[cd ~/kernel-tests;
 		sudo -s <<< "semanage boolean -m --on selinuxuser_execheap &&\
 		git pull &&\
 		./runtests.sh &&\
