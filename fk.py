@@ -18,25 +18,11 @@ class Fk:
 	def show_nsdks(self): self.n_sdks();print("Numbers of Sdks: ", self.__n_sdks)
 	def list_runtime(self): return sp.getoutput("flatpak list --app --columns=runtime | sort | uniq -c | sort -n")
 	def list_apps(self): return sp.getoutput("flatpak list --app --columns=name | sort | uniq -c | sort -n | sed \"s/1/-/\"")
-	def list_sdk(self): return sp.getoutput("flatpak list | sort | uniq -c | grep -E \"[Ss][Dd][Kk]\" | sort -n")
-		# | sed \"s/\d\d?/-/\"")
+	def list_sdk(self): return sp.getoutput("flatpak list | sort | uniq -c | grep -E \"[Ss][Dd][Kk]\" | sort -n") # | sed \"s/\d\d?/-/\"")
 	def size_runtimes(self): return sp.getoutput("cd /var/lib/flatpak/runtime; flatpak list --app --columns=runtime | sort | uniq | xargs du -sh --total")
 	def export(self): os.system("flatpak list --app --columns=application > ~/flatpak-list-bk.txt")
-
-	def remove_fedora(self):
-		self.export()
-		self.exp_list = sp.getoutput("cat ~/flatpak-list-bk.txt | xargs")
-		c = "flatpak remove -y " + list
-		os.system(c)
-
-	def n_things(self):
-		self.n_runtimes()
-		self.n_apps()
-		self.n_sdks()
-		self.show_napps()
-		self.show_nruntimes()
-		self.show_nsdks()
-
+	def remove_fedora(self): self.export();self.exp_list = sp.getoutput("cat ~/flatpak-list-bk.txt | xargs");c = "flatpak remove -y " + list;os.system(c)
+	def n_things(self): self.n_runtimes();self.n_apps();self.n_sdks();self.show_napps();self.show_nruntimes();self.show_nsdks()
 	def __init__(self):
 		match sys.argv[1]:
 			case "exp": self.export()
