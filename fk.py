@@ -9,6 +9,7 @@ import subprocess as sp
 import argparse
 
 class Fk:
+	def x(self, cmd): os.system(cmd)
 	def n_runtimes(self): self.__n_runtimes = int(sp.getoutput("flatpak list --app --columns=runtime | sort | uniq -c | sort -n | wc -l"))
 	def n_apps(self): self.__n_apps = int(sp.getoutput("flatpak list --app --columns=name | sort | uniq -c | sort -n | wc -l"))
 	def n_sdks(self): self.__n_sdks = int(sp.getoutput("flatpak list | sort | uniq -c | grep -E \"[Ss][Dd][Kk]\" | sort -n | wc -l"))
@@ -40,16 +41,16 @@ class Fk:
 		match sys.argv[1]:
 			case "exp": self.export()
 			case "remove-fedora": self.remove_fedora()
-			case "repair": os.system("flatpak repair --user && sudo flatpak repair")
-			case "cleanall": os.system("flatpak remove --unused --delete-data")
-			case "up": os.system("flatpak update")
-			case "fup": os.system("flatpak update --no-static-deltas")
+			case "repair": self.x("flatpak repair --user && sudo flatpak repair")
+			case "cleanall": self.x("flatpak remove --unused --delete-data")
+			case "up": self.x("flatpak update")
+			case "fup": self.x("flatpak update --no-static-deltas")
 			case "n-things": self.n_things()
 			case "list-runtimes": self.show_nruntimes();print("Runtimes installed:\n");print(self.size_runtimes())
 			case "list-apps": self.show_napps();print("Apps installed:\n");print(self.list_apps())
-			case "b": c = "flatpak run org.flatpak.Builder --install --user --force-clean build-dir " + sys.argv[2];os.system(c)
-			case "in": c = "flatpak install flathub " + sys.argv[2];os.system(c)
-			case "pg": c = "flatpak remove --delete-data " + sys.argv[2];os.system(c)
-			case "convert-flathub": self.remove_fedora();c = "flatpak install flathub --system -y " + self.exp_list;os.system(c)
+			case "b": c = "flatpak run org.flatpak.Builder --install --user --force-clean build-dir " + sys.argv[2];self.x(c)
+			case "in": c = "flatpak install flathub " + sys.argv[2];self.x(c)
+			case "pg": c = "flatpak remove --delete-data " + sys.argv[2];self.x(c)
+			case "convert-flathub": self.remove_fedora();c = "flatpak install flathub --system -y " + self.exp_list;self.x(c)
 
 f = Fk()
