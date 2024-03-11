@@ -22,6 +22,8 @@ local function lastdeploy ()
 	io.write(("Data do último deploy: %s"):format(output:match("VERSION=\"(.-)\"")))
 end
 
+local function rpmostree_upgrade(opts) kv() lastdeploy() io.write("\n\n") x("rpm-ostree cancel && rpm-ostree upgrade %s"):format(opts)) end
+
 local handlers = {
 -- ["reinstall"] = function() x("rpm-ostree upgrade --install=flatpak-builder") end
 --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
@@ -38,8 +40,8 @@ local handlers = {
 	["lc"] = function() x("rpm-ostree db diff") end,
 	["lastdeploy"] = function () lastdeploy() io.write("\n") end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, Funciona mas precisa fazer funções fora da tabela
-	["up"] = function() kv() lastdeploy() io.write("\n\n") x("rpm-ostree upgrade && flatpak update -y") end,-- && toolbox run sudo dnf5 update -y")
-	["up-r"] = function() kv() lastdeploy() io.write("\n\n") x("rpm-ostree upgrade -r") end, -- && flatpak update -y" && toolbox run sudo dnf5 update -y")
+	["up"] = function() rpmostree_upgrade("&& flatpak update -y") end,-- && toolbox run sudo dnf5 update -y")
+	["up-r"] = function() rpmostree_upgrade("-r") end, -- && flatpak update -y" && toolbox run sudo dnf5 update -y")
 
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
