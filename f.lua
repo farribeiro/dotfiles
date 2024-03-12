@@ -8,25 +8,25 @@ local x = os.execute
 kp = {"modules-core", "core", "modules", "modules-extra" }
 
 local function kernelpackages()
-	local kv = tonumber(arg[2]:match("^(%d)"))
+	local kv = tonumber(arg[2]:match "^(%d)")
 	for i, item in ipairs(kp) do kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv) end
 	table.insert(kp, ("kernel-%d*"):format(kv))
 end
 
 local function getoutput(command)
 	local handle = io.popen(command)
-	local result = handle:read("*a")
+	local result = handle:read "*a"
 	handle:close()
 	return result
 end
 
-local function sbversion() return getoutput("rpm -E %fedora") end
+local function sbversion() return getoutput "rpm -E %fedora" end
 local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function override() x(("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
-function prepareworkdir() kernelpackages() x("rm -rf ~/work && mkdir -p ~/work/kernel_test") end
+function prepareworkdir() kernelpackages() x "rm -rf ~/work && mkdir -p ~/work/kernel_test" end
 
 local handlers = {
-	["off-selinux"] = function() x("semanage boolean -m --off selinuxuser_execheap") end,
+	["off-selinux"] = function() x "semanage boolean -m --off selinuxuser_execheap" end,
 
 	["install-tools"] = function()
 		local list = { "make", "libtirpc-devel", "gcc", "python3-fedora", "koji", "fastfetch" }
@@ -36,7 +36,7 @@ local handlers = {
 
 	["check"] = function()
 		x("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
-		io.write("\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n")
+		io.write "\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n"
 	end,
 
 	["override-reset"] = function()
@@ -47,7 +47,7 @@ local handlers = {
 
 	["force-override"] = function ()
 		-- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
-		arg[2] = getoutput("uname -r"):match("(%d+)")
+		arg[2] = getoutput("uname -r"):match "(%d+)"
 		kernelpackages() override()
 	end,
 
@@ -71,16 +71,17 @@ local handlers = {
 	end,
 
 	["kernel-regressions"] = function()
-		x([[cd ~/kernel-tests;
+		x [[cd ~/kernel-tests;
 		sudo -s <<< "semanage boolean -m --on selinuxuser_execheap &&\
 		git pull &&\
 		./runtests.sh &&\
 		./runtests.sh -t performance &&\
-		semanage boolean -m --off selinuxuser_execheap"]])
+		semanage boolean -m --off selinuxuser_execheap"]]
 	end,
 
 	["help"] = function()
-		io.write([[Options:
+		io.write
+[[Options:
 
 n, newer:
   Download and Install a newer kernel (eg f.lua n 6.8.1-200)
@@ -93,7 +94,7 @@ or, override-reset:
 kr, kernel-regressions:
   Performs test regressions
 
-]])
+]]
 	end
 }
 
