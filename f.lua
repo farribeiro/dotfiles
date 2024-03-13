@@ -4,8 +4,10 @@
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
+local kb = "cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s"
 
 kp = {"modules-core", "core", "modules", "modules-extra" }
+kp2 = kp
 
 local function kernelpackages()
 	local kv = tonumber(arg[2]:match "^(%d)")
@@ -21,9 +23,9 @@ local function getoutput(command)
 end
 
 local function sbversion() return getoutput "rpm -E %fedora" end
-local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
+local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function override() x(("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
-function prepareworkdir() kernelpackages() x "rm -rf ~/work && mkdir -p ~/work/kernel_test" end
+function prepareworkdir() x "rm -rf ~/work && mkdir -p ~/work/kernel_test" end
 
 local handlers = {
 	["off-selinux"] = function() x "semanage boolean -m --off selinuxuser_execheap" end,
@@ -47,26 +49,28 @@ local handlers = {
 
 	["force-override"] = function ()
 		-- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
-		arg[2] = getoutput("uname -r"):match "(%d+)"
+		arg[2] = getoutput "uname -r" :match "(%d+)"
 		kernelpackages() override()
 	end,
 
 	["newer-patch"] = function()
 		-- Executa o comando uname -r para obter a versão do kernel
-		local major, minor, patch = getoutput("uname -r"):match("(%d+)%.(%d+)%.(%d+)")
-
+		local major, minor, patch = getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)"
+	
 		-- Converte o valor do Patch para número e incrementa 1
 		-- Constrói a nova versão do kernel
-
+	
 		arg[2] = major
 		prepareworkdir()
-		x(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s-200.fc%d"):format(sbarch(), ("%s.%s.%d"):format(major, minor, patch + 1), sbversion()))
+		for i, item in ipairs(kp2) do x(("%s-200.fc%d"):format(kb:format(arch(), kp2[i] .. ("-%s.%s.%d"):format(major, minor, patch + 1)), sbversion())) end
+		kernelpackages()
 		override()
 	end,
-
+	
 	["newer"] = function()
 		prepareworkdir()
-		x(("cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s.fc%d"):format(sbarch(), arg[2], sbversion()))
+		for i, item in ipairs(kp2) do x(("%s.fc%d"):format(kb:format(arch(), kp2[i] .. "-" .. arg[2]), sbversion())) end
+		kernelpackages()
 		override()
 	end,
 
