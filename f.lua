@@ -4,7 +4,7 @@
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
-local kb = "cd ~/work/kernel_test ; koji download-build --arch=%s kernel-%s"
+local kb = "cd ~/work/kernel_test ; koji download-build --arch=%s --rpm kernel-%s"
 
 kp = {"modules-core", "core", "modules", "modules-extra" }
 kp2 = kp
@@ -62,14 +62,14 @@ local handlers = {
 	
 		arg[2] = major
 		prepareworkdir()
-		for i, item in ipairs(kp2) do x(("%s-200.fc%d"):format(kb:format(arch(), kp2[i] .. ("-%s.%s.%d"):format(major, minor, patch + 1)), sbversion())) end
+		for i, item in ipairs(kp2) do x(("%s-200.fc%d.%s.rpm"):format(kb:format(arch(), kp2[i] .. ("-%s.%s.%d"):format(major, minor, patch + 1)), sbversion(), arch())) end
 		kernelpackages()
 		override()
 	end,
 	
 	["newer"] = function()
 		prepareworkdir()
-		for i, item in ipairs(kp2) do x(("%s.fc%d"):format(kb:format(arch(), kp2[i] .. "-" .. arg[2]), sbversion())) end
+		for i, item in ipairs(kp2) do x(("%s.fc%d.%s.rpm"):format(kb:format(arch(), kp2[i] .. "-" .. arg[2]), sbversion(), arch())) end
 		kernelpackages()
 		override()
 	end,
