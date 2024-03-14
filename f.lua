@@ -4,10 +4,10 @@
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
-local kb = "cd ~/work/kernel_test ; koji download-build --arch=%s --rpm %s"
+local wd = "~/work/kernel_test"
+local cd = ("cd %s ;"):format(wd)
+local kb = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
 kp = {"modules-core", "core", "modules", "modules-extra" }
-
-local function insetkernel(table) table.insert(table, "kernel") end
 
 local function getoutput(command)
 	local handle = io.popen(command)
@@ -19,15 +19,31 @@ end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 
-local function kernelpackages()
-	-- local kv = tonumber(arg[2]:match "^(%d)")
-	local major, minor, patch = getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)"
-	for i, item in ipairs(kp) do kp[i] = ("kernel-%s%s.fc%d.1.%s.rpm"):format(kp[i], ("-%s.%s.%d"):format(major, minor, patch + 1), sbversion(), arch()) end
-	table.insert(kp, ("kernel%s.fc%d.%s.rpm"):format(version(), sbversion(), arch()))
+local function override()
+	local cmd = (("%s rpm-ostree override replace %s"):format(cd, table.concat(kp, " ")))
+	print(cmd)
+	x(cmd)
 end
 
-local function override() print(("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
-function prepareworkdir() kernelpackages() x "rm -rf ~/work && mkdir -p ~/work/kernel_test" end
+function prepareworkdir() x(("rm -rf %s && mkdir -p %s"):format(wd, wd)) end
+
+function down_and_replace(kp_args, k_args, version)
+	prepareworkdir()
+	local cmd = ""
+	for i, item in ipairs(kp) do
+		kp[i] = (kp_args):format(kp[i], version, sbversion(), arch())
+		cmd = kb:format(arch(), kp[i])
+		io.write(cmd .. "\n")
+		x(cmd)
+	end
+
+	cmd = kb:format(arch(), (k_args):format(version, sbversion(), arch()))
+	io.write(cmd .. "\n")
+	x(cmd)
+
+	table.insert(kp, (k_args):format(version, sbversion(), arch()))
+	override()
+end
 
 local handlers = {
 	["off-selinux"] = function() x "semanage boolean -m --off selinuxuser_execheap" end,
@@ -45,35 +61,22 @@ local handlers = {
 
 	["override-reset"] = function()
 		for i, item in ipairs(kp) do kp[i] = ("kernel-%s"):format(kp[i]) end
-		insetkernel(kp)
+		table.insert(kp, "kernel")
 		x(("rpm-ostree override reset %s"):format(table.concat(kp, " ")))
 	end,
 
 	["force-override"] = function ()
-		-- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
-		arg[2] = getoutput "uname -r" :match "(%d+)"
+		arg[2] = getoutput "uname -r":match "(%d+)" -- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
 		kernelpackages() override()
 	end,
 
 	["newer-patch"] = function()
-		-- Executa o comando uname -r para obter a versão do kernel
-		local major, minor, patch = getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)"
-	
-		-- Converte o valor do Patch para número e incrementa 1
-		-- Constrói a nova versão do kernel
-	
-		arg[2] = major
-		prepareworkdir()
-		for i, item in ipairs(kp) do x(("%s-200.fc%d.%s.rpm"):format(kb:format(arch(), kp[i]), sbversion(), arch())) end
-		override()
+		local major, minor, patch = getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
+		local version = ("-%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
+		down_and_replace("kernel-%s%s-200.fc%d.%s.rpm", "kernel%s-200.fc%d.%s.rpm", version)
 	end,
-	
-	["newer"] = function()
-		prepareworkdir()
-		x(("%s.fc%d.1.%s.rpm"):format(("cd ~/work/kernel_test ; koji download-build --arch=%s --rpm kernel-%s"):format(arch(), arg[2]), sbversion(), arch()))
-		for i, item in ipairs(kp) do x(("%s.fc%d.%s.rpm"):format(kb:format(arch(), kp[i] .. "-" .. arg[2]), sbversion(), arch())) end
-		override()
-	end,
+
+	["newer"] = function() down_and_replace("kernel-%s-%s.fc%d.%s.rpm", "kernel-%s.fc%d.%s.rpm", arg[2] ) end,
 
 	["kernel-regressions"] = function()
 		x [[cd ~/kernel-tests;
