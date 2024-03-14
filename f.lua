@@ -4,16 +4,10 @@
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
-local kb = "cd ~/work/kernel_test ; koji download-build --arch=%s --rpm kernel-%s"
-
+local kb = "cd ~/work/kernel_test ; koji download-build --arch=%s --rpm %s"
 kp = {"modules-core", "core", "modules", "modules-extra" }
-kp2 = kp
 
-local function kernelpackages()
-	local kv = tonumber(arg[2]:match "^(%d)")
-	for i, item in ipairs(kp) do kp[i] = ("kernel-%s-%d*.rpm"):format(kp[i], kv) end
-	table.insert(kp, ("kernel-%d*"):format(kv))
-end
+local function insetkernel(table) table.insert(table, "kernel") end
 
 local function getoutput(command)
 	local handle = io.popen(command)
@@ -24,8 +18,16 @@ end
 
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
-local function override() x(("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
-function prepareworkdir() x "rm -rf ~/work && mkdir -p ~/work/kernel_test" end
+
+local function kernelpackages()
+	-- local kv = tonumber(arg[2]:match "^(%d)")
+	local major, minor, patch = getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)"
+	for i, item in ipairs(kp) do kp[i] = ("kernel-%s%s.fc%d.1.%s.rpm"):format(kp[i], ("-%s.%s.%d"):format(major, minor, patch + 1), sbversion(), arch()) end
+	table.insert(kp, ("kernel%s.fc%d.%s.rpm"):format(version(), sbversion(), arch()))
+end
+
+local function override() print(("cd ~/work/kernel_test ; rpm-ostree override replace %s"):format(table.concat(kp, " "))) end
+function prepareworkdir() kernelpackages() x "rm -rf ~/work && mkdir -p ~/work/kernel_test" end
 
 local handlers = {
 	["off-selinux"] = function() x "semanage boolean -m --off selinuxuser_execheap" end,
@@ -43,7 +45,7 @@ local handlers = {
 
 	["override-reset"] = function()
 		for i, item in ipairs(kp) do kp[i] = ("kernel-%s"):format(kp[i]) end
-		table.insert(kp, "kernel")
+		insetkernel(kp)
 		x(("rpm-ostree override reset %s"):format(table.concat(kp, " ")))
 	end,
 
@@ -62,15 +64,14 @@ local handlers = {
 	
 		arg[2] = major
 		prepareworkdir()
-		for i, item in ipairs(kp2) do x(("%s-200.fc%d.%s.rpm"):format(kb:format(arch(), kp2[i] .. ("-%s.%s.%d"):format(major, minor, patch + 1)), sbversion(), arch())) end
-		kernelpackages()
+		for i, item in ipairs(kp) do x(("%s-200.fc%d.%s.rpm"):format(kb:format(arch(), kp[i]), sbversion(), arch())) end
 		override()
 	end,
 	
 	["newer"] = function()
 		prepareworkdir()
-		for i, item in ipairs(kp2) do x(("%s.fc%d.%s.rpm"):format(kb:format(arch(), kp2[i] .. "-" .. arg[2]), sbversion(), arch())) end
-		kernelpackages()
+		x(("%s.fc%d.1.%s.rpm"):format(("cd ~/work/kernel_test ; koji download-build --arch=%s --rpm kernel-%s"):format(arch(), arg[2]), sbversion(), arch()))
+		for i, item in ipairs(kp) do x(("%s.fc%d.%s.rpm"):format(kb:format(arch(), kp[i] .. "-" .. arg[2]), sbversion(), arch())) end
 		override()
 	end,
 
