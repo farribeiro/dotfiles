@@ -36,7 +36,6 @@ handlers ={
 	["dots"] = function() add_patterns({"%.%.%.", "…"}) open_replace() end -- Função para substituir os pontos suspensivos por um caractere especial. (... por … )
 }
 
-
-if not arg or #arg == 0 then os.exit(1) end
+if not arg or #arg == 0 then arg[1] = "all" end
 handlers[arg[1]]()
 print(([[Resultado gravado em "%s".]]):format(output_file))
