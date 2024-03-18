@@ -13,9 +13,9 @@ local function getoutput(command)
 end
 
 local function sbversion() return getoutput "rpm -E %fedora" end
-local function sbarch() return getoutput("uname -m"):gsub("[\n\r]", "") end
+local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function kv () io.write (("Versão do kernel: %s"):format(getoutput "uname -r" )) end
-local function rebasesb(plus) x(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, sbarch())) end
+local function rebasesb(plus) x(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, arch())) end
 
 local function lastdeploy ()
 	local output = getoutput "cat /etc/os-release"
@@ -28,7 +28,7 @@ local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
 	-- --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
-	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1, sbarch())) end,
+	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1, arch())) end,
 	["testsb"] = function() rebasesb(0) end,
 	["nexttest"] = function() rebasesb(1) end,
 	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all" end,
