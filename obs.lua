@@ -10,7 +10,7 @@ local patterns = {}
 -- Função para abrir um arquivo, realizar a substituição e gravar o conteúdo modificado em um novo arquivo
 local function open_replace()
 	local f = assert(io.open(input_file, "r")) -- Abre o arquivo de entrada para leitura
-	local md = f:read("*all") -- Lê todo o conteúdo do arquivo
+	local md = f:read "*all" -- Lê todo o conteúdo do arquivo
 	f:close() -- Fecha o arquivo de entrada
 
 	os.execute(("rm -rf %s"):format(output_file))
