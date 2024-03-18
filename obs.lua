@@ -1,7 +1,7 @@
 #!/usr/bin/lua
 
 -- SPDX-License-Identifier: GPL-2.0
--- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
+-- Copyright 2024 - Fábio Rodrigues Ribeiro and contributors
 
 local input_file = "entrada.md"
 local output_file = "rascunho.md"
