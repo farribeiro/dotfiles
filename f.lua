@@ -55,7 +55,11 @@ local handlers = {
 	end,
 
 	["check"] = function()
-		x("koji list-builds --package=kernel --pattern \"kernel-%s*\" | grep fc%d"):format(arg[2], sbversion())
+		arg[2] = not arg[2] and sbversion() or arg[2]
+		cmd = ([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2])
+		io.write (cmd .. "\n")
+		x(cmd)
+
 		io.write "\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n"
 	end,
 
