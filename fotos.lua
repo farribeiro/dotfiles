@@ -19,11 +19,11 @@ local function corre(file, opt)
 end
 
 local function resize(size)
-	mkdir() for file in getoutput() do corre(file, ("-resize %s \"%s\" \"resultado/%s\""):format(size, file, file)) end
+	mkdir() for file in getoutput() do corre(file, ([[-resize %s "%s" "resultado/%s"]]):format(size, file, file)) end
 end
 
 local function normalize_ppi()
-	mkdir() for file in getoutput() do corre(file, ("-depth 72 \"%s\" \"www/%s\""):format(file, file)) end
+	mkdir() for file in getoutput() do corre(file, ([[-depth 72 "%s" "www/%s"]]):format(file, file)) end
 end
 
 handlers ={
