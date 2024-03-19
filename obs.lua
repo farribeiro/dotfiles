@@ -23,16 +23,18 @@ local function open_replace()
 	f:close() -- Fecha o arquivo de saída
 end
 
-local function add_patterns(p)
-	table.insert(patterns, p)
-end
+local function add_patterns(p) table.insert(patterns, p) end
+local function espaco() add_patterns({" ", " "}) end
+local function dash() add_patterns({"%-%-", "–"}) end
+local function trave() add_patterns({"%-%-%-", "—"}) end
+local function dots() add_patterns({"%.%.%.", "…"}) end -- Função para substituir os pontos suspensivos por um caractere especial. (... por … )
 
-handlers ={
-	["all"] = function()
-		add_patterns({"%.%.%.", "…"})
-		add_patterns({" ", " "})
-	end,
-	["dots"] = function() add_patterns({"%.%.%.", "…"}) open_replace() end -- Função para substituir os pontos suspensivos por um caractere especial. (... por … )
+local handlers ={
+	["espaco"] = espaco,
+	["dash"] = dash,
+	["trave"] = trave,
+	["dots"] = dots, -- Função para substituir os pontos suspensivos por um caractere especial. (... por … )
+	["all"] = function() dots() trave() dash() espaco() end
 }
 
 if not arg or #arg == 0 then arg[1] = "all" end
