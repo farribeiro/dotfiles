@@ -3,6 +3,8 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+local x = os.execute
+
 local function readLinesFromFile(filename)
 	local file = io.open(filename, "r")
 	if not file then error("Erro ao abrir o arquivo: " .. filename) end
@@ -14,18 +16,18 @@ local function readLinesFromFile(filename)
 end
 
 local function cloneRepositories(filename)
-	for _, repo in ipairs(readLinesFromFile(filename)) do os.execute(("git clone %s"):format(repo)) end
+	for _, repo in ipairs(readLinesFromFile(filename)) do x(("git clone %s"):format(repo)) end
 end
 
 local function writeWorldMtFile(modules)
 	local file = io.open("world.mt", "w")
-	if not file then error("Erro ao abrir o arquivo world.mt para escrita.") end
+	if not file then error "Erro ao abrir o arquivo world.mt para escrita." end
 
-	file:write("gameid = minetest\nworld_name =\n\n")
+	file:write "gameid = minetest\nworld_name =\n\n"
 	file:write(table.concat(modules, "\n"))
 
 	file:close()
-	print("world.mt criado com sucesso.")
+	print "world.mt criado com sucesso."
 end
 
 local handlers ={
@@ -51,11 +53,11 @@ local handlers ={
 	end,
 
 	["up-mods"] = function()
-		os.execute("find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;")
+		x "find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;"
 	end,
 
 	["up-secfix"] = function()
-		os.execute("dnf5 up -y")
+		x "dnf5 up -y"
 	end,
 
 	["up"] = function ()
@@ -64,11 +66,11 @@ local handlers ={
 	end,
 
 	["start"] = function()
-		os.execute("minetest --server --terminal --gameid minetest")
+		x "minetest --server --terminal --gameid minetest"
 	end,
 
 	["stop"] = function()
-		os.execute("killall minetest")
+		x "killall minetest"
 	end,
 
 	["restart"] = function()
