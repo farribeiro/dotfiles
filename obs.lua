@@ -7,7 +7,7 @@ local input_file = "entrada.md"
 local output_file = "rascunho.md"
 local patterns = {}
 
--- Função para abrir um arquivo, realizar a substituição e gravar o conteúdo modificado em um novo arquivo
+-- Abrir um arquivo, realizar a substituição e gravar o conteúdo modificado em um novo arquivo
 local function open_replace()
 	local f = assert(io.open(input_file, "r")) -- Abre o arquivo de entrada para leitura
 	local md = f:read "*all" -- Lê todo o conteúdo do arquivo
@@ -24,16 +24,17 @@ local function open_replace()
 end
 
 local function add_patterns(p) table.insert(patterns, p) end
-local function espaco() add_patterns({" ", " "}) end
-local function dash() add_patterns({"%-%-", "–"}) end
-local function trave() add_patterns({"%-%-%-", "—"}) end
-local function dots() add_patterns({"%.%.%.", "…"}) end -- Função para substituir os pontos suspensivos por um caractere especial. (... por … )
+local function espaco() add_patterns({" ", " "}) end -- Espaços alienigenas por espaços simples.
+local function dash() add_patterns({"%-%-", "–"}) end -- Dois menos por dash. ( -- por – )
+local function trave() add_patterns({"%-%-%-", "—"}) end -- Três menos por travessão. ( --- por — )
+local function dots() add_patterns({"%.%.%.", "…"}) end -- Pontos suspensivos por um caractere especial. (... por … )
 
 local handlers ={
 	["espaco"] = espaco,
 	["dash"] = dash,
 	["trave"] = trave,
-	["dots"] = dots, -- Função para substituir os pontos suspensivos por um caractere especial. (... por … )
+	["dots"] = dots,
+	["run"] = function() os.execute "flatpak run nz.mega.MEGAsync & flatpak run md.obsidian.Obsidian & disown" end,
 	["all"] = function() dots() trave() dash() espaco() end
 }
 
