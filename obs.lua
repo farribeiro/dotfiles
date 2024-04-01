@@ -34,7 +34,7 @@ local handlers ={
 	["dash"] = dash,
 	["trave"] = trave,
 	["dots"] = dots,
-	["run"] = function() os.execute "flatpak run nz.mega.MEGAsync & flatpak run md.obsidian.Obsidian & disown" end,
+	-- ["run"] = function() os.execute "flatpak run nz.mega.MEGAsync & flatpak run md.obsidian.Obsidian & disown" end,
 	["all"] = function() dots() trave() dash() espaco() end
 }
 
