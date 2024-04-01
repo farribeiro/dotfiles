@@ -23,11 +23,11 @@ local function open_replace()
 	f:close() -- Fecha o arquivo de saída
 end
 
-local function add_patterns(p) table.insert(patterns, p) end
-local function espaco() add_patterns({" ", " "}) end -- Espaços alienigenas por espaços simples.
-local function dash() add_patterns({"%-%-", "–"}) end -- Dois menos por dash. ( -- por – )
-local function trave() add_patterns({"%-%-%-", "—"}) end -- Três menos por travessão. ( --- por — )
-local function dots() add_patterns({"%.%.%.", "…"}) end -- Pontos suspensivos por um caractere especial. (... por … )
+local function add_patterns(s, r) table.insert(patterns, {s, r}) end
+local function espaco() add_patterns(" ", " ") end -- Espaços alienigenas por espaços simples.
+local function dash() add_patterns("%-%-", "–") end -- Dois menos por dash. ( -- por – )
+local function trave() add_patterns("%-%-%-", "—") end -- Três menos por travessão. ( --- por — )
+local function dots() add_patterns("%.%.%.", "…") end -- Pontos suspensivos por um caractere especial. (... por … )
 
 local handlers ={
 	["espaco"] = espaco,
