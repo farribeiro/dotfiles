@@ -25,10 +25,8 @@ local function override()
 	x(cmd)
 end
 
-function prepareworkdir() x(("rm -rf %s && mkdir -p %s"):format(wd, wd)) end
-
 function down_and_replace(kp_args, k_args, version)
-	prepareworkdir()
+	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
 	local cmd = ""
 	for i, item in ipairs(kp) do
 		kp[i] = (kp_args):format(kp[i], version, sbversion(), arch())
