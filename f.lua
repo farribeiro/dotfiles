@@ -19,6 +19,8 @@ end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 
+local writecmd(cmd) io.write(cmd .. "\n") end
+
 local function override()
 	local cmd = (("%s rpm-ostree override replace %s"):format(cd, table.concat(kp, " ")))
 	print(cmd)
@@ -31,12 +33,12 @@ function down_and_replace(kp_args, k_args, version)
 	for i, item in ipairs(kp) do
 		kp[i] = (kp_args):format(kp[i], version, sbversion(), arch())
 		cmd = kb:format(arch(), kp[i])
-		io.write(cmd .. "\n")
+		writecmd(cmd)
 		x(cmd)
 	end
 
 	cmd = kb:format(arch(), (k_args):format(version, sbversion(), arch()))
-	io.write(cmd .. "\n")
+	writecmd(cmd)
 	x(cmd)
 
 	table.insert(kp, (k_args):format(version, sbversion(), arch()))
@@ -55,7 +57,7 @@ local handlers = {
 	["check"] = function()
 		arg[2] = not arg[2] and sbversion() or arg[2]
 		cmd = ([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2])
-		io.write (cmd .. "\n")
+		writecmd(cmd)
 		x(cmd)
 
 		io.write "\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n"
