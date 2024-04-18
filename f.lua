@@ -23,7 +23,7 @@ local writecmd(cmd) io.write(cmd .. "\n") end
 
 local function override()
 	local cmd = (("%s rpm-ostree override replace %s"):format(cd, table.concat(kp, " ")))
-	print(cmd)
+	writecmd(cmd)
 	x(cmd)
 end
 
