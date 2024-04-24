@@ -19,7 +19,7 @@ end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 
-local writecmd(cmd) io.write(cmd .. "\n") end
+local function writecmd(cmd) io.write(cmd .. "\n") end
 
 local function override()
 	local cmd = (("%s rpm-ostree override replace %s"):format(cd, table.concat(kp, " ")))
