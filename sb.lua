@@ -15,7 +15,7 @@ end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function kv () io.write (("Versão do kernel: %s"):format(getoutput "uname -r" )) end
-local function rebasesb(plus) x(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, arch())) end
+local function rebasesb(plus) x(("dnf rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, arch())) end
 
 function open_override()
 	local pct = {}
@@ -30,27 +30,27 @@ local function lastdeploy ()
 	io.write(("Data do último deploy: %s"):format(output:match "VERSION=\"(.-)\"" ))
 end
 
-local function rpmostree_upgrade(opts) kv() lastdeploy() io.write "\n\n" x(("rpm-ostree cancel && rpm-ostree upgrade %s"):format(opts)) end
+local function rpmostree_upgrade(opts) kv() lastdeploy() io.write "\n\n" x(("dnf cancel && dnf upgrade %s"):format(opts)) end
 
 local handlers = {
-	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
-	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
+	-- ["reinstall"] = function() x "dnf upgrade --install=flatpak-builder" end
+	-- ["mesa-drm-freeworld"] = function() x "dnf override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
 	-- --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(sbversion()+1, arch())) end,
 	["testsb"] = function() rebasesb(0) end,
 	["nexttest"] = function() rebasesb(1) end,
-	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all" end,
-	["preview"] = function() x "rpm-ostree upgrade --preview" end,
+	["clean"] = function() x "sudo -s <<< \"dnf cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all" end,
+	["preview"] = function() x "dnf upgrade --preview" end,
 	["pin"] = function() x "sudo ostree admin pin 0" end,
-	["in"] = function() x(("rpm-ostree upgrade --install=%s"):format(arg[2])) end,
-	["search"] = function() x(("rpm-ostree search %s"):format(arg[2])) end,
+	["in"] = function() x(("dnf upgrade --install=%s"):format(arg[2])) end,
+	["search"] = function() x(("dnf search %s"):format(arg[2])) end,
 	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(arg[2])) end,
-	["lc"] = function() x "rpm-ostree db diff" end,
+	["lc"] = function() x "dnf db diff" end,
 	["lastdeploy"] = function () lastdeploy() io.write "\n" end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, Funciona mas precisa fazer funções fora da tabela
 	["up"] = function() rpmostree_upgrade "&& flatpak update -y" end,-- && toolbox run sudo dnf5 update -y")
 	["up-r"] = function() rpmostree_upgrade "-r" end, -- && flatpak update -y" && toolbox run sudo dnf5 update -y")
-	["bulk-override-replace"] = function () print(("rpm-ostree override replace%s"):format(open_override())) end,
+	["bulk-override-replace"] = function () print(("dnf override replace%s"):format(open_override())) end,
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
 	end,
@@ -87,7 +87,7 @@ search-inrpm:
 s, search:
   Search for package
 lc:
-  Show last changes in rpm-ostree
+  Show last changes in dnf
 ld, lastdeploy:
   Show the last deploy in Silverblue
 oua, ostree-unpinall:
