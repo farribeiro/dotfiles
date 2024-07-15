@@ -17,6 +17,14 @@ local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function kv () io.write (("Versão do kernel: %s"):format(getoutput "uname -r" )) end
 local function rebasesb(plus) x(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, arch())) end
 
+function open_override()
+	local pct = {}
+	local file = assert(io.open("override.txt", "r"))
+	for line in file:lines() do pct = table.insert(pct, line) end
+	file:close()
+	return table.concat(pct, " ")
+end
+
 local function lastdeploy ()
 	local output = getoutput "cat /etc/os-release"
 	io.write(("Data do último deploy: %s"):format(output:match "VERSION=\"(.-)\"" ))
@@ -28,7 +36,7 @@ local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
 	-- --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
-	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E %s/silverblue$"):format(sbversion()+1, arch())) end,
+	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(sbversion()+1, arch())) end,
 	["testsb"] = function() rebasesb(0) end,
 	["nexttest"] = function() rebasesb(1) end,
 	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all" end,
@@ -42,7 +50,7 @@ local handlers = {
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, Funciona mas precisa fazer funções fora da tabela
 	["up"] = function() rpmostree_upgrade "&& flatpak update -y" end,-- && toolbox run sudo dnf5 update -y")
 	["up-r"] = function() rpmostree_upgrade "-r" end, -- && flatpak update -y" && toolbox run sudo dnf5 update -y")
-
+	["bulk-override-replace"] = function () print(("rpm-ostree override replace%s"):format(open_override())) end,
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
 	end,
