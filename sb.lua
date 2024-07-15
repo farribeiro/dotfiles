@@ -39,7 +39,7 @@ local handlers = {
 	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(sbversion()+1, arch())) end,
 	["testsb"] = function() rebasesb(0) end,
 	["nexttest"] = function() rebasesb(1) end,
-	["clean"] = function() x "sudo -s <<< \"dnf cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all" end,
+	["clean"] = function() x "sudo -s <<< \"dnf cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all" end,
 	["preview"] = function() x "dnf upgrade --preview" end,
 	["pin"] = function() x "sudo ostree admin pin 0" end,
 	["in"] = function() x(("dnf upgrade --install=%s"):format(arg[2])) end,
