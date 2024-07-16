@@ -6,13 +6,11 @@
 local x = os.execute
 
 local function readLinesFromFile(filename)
-	local file = io.open(filename, "r")
-	if not file then error("Erro ao abrir o arquivo: " .. filename) end
-	local lines = {}
-	for line in file:lines() do table.insert(lines, line) end
-
+	local tabela = {}
+	local file = assert(io.open(filename, "r"))
+	for line in file:lines() do table.insert(tabela, line) end
 	file:close()
-	return lines
+	return tabela
 end
 
 local function cloneRepositories(filename)
