@@ -52,25 +52,14 @@ local handlers ={
 		io.write(("Quantidade de repositórios: %d\nQuantidade de mods: %d\n"):format(count_repo, count_modules))
 	end,
 
-	["up-mods"] = function()
-		x "find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;"
-	end,
-
-	["up-secfix"] = function()
-		x "dnf5 up -y"
-	end,
+	["up-mods"] = function() x "find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;" end,
+	["up-secfix"] = function() x "dnf up -y" end,
+	["start"] = function() x "minetest --server --terminal --gameid minetest" end,
+	["stop"] = function() x "killall minetest" end,
 
 	["up"] = function ()
 		handlers["up-mods"]()
 		handlers["up-secfix"]()
-	end,
-
-	["start"] = function()
-		x "minetest --server --terminal --gameid minetest"
-	end,
-
-	["stop"] = function()
-		x "killall minetest"
 	end,
 
 	["restart"] = function()
