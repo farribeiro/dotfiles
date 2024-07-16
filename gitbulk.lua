@@ -3,6 +3,8 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+local x = os.execute
+
 local handlers = {
 	["clone"] = function ()
 		local file = io.open("git.txt", "r")
@@ -10,6 +12,7 @@ local handlers = {
 		for line in file:lines() do os.execute(("git clone %s"):format(line)) end
 		file:close()
 	end,
+	["sm"] = function() x "git submodule update && git submodule update --init" end,
 	
 	["pull"] = function()
 		os.execute("find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;")
