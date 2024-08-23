@@ -15,7 +15,7 @@ end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function kv () io.write (("Versão do kernel: %s"):format(getoutput "uname -r" )) end
-local function rebasesb(plus) x(("rpm-ostree rebase fedora:fedora/%d/%s/testing/silverblue"):format(sbversion()+plus, arch())) end
+local function rebasesb(plus,testing) print (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(sbversion()+plus, arch(), testing)) end
 
 function open_override()
 	local pct = {}
@@ -37,8 +37,9 @@ local handlers = {
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
 	-- --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
 	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(sbversion()+1, arch())) end,
-	["testsb"] = function() rebasesb(0) end,
-	["nexttest"] = function() rebasesb(1) end,
+	["testsb"] = function() rebasesb(0,"/testing") end,
+	["nexttest"] = function() rebasesb(1, "/testing") end,
+	["nextsb"] = function() rebasesb(1, "")	end,
 	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all" end,
 	["preview"] = function() x "rpm-ostree upgrade --preview" end,
 	["pin"] = function() x "sudo ostree admin pin 0" end,
@@ -65,6 +66,8 @@ cb:
 testsb:
   Rebase to testing branch
 nt, nexttest:
+  Upgrade to next testing version of silverblue
+nsb, nextsb:
   Upgrade to next version of silverblue
 up:
   Upgrade the role system to latest commit
@@ -105,6 +108,7 @@ handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
 handlers["nt"] = handlers["nexttest"]
 handlers["ld"] = handlers["lastdeploy"]
+handlers["nsb"] = handlers["nextsb"]
 
 if not arg or #arg == 0 then handlers["help"]() os.exit(1) end 
 handlers[arg[1]]()
