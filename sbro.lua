@@ -15,7 +15,7 @@ end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function kv () io.write (("Versão do kernel: %s"):format(getoutput "uname -r" )) end
-local function rebasesb(plus,testing) print (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(sbversion()+plus, arch(), testing)) end
+local function rebasesb(plus,testing) x (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(sbversion()+plus, arch(), testing)) end
 
 function open_override()
 	local pct = {}
