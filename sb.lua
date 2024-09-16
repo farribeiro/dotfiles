@@ -51,6 +51,11 @@ local handlers = {
 	["up"] = function() rpmostree_upgrade "&& flatpak update -y" end,-- && toolbox run sudo dnf5 update -y")
 	["up-r"] = function() rpmostree_upgrade "-r" end, -- && flatpak update -y" && toolbox run sudo dnf5 update -y")
 	["bulk-override-replace"] = function () print(("dnf override replace%s"):format(open_override())) end,
+	["dnf"] = function()
+		local opts = ""
+		for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
+		print(("dnf cancel && dnf%s"):format(opts))
+	end,
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
 	end,
