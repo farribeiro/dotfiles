@@ -4,6 +4,8 @@
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
+local ro = "rpm-ostree"
+local roc = ("%s cancel && "):format(ro)
 
 local function getoutput(command)
 	local handle = io.popen(command)
@@ -30,7 +32,7 @@ local function lastdeploy ()
 	io.write(("Data do último deploy: %s"):format(output:match "VERSION=\"(.-)\"" ))
 end
 
-local function rpmostree_upgrade(opts) kv() lastdeploy() io.write "\n\n" x(("rpm-ostree cancel && rpm-ostree upgrade %s"):format(opts)) end
+local function rpmostree_upgrade(opts) kv() lastdeploy() io.write "\n\n" x(("%s rpm-ostree upgrade %s"):format(roc,opts)) end
 
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
@@ -55,7 +57,7 @@ local handlers = {
 	["ro"] = function()
 		local opts = ""
 		for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
-		print(("rpm-ostree cancel && rpm-ostree%s"):format(opts))
+		print(("%srpm-ostree%s"):format(roc, opts))
 	end,
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
