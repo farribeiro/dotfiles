@@ -117,5 +117,5 @@ handlers["nt"] = handlers["nexttest"]
 handlers["ld"] = handlers["lastdeploy"]
 handlers["nsb"] = handlers["nextsb"]
 
-if not arg or #arg == 0 then handlers["help"]() os.exit(1) end 
+if not arg or #arg == 0 then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()
