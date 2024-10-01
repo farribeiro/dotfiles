@@ -5,7 +5,7 @@
 
 local x = os.execute
 local ro = "rpm-ostree"
-local roc = ("%s cancel && "):format(ro)
+local roc = ("gnome-software --quit && %s cancel && "):format(ro)
 
 local function getoutput(command)
 	local handle = io.popen(command)
