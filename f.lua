@@ -72,7 +72,7 @@ local handlers = {
 	["newer-patch"] = function()
 		local major, minor, patch = getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
 		local version = ("-%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
-		down_and_replace("kernel-%s%s-200.fc%d.%s.rpm", "kernel%s-200.fc%d.%s.rpm", version)
+		down_and_replace("kernel-%s%s-300.fc%d.%s.rpm", "kernel%s-300.fc%d.%s.rpm", version)
 	end,
 
 	["newer"] = function() down_and_replace("kernel-%s-%s.fc%d.%s.rpm", "kernel-%s.fc%d.%s.rpm", arg[2] ) end,
