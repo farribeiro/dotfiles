@@ -32,7 +32,10 @@ local function lastdeploy ()
 	io.write(("Data do último deploy: %s"):format(output:match "VERSION=\"(.-)\"" ))
 end
 
-local function rpmostree_upgrade(opts) kv() lastdeploy() io.write "\n\n" x(("%s rpm-ostree upgrade %s"):format(roc,opts)) end
+local function rpmostree_upgrade(opts)
+	kv() lastdeploy() io.write "\n\n"
+	x(("%s rpm-ostree upgrade %s"):format(roc,opts))
+end
 
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
