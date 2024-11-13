@@ -34,7 +34,7 @@ end
 
 local function rpmostree_upgrade(opts)
 	kv() lastdeploy() io.write "\n\n"
-	local a = os.getenv("DESKTOP_SESSION") == "gnome" and x "gnome-software --quit"
+	if os.getenv("DESKTOP_SESSION") == "gnome" then x "gnome-software --quit" end
 	x(("%s rpm-ostree upgrade %s"):format(roc,opts))
 end
 
