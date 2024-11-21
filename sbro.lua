@@ -40,6 +40,12 @@ local function rpmostree_upgrade(opts)
 	x(("%s rpm-ostree upgrade %s"):format(roc,opts))
 end
 
+local function multiargs()
+	local opts = ""
+	for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
+	return opts
+end
+
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
@@ -50,21 +56,17 @@ local handlers = {
 	["nextsb"] = function() rebasesb(1, "")	end,
 	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all" end,
 	["pin"] = function() x "sudo ostree admin pin 0" end,
-	["in"] = function() x(("rpm-ostree upgrade --install=%s"):format(arg[2])) end,
-	["search"] = function() x(("rpm-ostree search %s"):format(arg[2])) end,
-	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(arg[2])) end,
 	["lc"] = function() x "rpm-ostree db diff" end,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
+	["in"] = function() print(("%srpm-ostree upgrade --install=%s"):format(roc, multiargs())) end,
+	["search"] = function() x(("rpm-ostree search %s"):format(multiargs())) end,
+	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(multiargs())) end,
 	["lastdeploy"] = function () lastdeploy() io.write "\n" end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, -- Funciona mas precisa fazer funções fora da tabela
 	["up"] = function() rpmostree_upgrade "&& flatpak update -y" end,-- && toolbox run sudo dnf update -y")
-	["ro"] = function()
-		local opts = ""
-		for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
-		print(("%srpm-ostree%s"):format(roc, opts))
-	end,
 	-- ["up-r"] = function() rpmostree_upgrade "-r" end, -- && flatpak update -y" && toolbox run sudo dnf update -y")
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
+	["ro"] = function() print(("%srpm-ostree%s"):format(roc, multiargs())) end,
 	["ostree-unpinall"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
 	end,
