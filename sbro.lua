@@ -48,7 +48,7 @@ local handlers = {
 	["testsb"] = function() rebasesb(0,"/testing") end,
 	["nexttest"] = function() rebasesb(1, "/testing") end,
 	["nextsb"] = function() rebasesb(1, "")	end,
-	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -p -b -m && ostree admin cleanup\" && toolbox run dnf clean all && dnf5 clean all" end,
+	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all" end,
 	["pin"] = function() x "sudo ostree admin pin 0" end,
 	["in"] = function() x(("rpm-ostree upgrade --install=%s"):format(arg[2])) end,
 	["search"] = function() x(("rpm-ostree search %s"):format(arg[2])) end,
@@ -57,7 +57,7 @@ local handlers = {
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
 	["lastdeploy"] = function () lastdeploy() io.write "\n" end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, -- Funciona mas precisa fazer funções fora da tabela
-	["up"] = function() rpmostree_upgrade "&& flatpak update -y" end,-- && toolbox run sudo dnf5 update -y")
+	["up"] = function() rpmostree_upgrade "&& flatpak update -y" end,-- && toolbox run sudo dnf update -y")
 	["ro"] = function()
 		local opts = ""
 		for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
