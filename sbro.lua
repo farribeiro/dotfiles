@@ -56,11 +56,11 @@ local handlers = {
 	["nextsb"] = function() rebasesb(1, "")	end,
 	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all" end,
 	["pin"] = function() x "sudo ostree admin pin 0" end,
-	["lc"] = function() x "rpm-ostree db diff" end,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
 	["in"] = function() print(("%srpm-ostree upgrade --install=%s"):format(roc, multiargs())) end,
 	["search"] = function() x(("rpm-ostree search %s"):format(multiargs())) end,
 	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(multiargs())) end,
+	["lastchange"] = function() x "rpm-ostree db diff" end,
 	["lastdeploy"] = function () lastdeploy() io.write "\n" end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, -- Funciona mas precisa fazer funções fora da tabela
 	["up"] = function() rpmostree_upgrade "&& flatpak update -y" end,-- && toolbox run sudo dnf update -y")
@@ -104,7 +104,7 @@ search-inrpm:
   Search for installed package
 s, search:
   Search for package
-lc:
+lc, lastchage:
   Show last changes in rpm-ostree
 ld, lastdeploy:
   Show the last deploy in Silverblue
@@ -123,6 +123,7 @@ handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
 handlers["nt"] = handlers["nexttest"]
 handlers["ld"] = handlers["lastdeploy"]
+handlers["lc"] = handlers["lastchange"]
 handlers["nsb"] = handlers["nextsb"]
 
 if not arg or #arg == 0 then handlers["help"]() os.exit(1) end
