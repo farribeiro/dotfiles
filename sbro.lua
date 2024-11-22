@@ -50,7 +50,7 @@ local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
 	-- --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
-	["cb"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(sbversion()+1, arch())) end,
+	["check-branch"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(sbversion()+1, arch())) end,
 	["testsb"] = function() rebasesb(0,"/testing") end,
 	["nexttest"] = function() rebasesb(1, "/testing") end,
 	["nextsb"] = function() rebasesb(1, "") end,
@@ -76,7 +76,7 @@ local handlers = {
 [[
 Options:
 
-cb:
+cb, check-branch:
   Check new branch
 testsb:
   Rebase to testing branch
@@ -116,7 +116,7 @@ oua, ostree-unpinall:
 }
 
 -- Extra functions
--- handlers['cb'] = handlers["check-branch"]
+handlers['cb'] = handlers["check-branch"]
 handlers["oua"] = handlers["ostree-unpinall"]
 handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
