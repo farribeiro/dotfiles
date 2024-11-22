@@ -86,8 +86,6 @@ nsb, nextsb:
   Upgrade to next version of silverblue
 up:
   Upgrade the role system to latest commit
-up-r:
-  Upgrade the role system to latest commit and reboot
 in:
   Install a layered package
 c, clean:
