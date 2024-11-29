@@ -9,8 +9,10 @@ local roc = ("%s cancel && "):format(ro)
 
 local function getoutput(command)
 	local handle = io.popen(command)
-	local result = handle:read "*a"
+	if not handle then return nil, "Failed to execute command" end
+	local result = handle:read("*a")
 	handle:close()
+	if not result or result == "" then return nil, "Command output is empty" end
 	return result
 end
 
