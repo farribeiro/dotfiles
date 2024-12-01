@@ -32,5 +32,5 @@ handlers ={
 	["normalize-ppi"] = function() normalize_ppi() end
 }
 
-if not arg or #arg == 0 then os.exit(1) end
+if not arg or #arg == 0 then io.write("Nenhum argumento foi passado, saindo...\n") os.exit(1) end
 handlers[arg[1]]()

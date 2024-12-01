@@ -15,8 +15,5 @@ local handlers = {
 	["pull"] = function() x "find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;" end
 }
 
-if not arg or #arg == 0 then
-	-- handlers["help"]()
-	os.exit(1)
-end
+if not arg or #arg == 0 then io.write("Nenhum argumento foi passado, saindo...\n") os.exit(1) end
 handlers[arg[1]]()
