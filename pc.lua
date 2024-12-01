@@ -9,7 +9,7 @@ handle:close()
 
 local filename = "list.txt"
 local file = assert(io.open(filename, "w"))
-if not file then error "Erro ao abrir o arquivo world.mt para escrita." end
+if not file then error ("Erro ao abrir o arquivo %s para escrita."):format(filename) end
 
 for linha in result:gmatch("[^\n]+") do file:write(("file '%s'\n"):format(linha)) end  -- Imprime diretamente a linha no formato 'file'
 
