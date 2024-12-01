@@ -2,14 +2,8 @@
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
 -- Funções Utilitários
-function lerNumero(mensagem)
-	io.write(mensagem)
-	return io.read("*number") or 0
-end
-
-function fmt(valor)
-	return ("%.2f"):format(valor)
-end
+function lerNumero(mensagem) io.write(mensagem) return io.read("*number") or 0 end
+function fmt(valor) return ("%.2f"):format(valor) end
 
 -- Funções de calculo
 function escrevecustodiames(tipo)
@@ -18,29 +12,12 @@ function escrevecustodiames(tipo)
 	if tipo == "mes" then return io.write(fmt(custo4mes()), "/mês (24x7)\n") end
 end
 
-function potencia(amp,volts)
-	return amp * volts
-end
-
-function potencia4kwh(ptnc)
-	return ptnc / 1000
-end
-
-function custo4hora()
-	return KWh * preco
-end
-
-function custo4dia()
-	return custo4hora() * horas4dia
-end
-
-function custo4mes()
-	return custo4dia() * dias
-end
-
-function kwh4mes()
-	return KWh * horas4dia * dias
-end
+function potencia(amp,volts) return amp * volts end
+function potencia4kwh(ptnc) return ptnc / 1000 end
+function custo4hora() return KWh * preco end
+function custo4dia() return custo4hora() * horas4dia end
+function custo4mes() return custo4dia() * dias end
+function kwh4mes() return KWh * horas4dia * dias end
 
 horas4dia = 24
 dias = 30
