@@ -17,7 +17,7 @@ local function getoutput(command)
 end
 
 local function sbversion() return getoutput "rpm -E %fedora" end
-local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
+local function arch() return getoutput "uname -m":gsub("[\n\r]", "") end
 local function kv () io.write (("Versão do kernel: %s"):format(getoutput "uname -r" )) end
 local function rebasesb(plus,testing) x (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(sbversion()+plus, arch(), testing)) end
 
@@ -42,6 +42,11 @@ local function rpmostree_upgrade(opts)
 	x(("%s rpm-ostree upgrade %s"):format(roc,opts))
 end
 
+local function pinning()
+	io.write("\n*** Pinning: \n")
+	x "sudo ostree admin pin 0"
+end
+
 local function multiargs()
 	local opts = ""
 	for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
@@ -57,8 +62,8 @@ local handlers = {
 	["nexttest"] = function() rebasesb(1, "/testing") end,
 	["nextsb"] = function() rebasesb(1, "") end,
 	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all" end,
-	["pin"] = function() x "sudo ostree admin pin 0" end,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
+	["pin"] = function() pinning() end,
 	["in"] = function() print(("%srpm-ostree upgrade --install=%s"):format(roc, multiargs())) end,
 	["search"] = function() x(("rpm-ostree search %s"):format(multiargs())) end,
 	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(multiargs())) end,
@@ -69,8 +74,9 @@ local handlers = {
 	-- ["up-r"] = function() rpmostree_upgrade "-r" end, -- && flatpak update -y" && toolbox run sudo dnf update -y")
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
 	["ro"] = function() print(("%srpm-ostree%s"):format(roc, multiargs())) end,
-	["ostree-unpinall"] = function()
+	["ostree-unpinall-pin"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
+		pinning()
 	end,
 
 	["help"] = function()
@@ -108,7 +114,7 @@ lc, lastchage:
   Show last changes in rpm-ostree
 ld, lastdeploy:
   Show the last deploy in Silverblue
-oua, ostree-unpinall:
+ouap, ostree-unpinall-pin:
   Unpin all pinned commits
 
 ]]
@@ -117,7 +123,7 @@ oua, ostree-unpinall:
 
 -- Extra functions
 handlers['cb'] = handlers["check-branch"]
-handlers["oua"] = handlers["ostree-unpinall"]
+handlers["ouap"] = handlers["ostree-unpinall-pin"]
 handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
