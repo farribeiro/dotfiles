@@ -4,11 +4,10 @@
 tamanho = 12 # Tamanho da senha - Você pode alterar o tamanho aqui
 chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?/{}[]|" # Conjunto de caracteres
 senha = "" # Inicializando a senha
-rng = Random.new(Time.local.to_unix) # Criando um gerador de números aleatórios
 
 # Gerando a senha
 tamanho.times do
-  i = rng.rand(0...chars.size)
+  i = Random::Secure.rand(0...chars.size)
   senha += chars[i].to_s
 end
 
