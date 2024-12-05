@@ -6,9 +6,8 @@ chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*(
 senha = "" # Inicializando a senha
 
 # Gerando a senha
-tamanho.times do
-  i = Random::Secure.rand(0...chars.size)
-  senha += chars[i].to_s
+senha = String.build(tamanho) do |io|
+	tamanho.times do io.write_byte chars.to_slice.sample random: Random::Secure end
 end
 
 puts "Senha gerada: #{senha}" # Exibir a senha gerada
