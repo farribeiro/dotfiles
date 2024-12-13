@@ -7,7 +7,7 @@ local x = os.execute
 local wd = "~/work/kernel_test"
 local cd = ("cd %s ;"):format(wd)
 local kb = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
-kp = {"modules-core", "core", "modules", "modules-extra" }
+Kp = {"modules-core", "core", "modules", "modules-extra" }
 
 local function getoutput(command)
 	local handle = io.popen(command)
@@ -23,23 +23,23 @@ local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function write_x(cmd) io.write(cmd .. "\n") x(cmd) end
 
 local function override()
-	local cmd = (("%s rpm-ostree override replace %s"):format(cd, table.concat(kp, " ")))
+	local cmd = (("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " ")))
 	write_x(cmd)
 end
 
 function down_and_replace(kp_args, k_args, version)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
 	local cmd = ""
-	for i, item in ipairs(kp) do
-		kp[i] = (kp_args):format(kp[i], version, sbversion(), arch())
-		cmd = kb:format(arch(), kp[i])
+	for i, item in ipairs(Kp) do
+		Kp[i] = (kp_args):format(Kp[i], version, sbversion(), arch())
+		cmd = kb:format(arch(), Kp[i])
 		write_x(cmd)
 	end
 
 	cmd = kb:format(arch(), (k_args):format(version, sbversion(), arch()))
 	write_x(cmd)
 
-	table.insert(kp, (k_args):format(version, sbversion(), arch()))
+	table.insert(Kp, (k_args):format(version, sbversion(), arch()))
 	override()
 end
 
@@ -61,9 +61,9 @@ local handlers = {
 	end,
 
 	["override-reset"] = function()
-		for i, item in ipairs(kp) do kp[i] = ("kernel-%s"):format(kp[i]) end
-		table.insert(kp, "kernel")
-		x(("rpm-ostree override reset %s"):format(table.concat(kp, " ")))
+		for i, item in ipairs(Kp) do Kp[i] = ("kernel-%s"):format(Kp[i]) end
+		table.insert(Kp, "kernel")
+		x(("rpm-ostree override reset %s"):format(table.concat(Kp, " ")))
 	end,
 
 	["force-override"] = function ()
