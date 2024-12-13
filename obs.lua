@@ -15,9 +15,7 @@ local function open_replace()
 
 	os.execute(("rm -rf %s"):format(output_file))
 	f = assert(io.open(output_file, "w")) -- Abre o arquivo de saída para escrita
-	for i, item in ipairs(patterns) do
-		md = md:gsub(item[1], item[2]) -- Escreve o conteúdo modificado no arquivo de saída -- Aplica a substituição
-	end
+	for i, item in ipairs(patterns) do md = md:gsub(item[1], item[2]) end -- Escreve o conteúdo modificado no arquivo de saída -- Aplica a substituição
 
 	f:write(md)
 	f:close() -- Fecha o arquivo de saída
