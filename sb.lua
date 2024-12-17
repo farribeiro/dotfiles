@@ -3,22 +3,12 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
+local util = require("util")
 local x = os.execute
 local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
 
-local function getoutput(command)
-	local handle = io.popen(command)
-	if not handle then return nil, "Failed to execute command" end
-	local result = handle:read("*a")
-	handle:close()
-	if not result or result == "" then return nil, "Command output is empty" end
-	return result
-end
-
-local function sbversion() return getoutput "rpm -E %fedora" end
-local function arch() return getoutput "uname -m":gsub("[\n\r]", "") end
-local function kv () io.write (("Versão do kernel: %s"):format(getoutput "uname -r" )) end
+local function kv () io.write (("Versão do kernel: %s"):format(util.getoutput "uname -r" )) end
 local function rebasesb(plus,testing) x (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(sbversion()+plus, arch(), testing)) end
 
 --[[
@@ -32,7 +22,7 @@ end
 ]]--
 
 local function lastdeploy ()
-	local output = getoutput "cat /etc/os-release"
+	local output = util.getoutput "cat /etc/os-release"
 	io.write(("Data do último deploy: %s"):format(output:match "VERSION=\"(.-)\"" ))
 end
 
@@ -57,7 +47,7 @@ local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
 	-- --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
-	["check-branch"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(sbversion()+1, arch())) end,
+	["check-branch"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(util.sbversion()+1, util.arch())) end,
 	["testsb"] = function() rebasesb(0,"/testing") end,
 	["nexttest"] = function() rebasesb(1, "/testing") end,
 	["nextsb"] = function() rebasesb(1, "") end,

@@ -3,23 +3,13 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+local util = require("util")
 local x = os.execute
 local wd = "~/work/kernel_test"
 local cd = ("cd %s ;"):format(wd)
 local kb = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
 Kp = {"modules-core", "core", "modules", "modules-extra" }
 
-local function getoutput(command)
-	local handle = io.popen(command)
-	if not handle then return nil, "Failed to execute command" end
-	local result = handle:read("*a")
-	handle:close()
-	if not result or result == "" then return nil, "Command output is empty" end
-	return result
-end
-
-local function sbversion() return getoutput "rpm -E %fedora" end
-local function arch() return getoutput("uname -m"):gsub("[\n\r]", "") end
 local function write_x(cmd) io.write(cmd .. "\n") x(cmd) end
 
 local function override()
@@ -31,15 +21,15 @@ function down_and_replace(kp_args, k_args, version)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
 	local cmd = ""
 	for i, item in ipairs(Kp) do
-		Kp[i] = (kp_args):format(Kp[i], version, sbversion(), arch())
-		cmd = kb:format(arch(), Kp[i])
+		Kp[i] = (kp_args):format(Kp[i], version, util.sbversion(), util.arch())
+		cmd = kb:format(util.arch(), Kp[i])
 		write_x(cmd)
 	end
 
-	cmd = kb:format(arch(), (k_args):format(version, sbversion(), arch()))
+	cmd = kb:format(util.arch(), (k_args):format(version, util.sbversion(), util.arch()))
 	write_x(cmd)
 
-	table.insert(Kp, (k_args):format(version, sbversion(), arch()))
+	table.insert(Kp, (k_args):format(version, util.sbversion(), util.arch()))
 	override()
 end
 
@@ -53,7 +43,7 @@ local handlers = {
 	end,
 
 	["check"] = function()
-		arg[2] = not arg[2] and sbversion() or arg[2]
+		arg[2] = not arg[2] and util.sbversion() or arg[2]
 		cmd = ([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2])
 		write_x(cmd)
 
@@ -67,12 +57,12 @@ local handlers = {
 	end,
 
 	["force-override"] = function ()
-		arg[2] = getoutput "uname -r":match "(%d+)" -- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
+		arg[2] = util.getoutput "uname -r":match "(%d+)" -- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
 		kernelpackages() override()
 	end,
 
 	["newer-patch"] = function()
-		local major, minor, patch = getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
+		local major, minor, patch = util.getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
 		local version = ("-%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
 		down_and_replace("kernel-%s%s-300.fc%d.%s.rpm", "kernel%s-300.fc%d.%s.rpm", version)
 	end,
