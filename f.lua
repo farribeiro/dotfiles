@@ -10,11 +10,9 @@ local cd = ("cd %s ;"):format(wd)
 local kb = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
 Kp = {"modules-core", "core", "modules", "modules-extra" }
 
-local function write_x(cmd) io.write(cmd .. "\n") x(cmd) end
-
 local function override()
 	local cmd = (("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " ")))
-	write_x(cmd)
+	util.write_x(cmd)
 end
 
 function down_and_replace(kp_args, k_args, version)
@@ -23,11 +21,11 @@ function down_and_replace(kp_args, k_args, version)
 	for i, item in ipairs(Kp) do
 		Kp[i] = (kp_args):format(Kp[i], version, util.sbversion(), util.arch())
 		cmd = kb:format(util.arch(), Kp[i])
-		write_x(cmd)
+		util.write_x(cmd)
 	end
 
 	cmd = kb:format(util.arch(), (k_args):format(version, util.sbversion(), util.arch()))
-	write_x(cmd)
+	util.write_x(cmd)
 
 	table.insert(Kp, (k_args):format(version, util.sbversion(), util.arch()))
 	override()
@@ -45,7 +43,7 @@ local handlers = {
 	["check"] = function()
 		arg[2] = not arg[2] and util.sbversion() or arg[2]
 		cmd = ([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2])
-		write_x(cmd)
+		util.write_x(cmd)
 
 		io.write "\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n"
 	end,
@@ -58,13 +56,13 @@ local handlers = {
 
 	["force-override"] = function ()
 		arg[2] = util.getoutput "uname -r":match "(%d+)" -- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
-		kernelpackages() override()
+		override()
 	end,
 
 	["newer-patch"] = function()
 		local major, minor, patch = util.getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
 		local version = ("-%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
-		down_and_replace("kernel-%s%s-300.fc%d.%s.rpm", "kernel%s-300.fc%d.%s.rpm", version)
+		down_and_replace("kernel-%s%s-200.fc%d.%s.rpm", "kernel%s-200.fc%d.%s.rpm", version)
 	end,
 
 	["newer"] = function() down_and_replace("kernel-%s-%s.fc%d.%s.rpm", "kernel-%s.fc%d.%s.rpm", arg[2] ) end,
@@ -107,5 +105,5 @@ handlers["np"] = handlers["newer-patch"]
 handlers["off"] = handlers["off-selinux"]
 handlers["or"] = handlers["override-reset"]
 
-if not arg or #arg == 0 then handlers["help"]() os.exit(1) end
+util.check_arg()
 handlers[arg[1]]()

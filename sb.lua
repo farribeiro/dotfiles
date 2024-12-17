@@ -122,5 +122,5 @@ handlers["ld"] = handlers["lastdeploy"]
 handlers["lc"] = handlers["lastchange"]
 handlers["nsb"] = handlers["nextsb"]
 
-if not arg or #arg == 0 then handlers["help"]() os.exit(1) end
+util.check_arg()
 handlers[arg[1]]()
