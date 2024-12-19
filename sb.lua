@@ -3,7 +3,8 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
-local util = require("util")
+local util = require "util"
+local sai = require "sai"
 local x = os.execute
 local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
@@ -122,5 +123,5 @@ handlers["ld"] = handlers["lastdeploy"]
 handlers["lc"] = handlers["lastchange"]
 handlers["nsb"] = handlers["nextsb"]
 
-util.check_arg()
+if sai.ca() then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()

@@ -3,13 +3,12 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
+local util = require "util"
+local sai = require "sai"
 local x = os.execute
 
-local function getoutput()
-	local handle = io.popen [[\ls -1]]
-	local result = handle:read "*a"
-	handle:close()
-	return result:gmatch "[^\n]+"
+local function ls()
+	return util.getoutput([[\ls -1]]):gmatch "[^\n]+"
 end
 
 local function mkdir() x("mkdir -p resultado") end
@@ -19,11 +18,11 @@ local function corre(file, opt)
 end
 
 local function resize(size)
-	mkdir() for file in getoutput() do corre(file, ([[-resize %s "%s" "resultado/%s"]]):format(size, file, file)) end
+	mkdir() for file in ls() do corre(file, ([[-resize %s "%s" "resultado/%s"]]):format(size, file, file)) end
 end
 
 local function normalize_ppi()
-	mkdir() for file in getoutput() do corre(file, ([[-depth 72 "%s" "www/%s"]]):format(file, file)) end
+	mkdir() for file in ls() do corre(file, ([[-depth 72 "%s" "www/%s"]]):format(file, file)) end
 end
 
 handlers ={
@@ -32,5 +31,5 @@ handlers ={
 	["normalize-ppi"] = function() normalize_ppi() end
 }
 
-if not arg or #arg == 0 then io.write("Nenhum argumento foi passado, saindo...\n") os.exit(1) end
+sai.ca_none()
 handlers[arg[1]]()

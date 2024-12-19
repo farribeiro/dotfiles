@@ -3,7 +3,7 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
-local util = require("util")
+local util = require "util"
 local x = os.execute
 local wd = "~/work/kernel_test"
 local cd = ("cd %s ;"):format(wd)
@@ -105,5 +105,5 @@ handlers["np"] = handlers["newer-patch"]
 handlers["off"] = handlers["off-selinux"]
 handlers["or"] = handlers["override-reset"]
 
-util.check_arg()
+if util.ca() then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()

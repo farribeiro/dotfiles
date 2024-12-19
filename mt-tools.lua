@@ -3,6 +3,7 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+local sai = require "sai"
 local x = os.execute
 
 local function readLinesFromFile(filename)
@@ -117,8 +118,5 @@ end
 -- Extra functions
 handlers["bs"] = handlers["bootstrap"]
 
-if not arg or #arg == 0 then
-	--handlers["help"]()
-	os.exit(1)
-end
+if sai.ca() then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()
