@@ -16,5 +16,16 @@ return {
 ["writecmd_x"] = function(cmd) io.write(cmd .. "\n") x(cmd) end,
 ["x_writemsg"] = function(cmd, msg) x(cmd) io.write(msg) end,
 ["writemsg_x"] = function(cmd, msg) io.write(msg) x(cmd) end,
+["openfile_match"] = function(filename, string)
+	local file = assert(io.open(filename, "r"))
+	local result
+	for line in file:lines() do
+		result = line:match(string)
+		if result then break end
+	end
+	file:close()
+	-- if not result or result == "" then return nil, "File is empty" end
+	return result
+end,
 getoutput = getoutput
 }
