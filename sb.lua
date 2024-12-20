@@ -11,6 +11,7 @@ local roc = ("%s cancel && "):format(ro)
 
 local function kv () io.write (("Versão do kernel: %s"):format(util.getoutput "uname -r" )) end
 local function rebasesb(plus,testing) x (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(sbversion()+plus, arch(), testing)) end
+local function lastdeploy () io.write(("Data do último deploy: %s"):format(u.getoutput "cat /etc/os-release":match "VERSION=\"(.-)\"")) end
 local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 
 --[[
@@ -22,11 +23,6 @@ function open_override()
 	return table.concat(pct, " ")
 end
 ]]--
-
-local function lastdeploy ()
-	local output = util.getoutput "cat /etc/os-release"
-	io.write(("Data do último deploy: %s"):format(output:match "VERSION=\"(.-)\"" ))
-end
 
 local function rpmostree_upgrade(opts)
 	kv() lastdeploy() io.write "\n\n"
