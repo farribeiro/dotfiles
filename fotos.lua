@@ -7,10 +7,7 @@ x = os.execute
 local util = require "util"
 local sai = require "sai"
 
-local function ls()
-	return util.getoutput([[\ls -1]]):gmatch "[^\n]+"
-end
-
+local function ls() return util.getoutput([[\ls -1]]):gsub("[\n\r]", "") end
 local function mkdir() x("mkdir -p resultado") end
 
 local function corre(file, opt)
