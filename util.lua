@@ -13,18 +13,9 @@ end
 return {
 ["sbversion"] = function() return getoutput "rpm -E %fedora" end,
 ["arch"] = function() return getoutput "uname -m" end,
-["writecmd_x"] = function(cmd)
-	io.write(cmd .. "\n")
-	x(cmd)
-end,
-["x_writemsg"] = function(cmd, msg)
-	x(cmd)
-	io.write(msg)
-end,
-["writemsg_x"] = function(cmd, msg)
-	io.write(msg)
-	x(cmd)
-end,
+["writecmd_x"] = function(cmd) io.write(cmd .. "\n") x(cmd) end,
+["x_writemsg"] = function(cmd, msg) x(cmd) io.write(msg) end,
+["writemsg_x"] = function(cmd, msg) io.write(msg) x(cmd) end,
 ["openfile_match"] = function(filename, string)
 	local file = assert(io.open(filename, "r"))
 	if not file then error("Erro ao abrir o arquivo %s para escrita."):format(filename) end
