@@ -12,7 +12,7 @@ end
 
 return {
 ["sbversion"] = function() return getoutput "rpm -E %fedora" end,
-["arch"] = function() return getoutput "uname -m":gsub("[\n\r]", "") end,
+["arch"] = function() return getoutput "uname -m" end,
 ["writecmd_x"] = function(cmd) io.write(cmd .. "\n") x(cmd) end,
 ["x_writemsg"] = function(cmd, msg) x(cmd) io.write(msg) end,
 ["writemsg_x"] = function(cmd, msg) io.write(msg) x(cmd) end,
