@@ -5,6 +5,7 @@
 
 x = os.execute
 local u = require "util"
+local sai = require "sai"
 local wd = "~/work/kernel_test"
 local cd = ("cd %s ;"):format(wd)
 local kb = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
@@ -105,5 +106,5 @@ handlers["np"] = handlers["newer-patch"]
 handlers["off"] = handlers["off-selinux"]
 handlers["or"] = handlers["override-reset"]
 
-if util.ca() then handlers["help"]() os.exit(1) end
+if sai.ca() then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()
