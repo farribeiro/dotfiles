@@ -3,7 +3,7 @@
 
 local function getoutput(cmd)
 	local handle = assert(io.popen(cmd))
-	if not handle then error("Erro ao chamar o comando: %s."):format(cmd) end
+	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
 	local result = handle:read "*l"
 	handle:close()
 	if not result or result == "" then return nil, "Command output is empty" end
