@@ -2,13 +2,13 @@
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
 local function getoutput(cmd)
-		local handle = io.popen(cmd)
-		if not handle then return nil, "Failed to execute command" end
+		local handle = assert(io.popen(cmd))
 		local result = handle:read "*a"
 		handle:close()
 		if not result or result == "" then return nil, "Command output is empty" end
 		return result
 end
+
 
 return {
 ["sbversion"] = function() return getoutput "rpm -E %fedora" end,
