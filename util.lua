@@ -3,7 +3,7 @@
 
 local function getoutput(cmd)
 		local handle = assert(io.popen(cmd))
-		local result = handle:read "*a"
+		local result = handle:read "*l"
 		handle:close()
 		if not result or result == "" then return nil, "Command output is empty" end
 		return result
