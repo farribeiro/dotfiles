@@ -11,24 +11,21 @@ local cd = ("cd %s ;"):format(wd)
 local kb = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
 Kp = {"modules-core", "core", "modules", "modules-extra" }
 
-local function override()
-	local cmd = (("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " ")))
-	util.write_x(cmd)
-end
+local function override() u.writecmd_x(("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " "))) end
 
 function down_and_replace(kp_args, k_args, version)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
 	local cmd = ""
 	for i, item in ipairs(Kp) do
-		Kp[i] = (kp_args):format(Kp[i], version, util.sbversion(), util.arch())
-		cmd = kb:format(util.arch(), Kp[i])
-		util.write_x(cmd)
+		Kp[i] = (kp_args):format(Kp[i], version, u.sbversion(), u.arch())
+		cmd = kb:format(u.arch(), Kp[i])
+		u.writecmd_x(cmd)
 	end
 
-	cmd = kb:format(util.arch(), (k_args):format(version, util.sbversion(), util.arch()))
-	util.write_x(cmd)
+	cmd = kb:format(u.arch(), (k_args):format(version, u.sbversion(), u.arch()))
+	u.writecmd_x(cmd)
 
-	table.insert(Kp, (k_args):format(version, util.sbversion(), util.arch()))
+	table.insert(Kp, (k_args):format(version, u.sbversion(), u.arch()))
 	override()
 end
 
@@ -42,9 +39,9 @@ local handlers = {
 	end,
 
 	["check"] = function()
-		arg[2] = not arg[2] and util.sbversion() or arg[2]
+		arg[2] = not arg[2] and u.sbversion() or arg[2]
 		cmd = ([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2])
-		util.write_x(cmd)
+		u.writecmd_x(cmd)
 
 		io.write "\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n"
 	end,
@@ -56,12 +53,12 @@ local handlers = {
 	end,
 
 	["force-override"] = function ()
-		arg[2] = util.getoutput "uname -r":match "(%d+)" -- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
+		arg[2] = u.getoutput "uname -r":match "(%d+)" -- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
 		override()
 	end,
 
 	["newer-patch"] = function()
-		local major, minor, patch = util.getoutput"uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
+		local major, minor, patch = u.getoutput "uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
 		local version = ("-%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
 		down_and_replace("kernel-%s%s-200.fc%d.%s.rpm", "kernel%s-200.fc%d.%s.rpm", version)
 	end,

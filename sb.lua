@@ -9,9 +9,9 @@ local s = require "sai"
 local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
 
-local function kv () io.write (("Versão do kernel: %s"):format(util.getoutput "uname -r" )) end
-local function rebasesb(plus,testing) x (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(sbversion()+plus, arch(), testing)) end
+local function kv () io.write (("Versão do kernel: %s"):format(u.getoutput "uname -r" )) end
 local function lastdeploy () io.write(("Data do último deploy: %s"):format(u.getoutput "cat /etc/os-release":match "VERSION=\"(.-)\"")) end
+local function rebasesb(plus,testing) x (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(u.sbversion()+plus, u.arch(), testing)) end
 local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 
 --[[
@@ -26,7 +26,7 @@ end
 
 local function rpmostree_upgrade(opts)
 	kv() lastdeploy() io.write "\n\n"
-	if os.getenv("DESKTOP_SESSION") == "gnome" then x "gnome-software --quit" io.write "Parado gnome-software...\n\n" end
+	if os.getenv("DESKTOP_SESSION") == "gnome" then u.x_writemsg("gnome-software --quit", "Parado gnome-software...\n\n") end
 	x(("%s rpm-ostree upgrade %s"):format(roc,opts))
 end
 
@@ -115,5 +115,5 @@ handlers["ld"] = handlers["lastdeploy"]
 handlers["lc"] = handlers["lastchange"]
 handlers["nsb"] = handlers["nextsb"]
 
-if sai.ca() then handlers["help"]() os.exit(1) end
+if s.ca() then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()
