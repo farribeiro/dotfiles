@@ -4,8 +4,8 @@
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
 x = os.execute
-local util = require "util"
-local sai = require "sai"
+local u = require "util"
+local s = require "sai"
 local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
 
