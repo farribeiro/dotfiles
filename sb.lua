@@ -11,6 +11,7 @@ local roc = ("%s cancel && "):format(ro)
 
 local function kv () io.write (("Versão do kernel: %s"):format(util.getoutput "uname -r" )) end
 local function rebasesb(plus,testing) x (("rpm-ostree rebase fedora:fedora/%d/%s%s/silverblue"):format(sbversion()+plus, arch(), testing)) end
+local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 
 --[[
 function open_override()
@@ -33,11 +34,6 @@ local function rpmostree_upgrade(opts)
 	x(("%s rpm-ostree upgrade %s"):format(roc,opts))
 end
 
-local function pinning()
-	io.write("\n*** Pinning: \n")
-	x "sudo ostree admin pin 0"
-end
-
 local function multiargs()
 	local opts = ""
 	for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
@@ -54,7 +50,6 @@ local handlers = {
 	["nextsb"] = function() rebasesb(1, "") end,
 	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all" end,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
-	["pin"] = function() pinning() end,
 	["in"] = function() print(("%srpm-ostree upgrade --install=%s"):format(roc, multiargs())) end,
 	["search"] = function() x(("rpm-ostree search %s"):format(multiargs())) end,
 	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(multiargs())) end,
@@ -65,9 +60,10 @@ local handlers = {
 	-- ["up-r"] = function() rpmostree_upgrade "-r" end, -- && flatpak update -y" && toolbox run sudo dnf update -y")
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
 	["ro"] = function() print(("%srpm-ostree%s"):format(roc, multiargs())) end,
+	pin = pin,
 	["ostree-unpinall-pin"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
-		pinning()
+		pin()
 	end,
 
 	["help"] = function()
