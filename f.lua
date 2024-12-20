@@ -13,7 +13,7 @@ Kp = {"modules-core", "core", "modules", "modules-extra" }
 
 local function override() u.writecmd_x(("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " "))) end
 
-function down_and_replace(kp_args, k_args, version)
+local function down_and_replace(kp_args, k_args, version)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
 	local cmd = ""
 	for i, item in ipairs(Kp) do
