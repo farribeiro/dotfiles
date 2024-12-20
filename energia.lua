@@ -9,7 +9,7 @@ function fmt(valor) return ("%.2f"):format(valor) end
 function escrevecustodiames(tipo)
 	io.write("Custo de R$ ")
 	if tipo == "dia" then return io.write(fmt(custo4dia()), "/dia\n") end
-	if tipo == "mes" then return io.write(fmt(custo4mes()), "/mês (24x7)\n") end
+	if tipo == "mes" then return io.write(fmt(custo4mes()), "/mês\n") end
 end
 
 function potencia(amp,volts) return amp * volts end
@@ -25,7 +25,7 @@ dias = 30
 preco = lerNumero("Preço(KWh): ")
 ptnc = lerNumero("Potência(W): ")
 horas4dia = lerNumero("Quantas horas por dias usa o equipamento (horas decimais): ")
-dias = lerNumero("Quantos dias usa o equipamento: ")
+-- dias = lerNumero("Quantos dias usa o equipamento: ")
 -- try:
 	-- amp = float(input("Amperes: "))
 	-- volts = float(input("Voltagem: "))
@@ -33,14 +33,13 @@ dias = lerNumero("Quantos dias usa o equipamento: ")
 -- except ValueError:
 KWh = potencia4kwh(ptnc)
 
-io.write("\n********** ESTIMATIVAS ***************\n")
+io.write("\n** ESTIMATIVAS ***\n")
 io.write(fmt(KWh), "KWh x R$ ", fmt(preco), " = R$ ", fmt(custo4hora()), "/hora\n")
 io.write(fmt(KWh), " x ", horas4dia, " x ", dias, " = ", fmt(kwh4mes()), "kWh/mês\n")
 escrevecustodiames("dia")
 escrevecustodiames("mes")
-io.write("\n***************************************\n\n")
+io.write("\n***********\n\n")
 
--- io.write("\n\n*** Custo ***\n")
-io.write("Custo de R$ ", fmt(custo4hora() * horas4dia * dias), "\n")
-
-io.write("\n")
+-- io.write("\n\n* Custo *\n")
+-- io.write("Custo de R$ ", fmt(custo4hora() * horas4dia * dias), "\n")
+-- io.write("\n")
