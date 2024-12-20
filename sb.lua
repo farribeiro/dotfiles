@@ -3,9 +3,9 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
+x = os.execute
 local util = require "util"
 local sai = require "sai"
-local x = os.execute
 local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
 

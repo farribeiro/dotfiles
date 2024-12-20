@@ -3,8 +3,8 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+x = os.execute
 local util = require "util"
-local x = os.execute
 local wd = "~/work/kernel_test"
 local cd = ("cd %s ;"):format(wd)
 local kb = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
