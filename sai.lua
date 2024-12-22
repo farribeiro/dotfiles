@@ -3,7 +3,11 @@
 
 local function ca() return not arg or #arg == 0 end
 
+local function ca_none()
+	if ca() then io.write("Nenhum argumento foi passado, saindo...\n") os.exit(1) end
+end
+
 return {
-["ca_none"] = function () if ca() then io.write("Nenhum argumento foi passado, saindo...\n") os.exit(1) end end,
-ca = ca
+	ca_none = ca_none,
+	ca = ca
 }

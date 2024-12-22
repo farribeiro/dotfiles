@@ -10,13 +10,7 @@ local function getoutput(cmd)
 	return result
 end
 
-return {
-["sbversion"] = function() return getoutput "rpm -E %fedora" end,
-["arch"] = function() return getoutput "uname -m" end,
-["writecmd_x"] = function(cmd) io.write(cmd .. "\n") x(cmd) end,
-["x_writemsg"] = function(cmd, msg) x(cmd) io.write(msg) end,
-["writemsg_x"] = function(cmd, msg) io.write(msg) x(cmd) end,
-["openfile_match"] = function(filename, string)
+local function openfile_match(filename, string)
 	local file = assert(io.open(filename, "r"))
 	if not file then error(("Erro ao abrir o arquivo %s para escrita."):format(filename)) end
 	local result
@@ -27,6 +21,20 @@ return {
 	file:close()
 	-- if not result or result == "" then return nil, "File is empty" end
 	return result
-end,
-getoutput = getoutput
+end
+
+local function sbversion() return getoutput "rpm -E %fedora" end
+local function arch() return getoutput "uname -m" end
+local function writecmd_x(cmd) io.write(cmd .. "\n") x(cmd) end
+local function writemsg_x(cmd, msg) io.write(msg) x(cmd) end
+local function x_writemsg(cmd, msg) x(cmd) io.write(msg) end
+
+return {
+	sbversion = sbversion,
+	arch = arch,
+	writecmd_x = writecmd_x,
+	writemsg_x = writemsg_x,
+	x_writemsg = x_writemsg,
+	openfile_match = openfile_match,
+	getoutput = getoutput
 }
