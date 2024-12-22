@@ -8,7 +8,7 @@
 
 class Sub4mkv
 	def generate_str
-		String.build do |io|
+		String.build do |io| # omitido return
 			io << "mkvmerge -o " << ARGV[1] << " " << ARGV[0] << " --language 0:por " << ARGV[0].chomp(".mkv") << ".sub"
 		end
 	end
