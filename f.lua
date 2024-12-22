@@ -37,10 +37,7 @@ local handlers = {
 	end,
 
 	["check"] = function()
-		arg[2] = not arg[2] and u.sbversion() or arg[2]
-		cmd = ([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2])
-		u.writecmd_x(cmd)
-
+		u.writecmd_x(([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2] and arg[2] or u.sbversion()))
 		io.write "\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n"
 	end,
 
@@ -61,7 +58,7 @@ local handlers = {
 		down_and_replace(version, 200)
 	end,
 
-	["newer"] = function() down_and_replace("kernel-%s-%s.fc%d.%s.rpm", "kernel-%s.fc%d.%s.rpm", arg[2] ) end,
+	["newer"] = function() down_and_replace(arg[2], 300) end,
 
 	["kernel-regressions"] = function()
 		x [[cd ~/kernel-tests;
