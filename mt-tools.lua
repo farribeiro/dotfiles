@@ -4,7 +4,7 @@
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
 local sai = require "sai"
-local x = os.execute
+x = os.execute
 
 local function readLinesFromFile(filename)
 	local tabela = {}
