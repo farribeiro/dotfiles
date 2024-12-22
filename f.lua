@@ -9,20 +9,21 @@ local sai = require "sai"
 local wd = "~/work/kernel_test"
 local cd = ("cd %s ;"):format(wd)
 local koji_build = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
+local kp_args, k_args = "kernel-%s%s-%d.fc%d.%s.rpm","kernel%s-%d.fc%d.%s.rpm"
 Kp = {"modules-core", "core", "modules", "modules-extra" }
 
 local function override() u.writecmd_x(("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " "))) end
 
-local function down_and_replace(kp_args, k_args, version)
+local function down_and_replace(version, dist)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
 	for i, item in ipairs(Kp) do
-		Kp[i] = (kp_args):format(Kp[i], version, u.sbversion(), u.arch())
+		Kp[i] = (kp_args):format(Kp[i], version, dist, u.sbversion(), u.arch())
 		u.writecmd_x(koji_build:format(u.arch(), Kp[i]))
 	end
 
 	u.writecmd_x(koji_build:format(u.arch(), (k_args):format(version, dist, u.sbversion(), u.arch())))
 
-	table.insert(Kp, (k_args):format(version, u.sbversion(), u.arch()))
+	table.insert(Kp, (k_args):format(version, dist, u.sbversion(), u.arch()))
 	override()
 end
 
@@ -57,7 +58,7 @@ local handlers = {
 	["newer-patch"] = function()
 		local major, minor, patch = u.getoutput "uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
 		local version = ("-%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
-		down_and_replace("kernel-%s%s-200.fc%d.%s.rpm", "kernel%s-200.fc%d.%s.rpm", version)
+		down_and_replace(version, 200)
 	end,
 
 	["newer"] = function() down_and_replace("kernel-%s-%s.fc%d.%s.rpm", "kernel-%s.fc%d.%s.rpm", arg[2] ) end,
