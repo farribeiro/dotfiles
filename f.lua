@@ -8,22 +8,19 @@ local u = require "util"
 local sai = require "sai"
 local wd = "~/work/kernel_test"
 local cd = ("cd %s ;"):format(wd)
-local kb = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
+local koji_build = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
 Kp = {"modules-core", "core", "modules", "modules-extra" }
 
 local function override() u.writecmd_x(("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " "))) end
 
 local function down_and_replace(kp_args, k_args, version)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
-	local cmd = ""
 	for i, item in ipairs(Kp) do
 		Kp[i] = (kp_args):format(Kp[i], version, u.sbversion(), u.arch())
-		cmd = kb:format(u.arch(), Kp[i])
-		u.writecmd_x(cmd)
+		u.writecmd_x(koji_build:format(u.arch(), Kp[i]))
 	end
 
-	cmd = kb:format(u.arch(), (k_args):format(version, u.sbversion(), u.arch()))
-	u.writecmd_x(cmd)
+	u.writecmd_x(koji_build:format(u.arch(), (k_args):format(version, dist, u.sbversion(), u.arch())))
 
 	table.insert(Kp, (k_args):format(version, u.sbversion(), u.arch()))
 	override()
