@@ -6,37 +6,14 @@ function lerTamanho(mensagem)
 	return io.read("*line")
 end
 
-function changebits2bytes(size)
-	return size / bitsinbyte
-end
-
-function changebytes2bits(size)
-	return size * bitsinbyte
-end
-
-function increase_bits(size)
-	return size * bits
-end
-
-function decresase_bits(size)
-	return size / bits
-end
-
-function tombits(size)
-	return increase_bits(size)
-end
-
-function tokbits(size)
-	return tombits(size) * 10
-end
-
-function tombytes(size)
-	return changebits2bytes(tombits(size))
-end
-
-function togbytes(size)
-	return changebits2bytes(size)
-end
+local function changebits2bytes(size) return size / bitsinbyte end
+local function changebytes2bits(size) return size * bitsinbyte end
+local function increase_bits(size) return size * bits end
+local function decresase_bits(size) return size / bits end
+local function tombits(size) return increase_bits(size) end
+local function tokbits(size) return tombits(size) * 10 end
+local function tombytes(size) return changebits2bytes(tombits(size)) end
+local function togbytes(size) return changebits2bytes(size) end
 
 line = lerTamanho("Entre com o tamanho da internet: ")
 number = line:gsub("%D", "")
