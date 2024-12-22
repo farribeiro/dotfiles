@@ -16,8 +16,7 @@ local function tombytes(size) return changebits2bytes(tombits(size)) end
 local function togbytes(size) return changebits2bytes(size) end
 
 line = lerTamanho("Entre com o tamanho da internet: ")
-number = line:gsub("%D", "")
-option = line:gsub("[^%a]", "")
+number, option = line:gsub("[%a]", ""), line:gsub("[^%a]", "")
 
 if option == "G" then
 	io.write("Tamanho da banda é ", tombits(number), " Megabits\n")
