@@ -26,6 +26,10 @@ local function down_and_replace(version, dist)
 	override()
 end
 
+local function dist(version)
+	return x(koji_build:format(u.arch(), k_args:format(version, 300, u.sbversion(), u.arch()))) and 300 or 200
+end
+
 local handlers = {
 	["off-selinux"] = function() x "semanage boolean -m --off selinuxuser_execheap" end,
 
@@ -54,10 +58,10 @@ local handlers = {
 	["newer-patch"] = function()
 		local major, minor, patch = u.getoutput "uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
 		local version = ("-%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
-		down_and_replace(version, 200)
+		down_and_replace(version, dist(version))
 	end,
 
-	["newer"] = function() down_and_replace(arg[2], 300) end,
+	["newer"] = function() down_and_replace(("-%s"):format(arg[2]), dist(arg[2])) end,
 
 	["kernel-regressions"] = function()
 		x [[cd ~/kernel-tests;
