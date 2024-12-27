@@ -6,18 +6,12 @@
 
 #Este script junta o video e legenda externa no container MASTROSKA
 
-class Sub4mkv
-	def generate_str
-		String.build(7) do |io| # omitido return
-			io << "mkvmerge -o " << ARGV[1] << " " << ARGV[0] << " --language 0:por " << ARGV[0].chomp(".mkv") << ".sub"
-		end
-	end
-
-	def initialize
-		unless ARGV.empty? || ARGV[1].empty?
-			puts generate_str
-		end
+def generate_str
+	String.build(7) do |io| # omitido return
+		io << "mkvmerge -o " << ARGV[1] << " " << ARGV[0] << " --language 0:por " << ARGV[0].chomp(".mkv") << ".sub"
 	end
 end
 
-s = Sub4mkv.new
+unless ARGV.empty? || ARGV[1].empty?
+	puts generate_str
+end
