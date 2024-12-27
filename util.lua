@@ -42,5 +42,6 @@ return {
 	writemsg_x = writemsg_x,
 	x_writemsg = x_writemsg,
 	openfile_match = openfile_match,
+	xargs = xargs,
 	getoutput = getoutput
 }
