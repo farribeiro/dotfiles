@@ -7,8 +7,7 @@ x = os.execute
 local u = require "util"
 local sai = require "sai"
 local wd = "~/work/kernel_test"
-local cd = ("cd %s ;"):format(wd)
-local koji_build = ("%s koji download-build --arch=%s --rpm %s"):format(cd, "%s", "%s")
+local koji_build = ("cd %s ; koji download-build --arch=%s --rpm %s"):format(wd, "%s", "%s")
 local kp_args, k_args = "kernel-%s%s-%d.fc%d.%s.rpm","kernel%s-%d.fc%d.%s.rpm"
 Kp = {"modules-core", "core", "modules", "modules-extra" }
 
