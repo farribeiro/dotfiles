@@ -25,5 +25,6 @@ if option == "G" then
 	writeKiB()
 elseif option == "M" then writeKiB() end
 
-io.write("Taxa de download é ", tombytes(number), " Megabytes (MB)")
+io.write(("Taxa de download é %.2f Megabytes (MB)\n"):format(tombytes(number)))
+io.write(("Taxa de download é %.4f Gigabytes (GB)"):format(togbytes(number)))
 io.write("\n")
