@@ -23,6 +23,12 @@ local function openfile_match(filename, string)
 	return result
 end
 
+local function xargs()
+	local opts = ""
+	for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
+	return opts
+end
+
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput "uname -m" end
 local function writecmd_x(cmd) io.write(cmd .. "\n") x(cmd) end

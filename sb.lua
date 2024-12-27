@@ -30,12 +30,6 @@ local function rpmostree_upgrade(opts)
 	x(("%s rpm-ostree upgrade %s"):format(roc,opts))
 end
 
-local function multiargs()
-	local opts = ""
-	for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
-	return opts
-end
-
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
