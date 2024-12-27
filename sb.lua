@@ -43,16 +43,16 @@ local handlers = {
 	["nextsb"] = function() rebasesb(1, "") end,
 	clean = clean,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
-	["in"] = function() print(("%srpm-ostree upgrade --install=%s"):format(roc, multiargs())) end,
-	["search"] = function() x(("rpm-ostree search %s"):format(multiargs())) end,
+	["in"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
+	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
 	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(multiargs())) end,
-	["lastchange"] = function() x "rpm-ostree db diff" end,
 	["lastdeploy"] = function () lastdeploy() io.write "\n" end,
+	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
 	up = up,
 	["c-up"] = function() clean() up() end, -- Funciona mas precisa fazer funções fora da tabela, solucionado
 	["up-r"] = function() rpmostree_upgrade "-r" end,
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
-	["ro"] = function() print(("%srpm-ostree%s"):format(roc, multiargs())) end,
+	["ro"] = function() x(("%s%s%s"):format(roc, ro, u.xargs())) end,
 	pin = pin,
 	["ostree-unpinall-pin"] = function()
 		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
