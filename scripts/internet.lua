@@ -21,7 +21,7 @@ local line = lerTamanho("Entre com o tamanho da internet (abaixo de 1G, em decim
 number, option = line:gsub("[%a]", ""), line:gsub("[^%a]", "")
 
 if option == "G" then
-	writeinbits (tombits(number), " Megabits (MiB)")
+	writeinbits (tombits(number), "Megabits (MiB)")
 	writeKiB()
 elseif option == "M" then writeKiB() end
 
