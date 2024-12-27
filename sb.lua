@@ -30,6 +30,9 @@ local function rpmostree_upgrade(opts)
 	x(("%s rpm-ostree upgrade %s"):format(roc,opts))
 end
 
+local function up() rpmostree_upgrade "&& flatpak update -y && toolbox run sudo dnf update -y" end
+local function clean() x (("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro)) end
+
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
@@ -38,7 +41,7 @@ local handlers = {
 	["testsb"] = function() rebasesb(0,"/testing") end,
 	["nexttest"] = function() rebasesb(1, "/testing") end,
 	["nextsb"] = function() rebasesb(1, "") end,
-	["clean"] = function() x "sudo -s <<< \"rpm-ostree cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all" end,
+	clean = clean,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
 	["in"] = function() print(("%srpm-ostree upgrade --install=%s"):format(roc, multiargs())) end,
 	["search"] = function() x(("rpm-ostree search %s"):format(multiargs())) end,
@@ -46,8 +49,8 @@ local handlers = {
 	["lastchange"] = function() x "rpm-ostree db diff" end,
 	["lastdeploy"] = function () lastdeploy() io.write "\n" end,
 	-- ["c-up"] = function() handlers["clean"]() handlers["up"]() end, -- Funciona mas precisa fazer funções fora da tabela
-	["up"] = function() rpmostree_upgrade "&& flatpak update -y" end,-- && toolbox run sudo dnf update -y")
 	-- ["up-r"] = function() rpmostree_upgrade "-r" end, -- && flatpak update -y" && toolbox run sudo dnf update -y")
+	up = up,
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
 	["ro"] = function() print(("%srpm-ostree%s"):format(roc, multiargs())) end,
 	pin = pin,
