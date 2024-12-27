@@ -1,7 +1,7 @@
-bits = 1024
-bitsinbyte = 8
+local bits = 1024
+local bitsinbyte = 8
 
-function lerTamanho(mensagem)
+local function lerTamanho(mensagem)
 	io.write(mensagem)
 	return io.read("*line")
 end
@@ -14,10 +14,10 @@ local function tombits(size) return increase_bits(size) end
 local function tokbits(size) return tombits(size) * 10 end
 local function tombytes(size) return changebits2bytes(tombits(size)) end
 local function togbytes(size) return changebits2bytes(size) end
-local function writeinbits(valor, desc) io.write(("Tamanho da banda é %.f %s\n"):format(valor, desc)) end
-function writeKiB() writeinbits(tokbits(number), "Kilobits (KiB)") end
+local function writeinbits(valor, desc) io.write(("Tamanho da banda em é %.f %s\n"):format(valor, desc)) end
+local function writeKiB() writeinbits(tokbits(number), "Kilobits (KiB)") end
 
-line = lerTamanho("Entre com o tamanho da internet: ")
+local line = lerTamanho("Entre com o tamanho da internet (abaixo de 1G, em decimais, ex. 0.7G): ")
 number, option = line:gsub("[%a]", ""), line:gsub("[^%a]", "")
 
 if option == "G" then
