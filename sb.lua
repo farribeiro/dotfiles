@@ -45,7 +45,7 @@ local handlers = {
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
 	["in"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
-	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(multiargs())) end,
+	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(u.xargs())) end,
 	["lastdeploy"] = function () lastdeploy() io.write "\n" end,
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
 	up = up,
