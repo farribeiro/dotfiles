@@ -21,7 +21,7 @@ local function down_and_replace(version, dist)
 		u.writecmd_x(koji_build:format(u.arch(), Kp[i]))
 	end
 
-	u.writecmd_x(koji_build:format(u.arch(), (k_args):format(version, dist, u.sbversion(), u.arch())))
+	u.writecmd_x(koji_build:format(u.arch(), k_args:format(version, dist, u.sbversion(), u.arch())))
 
 	table.insert(Kp, (k_args):format(version, dist, u.sbversion(), u.arch()))
 	override()
