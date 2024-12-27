@@ -10,52 +10,52 @@ local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
 
 local function kv () io.write (("Versão do kernel: %s\n"):format(u.getoutput "uname -r" )) end
-local function lastdeploy () io.write(("Data do último deploy: %s\n"):format(u.openfile_match("/etc/os-release", [[VERSION="(.-)"]]))) end
-local function rebasesb(plus,testing) x (("%s rebase fedora:fedora/%d/%s%s/silverblue"):format(ro, u.sbversion()+plus, u.arch(), testing)) end
-local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
+local function lastdeploy () io.write(("Data do último deploy: %s\n"):format(u.openfile_match("/etc/os-release",[[VERSION="(.-)"]]))) end
+local function rebasesb(plus,testing) x(("%s rebase fedora:fedora/%d/%s%s/silverblue"):format(ro,u.sbversion()+plus,u.arch(),testing)) end
+local function pin() u.writemsg_x("sudo ostree admin pin 0","\n*** Pinning: \n") end
 
 --[[
 function open_override()
 	local pct = {}
-	local file = assert(io.open("override.txt", "r"))
-	for line in file:lines() do pct = table.insert(pct, line) end
+	local file = assert(io.open("override.txt","r"))
+	for line in file:lines() do pct = table.insert(pct,line) end
 	file:close()
-	return table.concat(pct, " ")
+	return table.concat(pct," ")
 end
 ]]--
 
 local function rpmostree_upgrade(opts)
 	kv() lastdeploy() io.write "\n"
-	if os.getenv("DESKTOP_SESSION") == "gnome" then u.x_writemsg("gnome-software --quit", "Parado gnome-software...\n\n") end
-	x(("%s %s upgrade %s"):format(roc,ro, opts))
+	if os.getenv("DESKTOP_SESSION") == "gnome" then u.x_writemsg("gnome-software --quit","Parado gnome-software...\n\n") end
+	x(("%s %s upgrade %s"):format(roc,ro,opts))
 end
 
 local function up() rpmostree_upgrade "&& flatpak update -y && toolbox run sudo dnf update -y" end
-local function clean() x (("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro)) end
+local function clean() x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro)) end
 
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
 	-- --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
-	["check-branch"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(util.sbversion()+1, util.arch())) end,
+	["check-branch"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(util.sbversion()+1,util.arch())) end,
 	["testsb"] = function() rebasesb(0,"/testing") end,
-	["nexttest"] = function() rebasesb(1, "/testing") end,
-	["nextsb"] = function() rebasesb(1, "") end,
+	["nexttest"] = function() rebasesb(1,"/testing") end,
+	["nextsb"] = function() rebasesb(1,"") end,
 	clean = clean,
-	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end, -- obsoleto
-	["in"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
-	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
+	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end,-- obsoleto
+	["in"] = function() x(("%s%s upgrade --install=%s"):format(roc,ro,u.xargs())) end,
+	["search"] = function() x(("%s search %s"):format(ro,u.xargs())) end,
 	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(u.xargs())) end,
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
 	lastdeploy = lastdeploy,
 	up = up,
-	["c-up"] = function() clean() up() end, -- Funciona mas precisa fazer funções fora da tabela, solucionado
+	["c-up"] = function() clean() up() end,-- Funciona mas precisa fazer funções fora da tabela, solucionado
 	["up-r"] = function() rpmostree_upgrade "-r" end,
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
-	["ro"] = function() x(("%s%s%s"):format(roc, ro, u.xargs())) end,
+	["ro"] = function() x(("%s%s%s"):format(roc,ro,u.xargs())) end,
 	pin = pin,
 	["ostree-unpinall-pin"] = function()
-		for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
+		for i = 2,5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
 		pin()
 	end,
 
