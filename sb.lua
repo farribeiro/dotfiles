@@ -30,7 +30,12 @@ local function rpmostree_upgrade(opts)
 	x(("%s %s upgrade %s"):format(roc,ro,opts))
 end
 
-local function up() rpmostree_upgrade "&& flatpak update -y && toolbox run sudo dnf update -y" end
+local function up()
+	rpmostree_upgrade ""
+	u.x_writemsg("flatpak update -y","\n*** Termiado atualizar flatpak ***\n*** Atualizando toolbox ***\n")
+	u.x_writemsg("toolbox run sudo dnf update -y", "\n*** Termiado atualizar toolbox ***\n\n")
+end
+
 local function clean() x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro)) end
 
 local handlers = {
