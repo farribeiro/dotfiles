@@ -37,6 +37,7 @@ local function up()
 end
 
 local function clean() x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro)) end
+local function oua() for i = 2,5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
 
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
@@ -59,8 +60,9 @@ local handlers = {
 	lastdeploy = lastdeploy,
 	pin = pin,
 	up = up,
+	oua = oua,
 	["ostree-unpinall-pin"] = function()
-		for i = 2,5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end
+		oua()
 		pin()
 	end,
 
@@ -99,8 +101,10 @@ lc, lastchage:
   Show last changes in rpm-ostree
 ld, lastdeploy:
   Show the last deploy in Silverblue
+oua, ostree-unpinall:
+    Unpin all pinned commits
 ouap, ostree-unpinall-pin:
-  Unpin all pinned commits
+  Unpin all pinned commits and pin
 
 ]]
 	end
@@ -116,6 +120,7 @@ handlers["nt"] = handlers["nexttest"]
 handlers["ld"] = handlers["lastdeploy"]
 handlers["lc"] = handlers["lastchange"]
 handlers["nsb"] = handlers["nextsb"]
+handlers["ostree-unpinall"] = handlers["oua"]
 
 if s.ca() then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()
