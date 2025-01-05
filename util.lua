@@ -12,7 +12,7 @@ end
 
 local function openfile_match(filename, string)
 	local file = assert(io.open(filename, "r"))
-	if not file then error(("Erro ao abrir o arquivo %s para escrita."):format(filename)) end
+	if not file then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) end
 	local result
 	for line in file:lines() do
 		result = line:match(string)
