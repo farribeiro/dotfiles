@@ -1,0 +1,5 @@
+let ok = $updatectl check$ failed { echo "Falhou" }
+
+if ok {
+	$updatectl update$ failed{ echo "Falhou" }
+}

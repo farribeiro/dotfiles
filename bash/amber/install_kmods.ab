@@ -1,0 +1,19 @@
+unsafe $cd \$(mktemp -d --suffix=nvidia)$
+
+let arch = $uname -m$ failed{
+	echo "Falhou"
+}
+
+let version = $rpm -E %fedora$ failed {
+	echo "Falhou"
+}
+
+let kernel = "6.12.8"
+
+$akmodsbuild /usr/src/akmods/nvidia-kmod.latest -k {kernel}-fc{version}.{arch}$ failed{
+	echo "Falhou"
+}
+
+$ dnf install ./*.rpm $ failed{
+	echo "Falhou"
+}
