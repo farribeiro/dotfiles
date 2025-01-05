@@ -51,6 +51,8 @@ local handlers = {
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
 	["nextsb"] = function() rebasesb(1,"") end,
 	["nexttest"] = function() rebasesb(1,"/testing") end,
+	["poweroff"] = function () x "systemctl poweroff" end,
+	["reboot"] = function () x "systemctl reboot" end,
 	["ro"] = function() x(("%s%s%s"):format(roc,ro,u.xargs())) end,
 	["search"] = function() x(("%s search %s"):format(ro,u.xargs())) end,
 	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(u.xargs())) end,
@@ -120,6 +122,8 @@ handlers["nt"] = handlers["nexttest"]
 handlers["ld"] = handlers["lastdeploy"]
 handlers["lc"] = handlers["lastchange"]
 handlers["nsb"] = handlers["nextsb"]
+handlers["p"] = handlers["poweroff"]
+handlers["r"] = handlers["reboot"]
 handlers["ostree-unpinall"] = handlers["oua"]
 
 if s.ca() then handlers["help"]() os.exit(1) end
