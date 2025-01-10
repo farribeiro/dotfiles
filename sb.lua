@@ -31,9 +31,10 @@ local function rpmostree_upgrade(opts)
 end
 
 local function up()
+	io.write "\n*** Atualizando imagem ostree ***\n\n"
 	rpmostree_upgrade ""
-	u.x_writemsg("flatpak update -y","\n*** Termiado atualizar flatpak ***\n*** Atualizando toolbox ***\n")
-	u.x_writemsg("toolbox run sudo dnf update -y", "\n*** Termiado atualizar toolbox ***\n\n")
+	u.x_writemsg("flatpak update -y","\n*** Terminado atualizar flatpak ***\n\n*** Atualizando toolbox ***\n\n")
+	x("toolbox run sudo dnf update -y")
 end
 
 local function clean() x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro)) end
