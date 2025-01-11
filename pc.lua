@@ -18,4 +18,4 @@ for linha in result:gmatch("[^\n]+") do file:write(("file '%s'\n"):format(linha)
 file:close()
 print (("%s criado com sucesso."):format(filename))
 
-os.execute("ffmpeg -f concat -safe 0 -i list.txt -c copy output.mp3")
+os.execute("ffmpeg -f concat -safe 0 -i list.txt -c:a flac output.flac")
