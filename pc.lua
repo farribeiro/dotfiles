@@ -20,3 +20,4 @@ file:close()
 print (("%s criado com sucesso."):format(filename))
 
 x "ffmpeg -f concat -safe 0 -i list.txt -c:a flac output.flac"
+x "ffmpeg -i output.flac -vn -ar 44100 -ac 2 -b:a 192k output.mp3"
