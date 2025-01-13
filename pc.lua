@@ -26,6 +26,11 @@ local function gera_lista(result)
 	print (("%s criado com sucesso."):format(filename))
 end
 
+local function podcast_flac()
+	limpa()
+	gera_lista(arquivos())
+	x "ffmpeg -f concat -safe 0 -i list.txt -c:a flac output.flac"
+end
 
-x "ffmpeg -f concat -safe 0 -i list.txt -c:a flac output.flac"
+
 x "ffmpeg -i output.flac -vn -ar 44100 -ac 2 -b:a 192k output.mp3"
