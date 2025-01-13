@@ -26,6 +26,10 @@ local function gera_lista(result)
 	print (("%s criado com sucesso."):format(filename))
 end
 
+local function ind_mp3(result)
+	for linha in result:gmatch("[^\n]+") do x (("ffmpeg -i '%s' -vn -ar 44100 -ac 2 -b:a 192k '%s'"):format(linha, linha:gsub("%.flac", ".mp3"))) end -- Converte arquivos flac para mp3
+end
+
 local function podcast_flac()
 	limpa()
 	gera_lista(arquivos())
