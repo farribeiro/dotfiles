@@ -32,5 +32,17 @@ local function podcast_flac()
 	x "ffmpeg -f concat -safe 0 -i list.txt -c:a flac output.flac"
 end
 
+local function podcast_mp3()
+	local cmd = "ffmpeg -i output.flac -vn -ar 44100 -ac 2 -b:a 192k output.mp3"
+	limpa()
+	local file = io.open("output.flac", "r")
+	if file then
+		file.close()
+		x(cmd)
+	else
+		podcast_flac()
+		x(cmd)
+	end
+end
 
-x "ffmpeg -i output.flac -vn -ar 44100 -ac 2 -b:a 192k output.mp3"
+
