@@ -8,9 +8,6 @@ x = os.execute
 local function limpa()
 	x "rm -rf list.txt output.flac output.mp3 *.mp3"
 end
-local filename = "list.txt"
-local file = assert(io.open(filename, "w"))
-if not file then error ("Erro ao abrir o arquivo %s para escrita."):format(filename) end
 
 local function arquivos()
 	local handle = assert(io.popen "\\ls -1 | sort -V")
@@ -19,10 +16,16 @@ local function arquivos()
 	handle:close()
 	return result
 end
-for linha in result:gmatch("[^\n]+") do file:write(("file '%s'\n"):format(linha)) end  -- Imprime diretamente a linha no formato 'file'
 
-file:close()
-print (("%s criado com sucesso."):format(filename))
+local function gera_lista(result)
+	local filename = "list.txt"
+	local file = assert(io.open(filename, "w"))
+	if not file then error ("Erro ao abrir o arquivo %s para escrita."):format(filename) end
+	for linha in result:gmatch("[^\n]+") do file:write(("file '%s'\n"):format(linha)) end  -- Imprime diretamente a linha no formato 'file'
+	file:close()
+	print (("%s criado com sucesso."):format(filename))
+end
+
 
 x "ffmpeg -f concat -safe 0 -i list.txt -c:a flac output.flac"
 x "ffmpeg -i output.flac -vn -ar 44100 -ac 2 -b:a 192k output.mp3"
