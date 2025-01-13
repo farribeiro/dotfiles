@@ -4,6 +4,7 @@
 -- Copyright 2024 - Fábio Rodrigues Ribeiro and contributors
 
 x = os.execute
+local s = require "sai"
 
 local function limpa()
 	x "rm -rf list.txt output.flac output.mp3 *.mp3"
@@ -50,3 +51,4 @@ local function podcast_mp3()
 end
 
 
+s.ca_none()
