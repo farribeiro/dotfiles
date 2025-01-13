@@ -50,5 +50,23 @@ local function podcast_mp3()
 	end
 end
 
+handlers ={
+	limpa = limpa,
+	["ind_mp3"] = function ()
+		limpa()
+		ind_mp3(arquivos())
+	end,
+	podcast_flac = podcast_flac,
+	podcast_mp3 = podcast_mp3,
+	["all"] = function ()
+		local result = arquivos()
+		limpa()
+		gera_lista(result)
+		ind_mp3(result)
+		podcast_flac()
+		podcast_mp3()
+	end
+}
 
 s.ca_none()
+handlers[arg[1]]()
