@@ -3,7 +3,7 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2024 - Fábio Rodrigues Ribeiro and contributors
 
-local x = os.execute
+x = os.execute
 x "rm -rf list.txt output.flac output.mp3"
 local handle = assert(io.popen "\\ls -1 | sort -V")
 if not handle then error "Erro ao executar o comando." end
