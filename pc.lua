@@ -4,12 +4,14 @@
 -- Copyright 2024 - Fábio Rodrigues Ribeiro and contributors
 
 x = os.execute
-x "rm -rf list.txt output.flac output.mp3"
 local handle = assert(io.popen "\\ls -1 | sort -V")
 if not handle then error "Erro ao executar o comando." end
 local result = handle:read "*a"
 handle:close()
 
+local function limpa()
+	x "rm -rf list.txt output.flac output.mp3 *.mp3"
+end
 local filename = "list.txt"
 local file = assert(io.open(filename, "w"))
 if not file then error ("Erro ao abrir o arquivo %s para escrita."):format(filename) end
