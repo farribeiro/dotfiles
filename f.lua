@@ -13,7 +13,7 @@ Kp = {"modules-core", "core", "modules", "modules-extra" }
 local sbversion = u.sbversion()
 local arch = u.arch()
 
-local function override() u.writecmd_x(("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " "))) end
+local function override() u.writecmd_x(("cd %s; rpm-ostree override replace %s"):format(wd, table.concat(Kp, " "))) end
 
 local function down_and_replace(version, dist)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
