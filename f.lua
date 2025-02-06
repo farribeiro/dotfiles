@@ -10,19 +10,21 @@ local wd = "~/work/kernel_test"
 local koji_build = ("cd %s ; koji download-build --arch=%s --rpm %s"):format(wd, "%s", "%s")
 local kp_args, k_args = "kernel-%s%s-%d.fc%d.%s.rpm","kernel%s-%d.fc%d.%s.rpm"
 Kp = {"modules-core", "core", "modules", "modules-extra" }
+local sbversion = u.sbversion()
+local arch = u.arch()
 
 local function override() u.writecmd_x(("%s rpm-ostree override replace %s"):format(cd, table.concat(Kp, " "))) end
 
 local function down_and_replace(version, dist)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
 	for i, item in ipairs(Kp) do
-		Kp[i] = (kp_args):format(Kp[i], version, dist, u.sbversion(), u.arch())
-		u.writecmd_x(koji_build:format(u.arch(), Kp[i]))
+		Kp[i] = kp_args:format(Kp[i], version, dist, sbversion, arch)
+		u.writecmd_x(koji_build:format(arch, Kp[i]))
 	end
 
-	u.writecmd_x(koji_build:format(u.arch(), k_args:format(version, dist, u.sbversion(), u.arch())))
+	u.writecmd_x(koji_build:format(arch, k_args:format(version, dist, sbversion, arch)))
 
-	table.insert(Kp, k_args:format(version, dist, u.sbversion(), u.arch()))
+	table.insert(Kp, k_args:format(version, dist, sbversion, arch))
 	override()
 end
 
@@ -40,7 +42,7 @@ local handlers = {
 	end,
 
 	["check"] = function()
-		u.writecmd_x(([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2] and arg[2] or u.sbversion()))
+		u.writecmd_x(([[koji list-builds --package=kernel --pattern "*fc%d*"]]):format(arg[2] and arg[2] or sbversion))
 		io.write "\n\nLink para o koji: https://koji.fedoraproject.org/koji/packageinfo?packageID=8\n"
 	end,
 
