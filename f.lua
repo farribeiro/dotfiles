@@ -18,6 +18,7 @@ local function override() u.writecmd_x(("cd %s; rpm-ostree override replace %s")
 local function down_and_replace(version, dist)
 	x(("rm -rf %s && mkdir -p %s"):format(wd, wd))
 	for i, item in ipairs(Kp) do
+		io.write("\n")
 		Kp[i] = kp_args:format(Kp[i], version, dist, sbversion, arch)
 		u.writecmd_x(koji_build:format(arch, Kp[i]))
 	end
