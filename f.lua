@@ -30,7 +30,7 @@ local function down_and_replace(version, dist)
 end
 
 local function dist(version)
-	return x(koji_build:format(u.arch(), k_args:format(version, 300, u.sbversion(), u.arch()))) and 300 or 200
+	return x(koji_build:format(arch, ("kernel-%s-%d.fc%d.%s.rpm"):format(version, 300, sbversion, arch))) and 300 or 200
 end
 
 local handlers = {
