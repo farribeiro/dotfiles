@@ -47,7 +47,7 @@ local handlers = {
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end,-- obsoleto
 	["c-up"] = function() clean() up() end,-- Funciona mas precisa fazer funções fora da tabela, solucionado
-	["check-branch"] = function() x(("ostree remote refs fedora | grep -E %d | grep -E \"%s/silverblue$\""):format(util.sbversion()+1,util.arch())) end,
+	["check-branch"] = function() x(("ostree remote refs fedora | grep -E \"%d/%s/silverblue$\""):format(util.sbversion()+1,util.arch())) end,
 	["in"] = function() x(("%s%s upgrade --install=%s"):format(roc,ro,u.xargs())) end,
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
 	["nextsb"] = function() rebasesb(1,"") end,
