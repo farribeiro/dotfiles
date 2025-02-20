@@ -37,7 +37,7 @@ local handlers = {
 	["off-selinux"] = function() x "semanage boolean -m --off selinuxuser_execheap" end,
 
 	["install-tools"] = function()
-		local list = { "make", "libtirpc-devel", "gcc", "koji", "fastfetch" }
+		local list = { "make", "libtirpc-devel", "gcc", "koji", "fastfetch", "python3-openidc-client", "policycoreutils-python-utils" }
 		local s = " \\\n--install="
 		x(("rpm-ostree upgrade %s%s && cd ~ ; git clone https://pagure.io/kernel-tests.git"):format(s, table.concat(list, s)))
 	end,
