@@ -4,7 +4,6 @@
 -- Copyright 2024-2025 - Fábio Rodrigues Ribeiro and contributors
 
 x = os.execute
-local s = require "sai"
 
 local function limpa()
 	x "rm -rf list.txt output.flac output.mp3 *.mp3"
@@ -69,5 +68,5 @@ handlers ={
 	end
 }
 
-s.ca_none()
+require "sai":ca_none()
 handlers[arg[1]]()

@@ -5,7 +5,6 @@
 
 x = os.execute
 local util = require "util"
-local sai = require "sai"
 
 local function ls() return util.getoutput([[\ls -1]]):gsub("[\n\r]", "") end
 local function mkdir() x("mkdir -p resultado") end
@@ -28,5 +27,5 @@ handlers ={
 	["normalize-ppi"] = function() normalize_ppi() end
 }
 
-sai.ca_none()
+require "sai":ca_none()
 handlers[arg[1]]()

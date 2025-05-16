@@ -3,8 +3,7 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2023-2024 - Fábio Rodrigues Ribeiro and contributors
 
-local sai = require "sai"
-sai.ca_none()
+require "sai":ca_none()
 local aria = "aria2c %s " .. arg[2]
 
 local handlers = {

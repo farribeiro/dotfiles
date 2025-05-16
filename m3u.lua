@@ -3,8 +3,7 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2024 - Fábio Rodrigues Ribeiro and contributors
 
-local s = require "sai"
-s.ca_none()
+require "sai":ca_none()
 local filename = arg[1] .. ".m3u"
 local file = assert(io.open(filename, "w"))
 if not file then error(("Erro ao abrir o arquivo %s para escrita."):format(filename)) end

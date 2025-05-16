@@ -3,7 +3,6 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2024 - Fábio Rodrigues Ribeiro and contributors
 
-local sai = require "sai"
 local input_file = "entrada.md"
 local output_file = "rascunho.md"
 local patterns = {}
@@ -37,7 +36,7 @@ local handlers ={
 	["all"] = function() dots() trave() dash() espaco() end
 }
 
-if sai.ca() then arg[1] = "all" end
+if require "sai":ca() then arg[1] = "all" end
 handlers[arg[1]]()
 open_replace()
 print(([[Resultado gravado em "%s".]]):format(output_file))

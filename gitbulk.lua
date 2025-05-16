@@ -4,7 +4,6 @@
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
-local sai = require "sai"
 
 local handlers = {
 	["clone"] = function ()
@@ -16,5 +15,5 @@ local handlers = {
 	["pull"] = function() x "find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;" end
 }
 
-sai.ca_none()
+require "sai":ca_none()
 handlers[arg[1]]()

@@ -5,7 +5,6 @@
 
 x = os.execute
 local u = require "util"
-local s = require "sai"
 local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
 
@@ -127,5 +126,5 @@ handlers["p"] = handlers["poweroff"]
 handlers["r"] = handlers["reboot"]
 handlers["ostree-unpinall"] = handlers["oua"]
 
-if s.ca() then handlers["help"]() os.exit(1) end
+if require"sai":ca() then handlers["help"]() os.exit(1) end
 handlers[arg[1]]()
