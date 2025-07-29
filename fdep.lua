@@ -1,7 +1,7 @@
 #!/usr/bin/lua
 
 -- SPDX-License-Identifier: GPL-2.0
--- Copyright 2023-2024 - Fábio Rodrigues Ribeiro and contributors
+-- Copyright 2025 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
 
