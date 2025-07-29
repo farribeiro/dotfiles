@@ -3,16 +3,15 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2025 - Fábio Rodrigues Ribeiro and contributors
 
-local x = os.execute
+local cmd_rq = "dnf -q repoquery "
 
 local handlers = {
-    ["findfile"] = function () x(("dnf provides %s"):format(arg[2])) end,
-	["whatsdepends"] = function () x(("dnf repoquery --whatdepends %s"):format(arg[2])) end
+    ["filepackage"] = function (q) return ("dnf provides %s"):format(q) end,
+	["whatdepends"] = function (q) return cmd_rq .. ("--whatdepends %s"):format(q) end
 }
 
-handlers["ff"] = handlers["findfile"]
-handlers["wd"] = handlers["whatsdepends"]
-
+handlers["fp"] = handlers["filepackage"]
+handlers["wd"] = handlers["whatdepends"]
 
 if require"sai":ca() then handlers["help"]() os.exit(1) end
-handlers[arg[1]]()
+os.execute(handlers[arg[1]](arg[2]))
