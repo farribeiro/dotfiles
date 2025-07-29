@@ -4,10 +4,11 @@
 -- Copyright 2025 - Fábio Rodrigues Ribeiro and contributors
 
 local cmd_rq = "dnf -q repoquery "
+local cmd_rq_pv = cmd_rq .. "%s --providers-of=%s"
 
 local handlers = {
-    ["filepackage"] = function (q) return ("dnf provides %s"):format(q) end,
-    ["showdeps"] = function (q) return cmd_rq .. ("%s --providers-of=depends"):format(q) end,
+    ["filepackage"] = function (q) return cmd_rq_pv:format(q, "provides") end,
+    ["showdeps"] = function (q) return cmd_rq_pv:format(q, "depends") end,
 	["whatdepends"] = function (q) return cmd_rq .. ("--whatdepends %s"):format(q) end
 }
 
