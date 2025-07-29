@@ -6,7 +6,6 @@
 import os
 import sys
 import subprocess as sp
-import argparse
 
 class Fk:
 	def n_runtimes(self): self.__n_runtimes = int(sp.getoutput("flatpak list --app --columns=runtime | sort | uniq -c | sort -n | wc -l"))
