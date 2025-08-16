@@ -1,0 +1,109 @@
+#!/usr/bin/pluto
+
+-- SPDX-License-Identifier: GPL-2.0
+-- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
+
+x = os.execute
+local b = break
+local u = require "util"
+local ro = "rpm-ostree"
+local roc = $"{ro} cancel && "
+
+local function kv() io.write ($"Versão do kernel: {u.getoutput("uname -r")}\n") end
+local function lastdeploy() io.write($"Data do último deploy: {u.openfile_match("/etc/os-release",[[VERSION="(.-)"]])}\n") end
+local function rebasesb(plus,testing) x($"{ro} rebase fedora:fedora/{u.sbversion()+plus}/{u.arch()}{testing}/cosmic-atomic") end
+local function pin() u.writemsg_x("sudo ostree admin pin 0","\n*** Pinning: \n") end
+
+--[[
+function open_override()
+	local pct = {}
+	local file = assert(io.open("override.txt","r"))
+	for line in file:lines() do pct = table.insert(pct,line) end
+	file:close()
+	return table.concat(pct," ")
+end
+]]--
+
+local function rpmostree_upgrade(opts)
+	kv() lastdeploy() io.write "\n"
+	if os.getenv("DESKTOP_SESSION") == "gnome" then u.x_writemsg("gnome-software --quit","*** Parado gnome-software ***\n\n") end
+	x($"{roc} {ro} upgrade {opts}")
+end
+
+local function up()
+	io.write "\n*** Atualizando imagem ostree ***\n\n"
+	rpmostree_upgrade ""
+	u.x_writemsg("flatpak update -y","\n*** Terminado atualizar flatpak ***\n\n*** Atualizando toolbox ***\n\n")
+	x("toolbox run sudo dnf update -y")
+end
+
+local function clean() x($"sudo -s <<< \"{ro} cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all") end
+local function oua() for i = 2,5 do x($"sudo ostree admin pin --unpin {i}") end end
+
+switch arg[1] do
+	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
+	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
+	-- --uninstall=rpmfusion-free-release-",self.__sbversion,"-1.noarch --uninstall=rpmfusion-nonfree-release-",self.__sbversion,"-1.noarch --install=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-",self.__sbversion+1,".noarch.rpm --install=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-",self.__sbversion+1,".noarch.rpm")
+	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
+	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end,-- obsoleto
+	case "c-up": clean() up() break -- Funciona mas precisa fazer funções fora da tabela, solucionado
+	case "check-branch", "cb": x($"ostree remote refs fedora | grep -E \"{u.sbversion()+1}/{u.arch()}/cosmic-atomic$\"") b
+	case "install", "in": x($"{roc}{ro} upgrade --install={u.xargs()}") b
+	case "lastchange", "lc": x($"{ro} db diff") b
+	case "nextsb", "nsb": rebasesb(1,"") b
+	case "nexttest", "nt": rebasesb(1,"/testing") b
+	case "poweroff", "p": x "systemctl poweroff" b
+	case "reboot", "r": x "systemctl reboot" b
+	case "ro": x($"{roc}{ro}{u.xargs()}") b
+	case "search", "s": x($"{ro} search {u.xargs()}") b
+	case "search-inrpm": x("rpm -qa | grep -E {u.xargs()}") b
+	case "testsb": rebasesb(0,"/testing") b
+	case "up-r": rpmostree_upgrade "-r" b
+	case "clean", "c": clean() b
+	case "lastdeploy", "ld": lastdeploy() b
+	case "pin": pin() b
+	case "up": up() b
+	case "ostree-unpinall", "oua": oua() b
+	case "ostree-unpinall-pin", "ouap": oua() pin() b
+	default:
+		io.write
+[[
+Options:
+
+cb, check-branch:
+  Check new branch
+testsb:
+  Rebase to testing branch
+nt, nexttest:
+  Upgrade to next testing version of silverblue
+nsb, nextsb:
+  Upgrade to next version of silverblue
+up:
+  Upgrade the role system to latest commit
+install, in:
+  Install a layered package
+c, clean:
+  Cleanup ostree based metadatas and cache
+c-up:
+  Cleanup ostree based metadatas, cache and upgrade the role system to latest commit
+pw, preview:
+  Dry-run of rpmostree upgrade
+pin:
+  Pin the Ostree Deployment
+mesa-drm-freeworld:
+  Install RPMFusion's mesa-drm freeworld (need configure rpmfusion repo)
+search-inrpm:
+  Search for installed package
+s, search:
+  Search for package
+lc, lastchage:
+  Show last changes in rpm-ostree
+ld, lastdeploy:
+  Show the last deploy in Silverblue
+oua, ostree-unpinall:
+    Unpin all pinned commits
+ouap, ostree-unpinall-pin:
+  Unpin all pinned commits and pin
+
+]]
+end

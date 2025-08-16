@@ -1,0 +1,9 @@
+#!/usr/bin/pluto
+
+-- SPDX-License-Identifier: GPL-2.0
+-- Copyright 2025 - Fábio Rodrigues Ribeiro and contributors
+
+a1 = arg[1]
+s = $"~/src/{a1}/"
+
+os.execute($"mkdir -p {s};cd {s};toolbox run dnf download --source {a1};rpm2cpio *.rpm | cpio -idv")
