@@ -4,7 +4,6 @@
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
 x = os.execute
-local b = break
 local u = require "util"
 local ro = "rpm-ostree"
 local roc = $"{ro} cancel && "
@@ -47,24 +46,24 @@ switch arg[1] do
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end,-- obsoleto
 	case "c-up": clean() up() break -- Funciona mas precisa fazer funções fora da tabela, solucionado
-	case "check-branch", "cb": x($"ostree remote refs fedora | grep -E \"{u.sbversion()+1}/{u.arch()}/cosmic-atomic$\"") b
-	case "install", "in": x($"{roc}{ro} upgrade --install={u.xargs()}") b
-	case "lastchange", "lc": x($"{ro} db diff") b
-	case "nextsb", "nsb": rebasesb(1,"") b
-	case "nexttest", "nt": rebasesb(1,"/testing") b
-	case "poweroff", "p": x "systemctl poweroff" b
-	case "reboot", "r": x "systemctl reboot" b
-	case "ro": x($"{roc}{ro}{u.xargs()}") b
-	case "search", "s": x($"{ro} search {u.xargs()}") b
-	case "search-inrpm": x("rpm -qa | grep -E {u.xargs()}") b
-	case "testsb": rebasesb(0,"/testing") b
-	case "up-r": rpmostree_upgrade "-r" b
-	case "clean", "c": clean() b
-	case "lastdeploy", "ld": lastdeploy() b
-	case "pin": pin() b
-	case "up": up() b
-	case "ostree-unpinall", "oua": oua() b
-	case "ostree-unpinall-pin", "ouap": oua() pin() b
+	case "check-branch", "cb": x($"ostree remote refs fedora | grep -E \"{u.sbversion()+1}/{u.arch()}/cosmic-atomic$\"") break
+	case "install", "in": x($"{roc}{ro} upgrade --install={u.xargs()}") break
+	case "lastchange", "lc": x($"{ro} db diff") break
+	case "nextsb", "nsb": rebasesb(1,"") break
+	case "nexttest", "nt": rebasesb(1,"/testing") break
+	case "poweroff", "p": x "systemctl poweroff" break
+	case "reboot", "r": x "systemctl reboot" break
+	case "ro": x($"{roc}{ro}{u.xargs()}") break
+	case "search", "s": x($"{ro} search {u.xargs()}") break
+	case "search-inrpm": x("rpm -qa | grep -E {u.xargs()}") break
+	case "testsb": rebasesb(0,"/testing") break
+	case "up-r": rpmostree_upgrade "-r" break
+	case "clean", "c": clean() break
+	case "lastdeploy", "ld": lastdeploy() break
+	case "pin": pin() break
+	case "up": up() break
+	case "ostree-unpinall", "oua": oua() break
+	case "ostree-unpinall-pin", "ouap": oua() pin() break
 	default:
 		io.write
 [[
