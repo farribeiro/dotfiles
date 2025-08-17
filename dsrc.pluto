@@ -6,4 +6,4 @@
 a1 = arg[1]
 s = $"~/src/{a1}/"
 
-os.execute($"mkdir -p {s};cd {s};toolbox run dnf download --source {a1};rpm2cpio *.rpm | cpio -idv")
+os.execute($"mkdir -p {s};cd {s};toolbox run dnf download --source {a1};rpm2cpio *.rpm | cpio -idmv")
