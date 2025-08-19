@@ -1,0 +1,38 @@
+#!/usr/bin/pluto
+
+-- SPDX-License-Identifier: GPL-2.0
+-- Copyright 2025 - Fábio Rodrigues Ribeiro and contributors
+
+local x = os.execute
+
+-- cwd = x("mktemp -d --suffix wallpappersXXXXXX") -- No have space
+
+local myhome = os.getenv("HOME")
+local bg =  $"{myhome}/.local/share/backgrounds"
+local cwdir = $"{myhome}/src/wallpapers"
+io.makedirs(cwdir)
+io.currentdir(cwdir) -- Set a new cwd
+--print(io.currentdir()) -- Get cwd
+
+x "toolbox run dnf download --source *-backgrounds-extras-gnome *-backgrounds-gnome"
+x 'find . -name "*.rpm" -exec sh -c "rpm2cpio \\"{}\\" | cpio -idvm" \\;'
+
+local compression_options = {
+    ["*.xz"]   = "J",
+    ["*.gz"]   = "z",
+    ["*.lzma"] = "J",
+    ["*.bz2"]  = "j"
+}
+for ext, option in pairs(compression_options) do
+    x ("find . -name \"" .. ext .. "\" -exec sh -c \"tar ".. option .."xfv \\\"{}\\\" \" \\;")
+end
+
+--[[
+local extensions = {"*.png","*.jpg","*.jpeg","*.jxl"}
+for _, ext in ipairs(extensions) do
+    print ("find . -name \"".. ext .. "\" -exec mv {} " .. bg .. " \\;")
+end
+]]
+
+x ('find . \\( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.jxl" \\) -exec mv {} '.. bg .. ' \\;')
+x ("chmod 644 " .. bg .. "/*")
