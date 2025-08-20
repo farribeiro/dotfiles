@@ -25,4 +25,5 @@ aria2c \
 syncthing \
 vulkan-tools \
 inxi \
+fpaste \
 koji-tool
