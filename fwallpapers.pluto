@@ -5,16 +5,21 @@
 
 local x = os.execute
 
+-- Define os diretórios
 -- cwd = x("mktemp -d --suffix wallpappersXXXXXX") -- No have space
 
 local myhome = os.getenv("HOME")
 local bg =  $"{myhome}/.local/share/backgrounds"
 local cwdir = $"{myhome}/src/wallpapers"
+
 -- Cria o diretório de trabalho e entra nele
 io.makedirs(cwdir)
 io.currentdir(cwdir)
 
+-- Baixa os pacotes de wallpapers do GNOME
 x "toolbox run dnf download --source *-backgrounds-extras-gnome *-backgrounds-gnome"
+
+-- Extrai os arquivos dos pacotes RPM
 x 'find . -name "*.rpm" -exec sh -c "rpm2cpio \\"{}\\" | cpio -idvm" \\;'
 
 local compression_options = {
