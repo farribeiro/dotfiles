@@ -29,4 +29,5 @@ for ext, option in pairs(compression_options) do x ($"find . -name \"{ext}\" -ex
 -- Move os arquivos de imagem para o diretório de backgrounds
 print ('find . \\( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.jxl" \\) -exec mv {} '.. bg .. ' \\;')
 
-x ("chmod 644 " .. bg .. "/*")
+-- Ajusta as permissões dos arquivos
+x ($"chmod 644 {bg}/*")
