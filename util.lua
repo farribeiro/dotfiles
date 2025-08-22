@@ -10,17 +10,29 @@ local function getoutput(cmd)
 	return result
 end
 
-local function openfile_match(filename, string)
-	local file = assert(io.open(filename, "r"))
-	if not file then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) end
-	local result
-	for line in file:lines() do
-		result = line:match(string)
-		if result then break end
-	end
-	file:close()
-	-- if not result or result == "" then return nil, "File is empty" end
-	return result
+local function open_file (filename)
+    local f = assert(io.open(filename, "r"))
+    if not f then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) end
+
+  return
+    function ()
+      f:seek("set", 0) -- volta pro início
+      local line = f and f:read "*a"
+      if not line then
+        f:close()
+        f = nil
+      end
+      return line
+    end
+end
+
+function openfile_match (filename, string)
+  local result
+  for line in open_file(filename) do
+    result = line:match(string)
+    if result then break end
+  end
+  return result
 end
 
 local function xargs()

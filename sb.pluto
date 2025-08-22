@@ -7,10 +7,11 @@ x = os.execute
 local u = require "util"
 local ro = "rpm-ostree"
 local roc = $"{ro} cancel && "
-
+local osrelease = "/etc/os-release"
+local variant = u.openfile_match(osrelease, "VARIANT_ID=(.-)$")
 local function kv() io.write ($"Versão do kernel: {u.getoutput("uname -r")}\n") end
-local function lastdeploy() io.write($"Data do último deploy: {u.openfile_match("/etc/os-release",[[VERSION="(.-)"]])}\n") end
-local function rebasesb(plus,testing) x($"{ro} rebase fedora:fedora/{u.sbversion()+plus}/{u.arch()}{testing}/cosmic-atomic") end
+local function lastdeploy() io.write($"Data do último deploy: {u.openfile_match(osrelease,"VERSION=\"(.-)\"")}\n") end
+local function rebasesb(plus,testing) x($"{ro} rebase fedora:fedora/{u.sbversion()+plus}/{u.arch()}{testing}/{variant}") end
 local function pin() u.writemsg_x("sudo ostree admin pin 0","\n*** Pinning: \n") end
 
 --[[
@@ -46,7 +47,7 @@ switch arg[1] do
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end,-- obsoleto
 	case "c-up": clean() up() break -- Funciona mas precisa fazer funções fora da tabela, solucionado
-	case "check-branch", "cb": x($"ostree remote refs fedora | grep -E \"{u.sbversion()+1}/{u.arch()}/cosmic-atomic$\"") break
+	case "check-branch", "cb": x($"ostree remote refs fedora | grep -E \"{u.sbversion()+1}/{u.arch()}/{variant}$\"") break
 	case "install", "in": x($"{roc}{ro} upgrade --install={u.xargs()}") break
 	case "lastchange", "lc": x($"{ro} db diff") break
 	case "nextsb", "nsb": rebasesb(1,"") break

@@ -7,10 +7,11 @@ x = os.execute
 local u = require "util"
 local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
-
+local osrelease = "/etc/os-release"
+local variant = u.openfile_match(osrelease, "VARIANT_ID=(.-)$")
 local function kv () io.write (("Versão do kernel: %s\n"):format(u.getoutput "uname -r" )) end
-local function lastdeploy () io.write(("Data do último deploy: %s\n"):format(u.openfile_match("/etc/os-release",[[VERSION="(.-)"]]))) end
-local function rebasesb(plus,testing) x(("%s rebase fedora:fedora/%d/%s%s/silverblue"):format(ro,u.sbversion()+plus,u.arch(),testing)) end
+local function lastdeploy () io.write(("Data do último deploy: %s\n"):format(u.openfile_match(osrelease, "VERSION=\"(.-)\""))) end
+local function rebasesb(plus,testing) x(("%s rebase fedora:fedora/%d/%s%s/%s"):format(ro,u.sbversion()+plus,u.arch(),testing, variant)) end
 local function pin() u.writemsg_x("sudo ostree admin pin 0","\n*** Pinning: \n") end
 
 --[[
@@ -46,7 +47,7 @@ local handlers = {
 	-- ["bulk-override-replace"] = function() print(("rpm-ostree override replace%s"):format(open_override())) end,
 	-- ["preview"] = function() x "rpm-ostree upgrade --preview" end,-- obsoleto
 	["c-up"] = function() clean() up() end,-- Funciona mas precisa fazer funções fora da tabela, solucionado
-	["check-branch"] = function() x(("ostree remote refs fedora | grep -E \"%d/%s/silverblue$\""):format(u.sbversion()+1,u.arch())) end,
+	["check-branch"] = function() x(("ostree remote refs fedora | grep -E \"%d/%s/%s$\""):format(u.sbversion()+1,u.arch(), variant)) end,
 	["in"] = function() x(("%s%s upgrade --install=%s"):format(roc,ro,u.xargs())) end,
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
 	["nextsb"] = function() rebasesb(1,"") end,
