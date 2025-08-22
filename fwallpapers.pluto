@@ -22,22 +22,11 @@ x "toolbox run dnf download --source *-backgrounds-extras-gnome *-backgrounds-gn
 -- Extrai os arquivos dos pacotes RPM
 x 'find . -name "*.rpm" -exec sh -c "rpm2cpio \\"{}\\" | cpio -idvm" \\;'
 
-local compression_options = {
-    ["*.xz"]   = "J",
-    ["*.gz"]   = "z",
-    ["*.lzma"] = "J",
-    ["*.bz2"]  = "j"
-}
-for ext, option in pairs(compression_options) do
-    x ("find . -name \"" .. ext .. "\" -exec sh -c \"tar ".. option .."xfv \\\"{}\\\" \" \\;")
-end
+-- Extrai arquivos compactados
+local compression_options = { ["*.xz"]   = "J", ["*.gz"]   = "z", ["*.lzma"] = "J", ["*.bz2"]  = "j" }
+for ext, option in pairs(compression_options) do x ($"find . -name \"{ext}\" -exec sh -c \"tar {option}xfv \\\"\{}\\\" \" \\;") end
 
---[[
-local extensions = {"*.png","*.jpg","*.jpeg","*.jxl"}
-for _, ext in ipairs(extensions) do
-    print ("find . -name \"".. ext .. "\" -exec mv {} " .. bg .. " \\;")
-end
-]]
+-- Move os arquivos de imagem para o diretório de backgrounds
+print ('find . \\( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.jxl" \\) -exec mv {} '.. bg .. ' \\;')
 
-x ('find . \\( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.jxl" \\) -exec mv {} '.. bg .. ' \\;')
 x ("chmod 644 " .. bg .. "/*")
