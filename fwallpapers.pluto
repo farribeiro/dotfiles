@@ -6,8 +6,6 @@
 local x = os.execute
 
 -- Define os diretórios
--- cwd = x("mktemp -d --suffix wallpappersXXXXXX") -- No have space
-
 local myhome = os.getenv("HOME")
 local bg =  $"{myhome}/.local/share/backgrounds"
 local cwdir = $"{myhome}/src/wallpapers"
