@@ -10,9 +10,9 @@ local x = os.execute
 local myhome = os.getenv("HOME")
 local bg =  $"{myhome}/.local/share/backgrounds"
 local cwdir = $"{myhome}/src/wallpapers"
+-- Cria o diretório de trabalho e entra nele
 io.makedirs(cwdir)
-io.currentdir(cwdir) -- Set a new cwd
---print(io.currentdir()) -- Get cwd
+io.currentdir(cwdir)
 
 x "toolbox run dnf download --source *-backgrounds-extras-gnome *-backgrounds-gnome"
 x 'find . -name "*.rpm" -exec sh -c "rpm2cpio \\"{}\\" | cpio -idvm" \\;'
