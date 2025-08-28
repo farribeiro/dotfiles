@@ -10,6 +10,15 @@ local function getoutput(cmd)
 	return result
 end
 
+local function getoutput_all(cmd)
+	local handle = assert(io.popen(cmd))
+	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
+	local result = handle:read "*a"
+	handle:close()
+	if not result or result == "" then return nil, "Command output is empty" end
+	return result
+end
+
 local function open_file (filename, opts)
     local f = assert(io.open(filename, opts))
     if not f then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) else return f end
@@ -60,5 +69,6 @@ return {
 	openfile_match = openfile_match,
 	xargs = xargs,
 	open_file = open_file,
+	getoutput_all = getoutput_all,
 	getoutput = getoutput
 }
