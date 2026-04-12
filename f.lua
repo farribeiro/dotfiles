@@ -7,10 +7,10 @@ x = os.execute
 local u = require "util"
 local wd = "~/work/kernel_test"
 local koji_build = ("cd %s ; koji download-build --arch=%s --rpm %s"):format(wd, "%s", "%s")
-local kp_args, k_args = "kernel-%s%s-%d.fc%d.%s.rpm","kernel%s-%d.fc%d.%s.rpm"
-Kp = {"modules-core", "core", "modules", "modules-extra" }
+local kp_args, k_args = "kernel-%s%s-%d.fc%d.%s.rpm", "kernel%s-%d.fc%d.%s.rpm"
 local sbversion = u.sbversion()
 local arch = u.arch()
+Kp = { "modules-core", "core", "modules", "modules-extra" }
 
 local function override() u.writecmd_x(("cd %s; rpm-ostree override replace %s"):format(wd, table.concat(Kp, " "))) end
 
@@ -52,7 +52,7 @@ local handlers = {
 		x(("rpm-ostree override reset %s"):format(table.concat(Kp, " ")))
 	end,
 
-	["force-override"] = function ()
+	["force-override"] = function()
 		arg[2] = u.getoutput "uname -r":match "(%d+)" -- Executa o comando uname -r para obter a versão do kernel e Divide a versão do kernel em partes usando o ponto como delimitador
 		override()
 	end,
@@ -76,7 +76,7 @@ local handlers = {
 
 	["help"] = function()
 		io.write
-[[Options:
+		[[Options:
 
 n, newer:
   Download and Install a newer kernel (eg f.lua n 6.8.1-200)
