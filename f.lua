@@ -8,9 +8,8 @@ local u = require "util"
 local wd = "~/Downloads/koji-tool"
 local koji_build = ("cd %s ; koji download-build --arch=%s --rpm %s"):format(wd, "%s", "%s")
 local kp_args, k_args = "kernel-%s%s-%d.fc%d.%s.rpm", "kernel%s-%d.fc%d.%s.rpm"
-local sbversion = u.sbversion()
-local arch = u.arch()
 Kp = { "modules-core", "core", "modules", "modules-extra" }
+local sbversion, arch = u.sbversion(), u.arch()
 
 local function override() u.writecmd_x(("cd %s; rpm-ostree override replace %s"):format(wd, table.concat(Kp, " "))) end
 
