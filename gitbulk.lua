@@ -6,7 +6,7 @@
 local x = os.execute
 
 local handlers = {
-	["clone"] = function ()
+	["clone"] = function()
 		local file = assert(io.open("git.txt", "r"))
 		for line in file:lines() do x(("git clone %s"):format(line)) end
 		file:close()
