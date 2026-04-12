@@ -4,7 +4,7 @@
 -- Copyright 2025 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
-local version = require "util":sbversion()
+local version = require "util".sbversion()
 
 handlers={
 	["cd"] = function () x(("cd /var/lib/mock/fedora-%d-x86_64-bootstrap/root"):format(version)) end,
