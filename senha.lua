@@ -12,7 +12,7 @@ local function secure_random_bytes(n)
 end
 
 io.write "Entre com o tamanho da senha: "
-local tamanho = io.read ("*number") -- Você pode alterar o tamanho aqui
+local tamanho = io.read("*number") -- Você pode alterar o tamanho aqui
 local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?/{}[]|"
 local senha = ""
 local random_bytes = secure_random_bytes(tamanho) -- Gera bytes aleatórios
