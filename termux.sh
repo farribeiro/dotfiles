@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/env sh
 
 # SPDX-License-Identifier: GPL-2.0
 # Copyright 2025 - Fábio Rodrigues Ribeiro and contributors
@@ -26,4 +26,7 @@ syncthing \
 vulkan-tools \
 inxi \
 fpaste \
+python-feedparser \
+python-pandas \
+luanti \
 koji-tool
