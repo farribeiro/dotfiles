@@ -7,8 +7,8 @@ require "sai":ca_none()
 local aria = "aria2c %s " .. arg[2]
 
 local handlers = {
-	["bittorrent"] = function () return aria:format("-V") end,
-	["download"] = function () return aria:format("-j 20 -c") end
+	["bittorrent"] = function() return aria:format("-V") end,
+	["download"] = function() return aria:format("-j 20 -c") end
 }
 
 handlers["t"] = handlers["bittorrent"]
