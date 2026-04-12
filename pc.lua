@@ -20,14 +20,17 @@ end
 local function gera_lista(result)
 	local filename = "list.txt"
 	local file = assert(io.open(filename, "w"))
-	if not file then error (("Erro ao abrir o arquivo %s para escrita."):format(filename)) end
-	for linha in result:gmatch("[^\n]+") do file:write(("file '%s'\n"):format(linha)) end  -- Imprime diretamente a linha no formato 'file'
+	if not file then error(("Erro ao abrir o arquivo %s para escrita."):format(filename)) end
+	for linha in result:gmatch("[^\n]+") do file:write(("file '%s'\n"):format(linha)) end -- Imprime diretamente a linha no formato 'file'
 	file:close()
-	print (("%s criado com sucesso."):format(filename))
+	print(("%s criado com sucesso."):format(filename))
 end
 
 local function ind_mp3(result)
-	for linha in result:gmatch("[^\n]+") do x (("ffmpeg -i '%s' -vn -ar 44100 -ac 2 -b:a 192k '%s'"):format(linha, linha:gsub("%.flac", ".mp3"))) end -- Converte arquivos flac para mp3
+	-- Converte arquivos flac para mp3
+	for linha in result:gmatch("[^\n]+") do
+		x(("ffmpeg -i '%s' -vn -ar 44100 -ac 2 -b:a 192k '%s'"):format(linha, linha:gsub("%.flac", ".mp3")))
+	end
 end
 
 local function podcast_flac()
@@ -50,15 +53,15 @@ local function podcast_mp3()
 	end
 end
 
-handlers ={
+handlers = {
 	limpa = limpa,
-	["ind_mp3"] = function ()
+	["ind_mp3"] = function()
 		limpa()
 		ind_mp3(arquivos())
 	end,
 	podcast_flac = podcast_flac,
 	podcast_mp3 = podcast_mp3,
-	["all"] = function ()
+	["all"] = function()
 		local result = arquivos()
 		limpa()
 		gera_lista(result)
