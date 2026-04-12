@@ -1,4 +1,4 @@
-#!/usr/bin/lua
+#!/usr/bin/env lua
 
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2023-2024 - Fábio Rodrigues Ribeiro and contributors
