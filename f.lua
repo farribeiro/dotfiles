@@ -57,8 +57,7 @@ local handlers = {
 	end,
 
 	["newer-patch"] = function()
-		local major, minor, patch = u.getoutput "uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
-		local version = ("-%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
+		local version = "-" .. u.get_nextkernelversion()
 		down_and_replace(version, dist(version))
 	end,
 
