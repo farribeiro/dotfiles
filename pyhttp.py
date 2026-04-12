@@ -5,7 +5,10 @@
 
 import os
 
+
 class Pyserver:
-	def __init__(self): os.system("python -m http.server")
+    def __init__(self):
+        os.system("python -m http.server")
+
 
 p = Pyserver()
