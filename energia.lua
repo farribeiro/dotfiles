@@ -2,7 +2,11 @@
 -- Copyright 2022-2023 - Fábio Rodrigues Ribeiro and contributors
 
 -- Funções Utilitários
-function lerNumero(mensagem) io.write(mensagem) return io.read("*number") or 0 end
+function lerNumero(mensagem)
+	io.write(mensagem)
+	return io.read("*number") or 0
+end
+
 function fmt(valor) return ("%.2f"):format(valor) end
 
 -- Funções de calculo
@@ -12,11 +16,16 @@ function escrevecustodiames(tipo)
 	if tipo == "mes" then return io.write(fmt(custo4mes()), "/mês\n") end
 end
 
-function potencia(amp,volts) return amp * volts end
+function potencia(amp, volts) return amp * volts end
+
 function potencia4kwh(ptnc) return ptnc / 1000 end
+
 function custo4hora() return KWh * preco end
+
 function custo4dia() return custo4hora() * horas4dia end
+
 function custo4mes() return custo4dia() * dias end
+
 function kwh4mes() return KWh * horas4dia * dias end
 
 horas4dia = 24
@@ -27,9 +36,9 @@ ptnc = lerNumero("Potência(W): ")
 horas4dia = lerNumero("Quantas horas por dias usa o equipamento (horas decimais): ")
 -- dias = lerNumero("Quantos dias usa o equipamento: ")
 -- try:
-	-- amp = float(input("Amperes: "))
-	-- volts = float(input("Voltagem: "))
-	-- ptnc = self.potencia(amp,volts)
+-- amp = float(input("Amperes: "))
+-- volts = float(input("Voltagem: "))
+-- ptnc = self.potencia(amp,volts)
 -- except ValueError:
 KWh = potencia4kwh(ptnc)
 
