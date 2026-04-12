@@ -6,11 +6,14 @@
 local x = os.execute
 local version = require "util".sbversion()
 
-handlers={
-	["cd"] = function () x(("cd /var/lib/mock/fedora-%d-x86_64-bootstrap/root"):format(version)) end,
-	["build"] = function () x(("fedpkg --release f%d mockbuild"):format(version)) end
+handlers = {
+	["cd"] = function() x(("cd /var/lib/mock/fedora-%d-x86_64-bootstrap/root"):format(version)) end,
+	["build"] = function() x(("fedpkg --release f%d mockbuild"):format(version)) end
 }
 
 handlers["b"] = handlers["build"]
-if require "sai":ca() then handlers["b"]() os.exit(0) end
+if require "sai":ca() then
+	handlers["b"]()
+	os.exit(0)
+end
 handlers[arg[1]]()
