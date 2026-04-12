@@ -11,7 +11,9 @@ local handlers = {
 	["opus"] = function() return yt:format("opus") end
 }
 
-handlers["r"] = handlers["mp3"] handlers["radinho"] = handlers["mp3"]
-handlers["c"] = handlers["opus"] handlers["celular"] = handlers["opus"]
+handlers["r"] = handlers["mp3"]
+handlers["radinho"] = handlers["mp3"]
+handlers["c"] = handlers["opus"]
+handlers["celular"] = handlers["opus"]
 
 os.execute(handlers[arg[1]]())
