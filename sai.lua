@@ -4,7 +4,10 @@
 local function ca() return not arg or #arg == 0 end
 
 local function ca_none()
-	if ca() then io.write("Nenhum argumento foi passado, saindo...\n") os.exit(1) end
+	if ca() then
+		io.write("Nenhum argumento foi passado, saindo...\n")
+		os.exit(1)
+	end
 end
 
 return {
