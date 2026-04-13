@@ -100,6 +100,25 @@ local function xargs()
 	return opts
 end
 
+local function get_fullkernelversion()
+	return getoutput "uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
+end
+
+local function get_kernelminorwithoutpatch()
+	local major, minor = get_fullkernelversion()
+	return ("%s.%d"):format(major, minor) -- Converte o valor do Minor para número e incrementa 1 e constrói a nova versão do kernel
+end
+
+local function get_nextkernelversion()
+	local major, minor, patch = get_fullkernelversion()
+	return ("%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
+end
+
+local function get_nextkernelminorwithoutpatch()
+	local major, minor = get_fullkernelversion()
+	return ("%s.%d"):format(major, minor + 1) -- Converte o valor do Minor para número e incrementa 1 e constrói a nova versão do kernel
+end
+
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput "uname -m" end
 
@@ -128,6 +147,9 @@ return {
 	x_writemsg = x_writemsg,
 	openfile_match = openfile_match,
 	xargs = xargs,
+	get_nextkernelversion = get_nextkernelversion,
+	get_nextkernelminorwithoutpatch = get_nextkernelminorwithoutpatch,
+	get_kernelminorwithoutpatch = get_kernelminorwithoutpatch,
 	open_file = open_file,
 	shell_read = shell_read,
 	escape = escape,
