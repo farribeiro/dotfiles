@@ -150,7 +150,6 @@ return {
 	get_nextkernelversion = get_nextkernelversion,
 	get_nextkernelminorwithoutpatch = get_nextkernelminorwithoutpatch,
 	get_kernelminorwithoutpatch = get_kernelminorwithoutpatch,
-	open_file = open_file,
 	shell_read = shell_read,
 	escape = escape,
 	getoutput_all = getoutput_all,
