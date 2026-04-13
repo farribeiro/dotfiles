@@ -49,9 +49,9 @@ local function getoutput_all(cmd)
 	return getoutput_base(cmd, "*a")
 end
 
-local function open_file (filename, opts)
-    local f = assert(io.open(filename, opts))
-    if not f then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) else return f end
+local function open_stream(filename, opts)
+	local f = assert(op(filename, opts))
+	if not f then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) else return f end
 end
 
 local function shell_read(cmd)
@@ -70,28 +70,28 @@ local function shell_read(cmd)
 	os.remove(tmp)
 	return content
 end
-local function open_iter (filename)
-    local f = open_file (filename, "r")
 
-    return
-        function ()
-            f:seek("set", 0) -- volta pro início
-            local line = f and f:read "*a"
-            if not line then
-                f:close()
-                f = nil
-            end
-            return line
-        end
+local function open_iter(filename)
+	local f = open_stream(filename, "r")
+	return
+		function()
+			f:seek("set", 0) -- volta pro início
+			local line = f and f:read "*a"
+			if not line then
+				f:close()
+				f = nil
+			end
+			return line
+		end
 end
 
-function openfile_match (filename, string)
-  local result
-  for line in open_iter(filename) do
-    result = line:match(string)
-    if result then break end
-  end
-  return result
+local function openfile_match(filename, string)
+	local result
+	for line in open_iter(filename) do
+		result = line:match(string)
+		if result then break end
+	end
+	return result
 end
 
 local function xargs()
