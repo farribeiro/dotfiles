@@ -7,15 +7,9 @@ local fk = "flatpak "
 local function shell_read(cmd)
 	local tmp = os.tmpname()
 
-	local function success(cmd)
-		local r1, r2, r3 = x(cmd)
-		if type(r1) == "boolean" then
-			return r1
-		elseif type(r1) == "number" then
-			return r1 == 0
-		else
-			return false
-		end
+	local function success(cmd2)
+		local r1, r2, r3 = x(cmd2)
+		if type(r1) == "boolean" then return r1 elseif type(r1) == "number" then return r1 == 0 else return false end
 	end
 
 	if not success(cmd .. " > " .. tmp) then
