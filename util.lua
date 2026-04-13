@@ -59,9 +59,22 @@ end
 
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput "uname -m" end
-local function writecmd_x(cmd) io.write(cmd .. "\n") x(cmd) end
-local function writemsg_x(cmd, msg) io.write(msg) x(cmd) end
-local function x_writemsg(cmd, msg) x(cmd) io.write(msg) end
+
+local function writecmd_x(cmd)
+	io.write(cmd .. "\n")
+	x(cmd)
+end
+
+local function writemsg_x(cmd, msg)
+	io.write(msg)
+	x(cmd)
+end
+
+local function x_writemsg(cmd, msg)
+	x(cmd)
+	io.write(msg)
+end
+
 local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 
 return {
