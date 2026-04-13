@@ -62,6 +62,7 @@ local function arch() return getoutput "uname -m" end
 local function writecmd_x(cmd) io.write(cmd .. "\n") x(cmd) end
 local function writemsg_x(cmd, msg) io.write(msg) x(cmd) end
 local function x_writemsg(cmd, msg) x(cmd) io.write(msg) end
+local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 
 return {
 	sbversion = sbversion,
@@ -72,6 +73,7 @@ return {
 	openfile_match = openfile_match,
 	xargs = xargs,
 	open_file = open_file,
+	escape = escape,
 	getoutput_all = getoutput_all,
 	getoutput = getoutput
 }
