@@ -9,15 +9,9 @@ local x = os.execute
 local function shell_read(cmd)
 	local tmp = os.tmpname()
 
-	local function success(cmd)
-		local r1, r2, r3 = x(cmd)
-		if type(r1) == "boolean" then
-			return r1
-		elseif type(r1) == "number" then
-			return r1 == 0
-		else
-			return false
-		end
+	local function success(cmd2)
+		local r1, r2, r3 = x(cmd2)
+		if type(r1) == "boolean" then return r1 elseif type(r1) == "number" then return r1 == 0 else return false end
 	end
 
 	if not success(cmd .. " > " .. tmp) then
@@ -58,6 +52,5 @@ local handlers = {
 	["whatdepends"] = function() return cmd_rq .. ("--whatdepends %s"):format(app_query) end
 }
 
-local choice = shell_read(
-	"echo -e 'filepackage\nshowdeps\nwhatsdepends\nCancelar' | gum filter --placeholder 'O que deseja fazer?'")
+local choice = shell_read("echo -e 'filepackage\nshowdeps\nwhatsdepends\nCancelar' | gum filter --placeholder 'O que deseja fazer?'")
 if choice and handlers[choice] then x(handlers[choice]) else print("🛑 Operação cancelada.") end
