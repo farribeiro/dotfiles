@@ -55,7 +55,6 @@ local tmp_list = os.tmpname()
 local f = assert(op(tmp_list, "w"))
 f:write(table.concat(display_list, "\n"))
 f:close()
-local selected_short = shell_read("gum filter --placeholder 'Escolha o app...' < " .. tmp_list)
+x("gum filter --placeholder 'Entradas...' < " .. tmp_list)
 os.remove(tmp_list)
 
-if not selected_short or selected_short == "" then os.exit(0) end
