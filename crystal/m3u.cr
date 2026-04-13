@@ -1,3 +1,17 @@
+require "option_parser"
+
+parser = OptionParser.new do |parser|
+  parser.banner = "Uso: seu_programa [opções] <nome_do_arquivo> <conteúdo_m3u>"
+end
+
+# Analisa os argumentos da linha de comando
+#parser.parse!
+
+# Verifica se os argumentos essenciais estão presentes
+if ARGV.size < 2
+  puts parser
+  exit
+end
 
 unless ARGV.empty?
 	filename = String.build(2) do |io|
