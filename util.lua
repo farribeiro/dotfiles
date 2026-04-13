@@ -27,6 +27,22 @@ local function open_file (filename, opts)
     if not f then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) else return f end
 end
 
+local function shell_read(cmd)
+	local tmp = os.tmpname()
+	local sanitize_cmd = ("%s > %s"):format(cmd, tmp)
+
+	if not success(sanitize_cmd) then
+		os.remove(tmp)
+		return nil
+	end
+
+	local handle = getoutput_base2(sanitize_cmd, "*a")
+	local content = handle:gsub("^%s*(.-)%s*$", "%1")
+	handle:close()
+	handle = nil
+	os.remove(tmp)
+	return content
+end
 local function open_iter (filename)
     local f = open_file (filename, "r")
 
@@ -86,6 +102,7 @@ return {
 	openfile_match = openfile_match,
 	xargs = xargs,
 	open_file = open_file,
+	shell_read = shell_read,
 	escape = escape,
 	getoutput_all = getoutput_all,
 	getoutput = getoutput
