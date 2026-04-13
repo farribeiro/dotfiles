@@ -4,33 +4,6 @@ local op = io.open
 local u = require "util"
 local x = os.execute
 
-local function shell_read(cmd)
-	local tmp = os.tmpname()
-
-	local function success(cmd)
-		local r1, r2, r3 = x(cmd)
-		if type(r1) == "boolean" then
-			return r1
-		elseif type(r1) == "number" then
-			return r1 == 0
-		else
-			return false
-		end
-	end
-
-	if not success(cmd .. " > " .. tmp) then
-		os.remove(tmp)
-		return nil
-	end
-
-	local f = op(tmp, "r")
-	local content = f:read("*a"):gsub("^%s*(.-)%s*$", "%1")
-	f:close()
-	f = nil
-	os.remove(tmp)
-	return content
-end
-
 -- Inicio
 local deps = { "gum", "flatpak" }
 for _, dep in ipairs(deps) do
@@ -58,4 +31,3 @@ f:write(table.concat(display_list, "\n"))
 f:close()
 x("gum filter --placeholder 'Entradas...' < " .. tmp_list)
 os.remove(tmp_list)
-
