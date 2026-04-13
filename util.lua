@@ -1,6 +1,9 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
+local op = io.open
+local pop = io.popen
+
 local function getoutput(cmd)
 	local handle = assert(io.popen(cmd))
 	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
