@@ -15,22 +15,38 @@ local function success(cmd)
 	end
 end
 
-local function getoutput(cmd)
-	local handle = assert(io.popen(cmd))
+local function getoutput_base(cmd, opts)
+	local handle = assert(pop(cmd))
 	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
-	local result = handle:read "*l"
+
+	if not success(cmd) then return nil end
+
+	local result = handle:read(opts)
 	handle:close()
+	-- handle = nil
 	if not result or result == "" then return nil, "Command output is empty" end
 	return result
 end
 
-local function getoutput_all(cmd)
-	local handle = assert(io.popen(cmd))
+
+local function getoutput_base2(cmd, opts)
+	local handle = assert(op(cmd))
 	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
-	local result = handle:read "*a"
-	handle:close()
-	if not result or result == "" then return nil, "Command output is empty" end
-	return result
+
+	if not success(cmd) then return nil end
+
+	return handle:read(opts)
+	-- handle:close()
+	-- handle = nil
+end
+
+
+local function getoutput(cmd, opts)
+	return getoutput_base(cmd, "*l")
+end
+
+local function getoutput_all(cmd)
+	return getoutput_base(cmd, "*a")
 end
 
 local function open_file (filename, opts)
