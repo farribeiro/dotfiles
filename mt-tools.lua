@@ -3,7 +3,7 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
 
-x = os.execute
+local x = os.execute
 
 local function readLinesFromFile(filename)
 	local tabela = {}
