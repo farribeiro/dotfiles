@@ -19,7 +19,7 @@ local function shell_read(cmd)
 		return nil
 	end
 
-	local f = op(tmp, "r")
+	local f = assert(op(tmp, "r"))
 	local content = f:read("*a"):gsub("^%s*(.-)%s*$", "%1")
 	f:close()
 	f = nil
@@ -53,4 +53,5 @@ local handlers = {
 }
 
 local choice = shell_read("echo -e 'filepackage\nshowdeps\nwhatsdepends\nCancelar' | gum filter --placeholder 'O que deseja fazer?'")
+
 if choice and handlers[choice] then x(handlers[choice]) else print("🛑 Operação cancelada.") end
