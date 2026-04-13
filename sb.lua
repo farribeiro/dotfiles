@@ -50,6 +50,8 @@ local function clean()
 end
 local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
 
+local poff = "systemctl poweroff"
+
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
