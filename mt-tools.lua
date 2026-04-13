@@ -28,8 +28,8 @@ local function writeWorldMtFile(modules)
 	print "world.mt criado com sucesso."
 end
 
-local handlers ={
-	["bootstrap"] = function ()
+local handlers = {
+	["bootstrap"] = function()
 		local repositoriesFile = "git.txt"
 		local modulesFile = "modules.txt"
 
@@ -42,7 +42,7 @@ local handlers ={
 		local modules = readLinesFromFile(modulesFile)
 		for i, item in ipairs(modules) do
 			modules[i] = ("load_mod_%s = true"):format(modules[i])
-			count_modules = count_modules +1
+			count_modules = count_modules + 1
 		end
 
 		writeWorldMtFile(modules)
@@ -55,7 +55,7 @@ local handlers ={
 	["start"] = function() x "minetest --server --terminal --gameid minetest" end,
 	["stop"] = function() x "killall minetest" end,
 
-	["up"] = function ()
+	["up"] = function()
 		handlers["up-mods"]()
 		handlers["up-secfix"]()
 	end,
@@ -65,7 +65,7 @@ local handlers ={
 		handlers["start"]()
 	end
 
---[[
+	--[[
 	["in-up-game"]
 		print(sudo dnf install make \
 		automake \
@@ -96,10 +96,8 @@ local handlers ={
 		ninja
 		)
 end
---]]
 
---[[
- cmake -G Ninja /usr/src/minetest \
+cmake -G Ninja /usr/src/minetest \
         -DENABLE_POSTGRESQL=TRUE \
         -DPostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql \
         -DCMAKE_INSTALL_PREFIX=/usr \
@@ -110,12 +108,15 @@ end
         -DVERSION_EXTRA=unofficial &&\
     ninja -j$(nproc) &&\
     ninja install
---]]
+]] --
 
 }
 
 -- Extra functions
 handlers["bs"] = handlers["bootstrap"]
 
-if require "sai":ca() then handlers["help"]() os.exit(1) end
+if require "sai":ca() then
+	handlers["help"]()
+	os.exit(1)
+end
 handlers[arg[1]]()
