@@ -4,20 +4,14 @@
 local op = io.open
 local pop = io.popen
 
-local function success(cmd)
-	local r1, r2, r3 = os.execute(cmd)
-	if type(r1) == "boolean" then
-		return r1
-	elseif type(r1) == "number" then
-		return r1 == 0
-	else
-		return false
-	end
-end
-
 local function getoutput_base(cmd, opts)
 	local handle = assert(pop(cmd))
 	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
+
+	local function success(cmd2)
+		local r1, r2, r3 = os.execute(cmd2)
+		if type(r1) == "boolean" then return r1 elseif type(r1) == "number" then return r1 == 0 else return false end
+	end
 
 	if not success(cmd) then return nil end
 
