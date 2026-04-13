@@ -1,6 +1,7 @@
 #!/usr/bin/env lua
 
 local op = io.open
+local u = require "util"
 local x = os.execute
 
 local function shell_read(cmd)
