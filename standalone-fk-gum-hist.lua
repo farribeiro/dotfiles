@@ -46,8 +46,9 @@ x('gum spin --spinner dot --title "🔍 Buscando..." -- sleep 0.5')
 
 local display_list = {}
 
-for line in shell_read(
-	"flatpak history --reverse | grep -Ev \"master|origin\" | sed 's/deploy//Ig' | sed 's/stable.*$//Ig'"):gmatch("[^\r\n]+") do
+for line in u.getoutput_all(
+	"flatpak history --reverse | grep -Ev \"master|origin|uninstall\" | sed -E 's/(deploy|stable|system.*$)//Ig'"):gsub("^%s*(.-)%s*$", "%1"):gmatch(
+	"[^\r\n]+") do
 	table.insert(display_list, line)
 end
 
