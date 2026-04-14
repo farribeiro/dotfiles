@@ -25,37 +25,10 @@ end
 local function getoutput(cmd, opts) return getoutput_base(cmd, "*l") end
 
 local function getoutput_all(cmd) return getoutput_base(cmd, "*a") end
-local function getoutput_base2(cmd, opts)
-	local handle = assert(op(cmd))
-	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
-
-	if not success(cmd) then return nil end
-
-	return handle:read(opts)
-	-- handle:close()
-	-- handle = nil
-end
 
 local function open_stream(filename, opts)
 	local f = assert(op(filename, opts))
 	if not f then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) else return f end
-end
-
-local function shell_read(cmd)
-	local tmp = os.tmpname()
-	local sanitize_cmd = ("%s > %s"):format(cmd, tmp)
-
-	if not success(sanitize_cmd) then
-		os.remove(tmp)
-		return nil
-	end
-
-	local handle = getoutput_base2(sanitize_cmd, "*a")
-	local content = handle:gsub("^%s*(.-)%s*$", "%1")
-	handle:close()
-	handle = nil
-	os.remove(tmp)
-	return content
 end
 
 local function open_iter(filename)
@@ -137,7 +110,6 @@ return {
 	get_nextkernelversion = get_nextkernelversion,
 	get_nextkernelminorwithoutpatch = get_nextkernelminorwithoutpatch,
 	get_kernelminorwithoutpatch = get_kernelminorwithoutpatch,
-	shell_read = shell_read,
 	escape = escape,
 	getoutput_all = getoutput_all,
 	getoutput = getoutput
