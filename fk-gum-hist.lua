@@ -5,16 +5,6 @@ local u = require "util"
 local x = os.execute
 
 -- Inicio
-local deps = { "gum", "flatpak" }
-for _, dep in ipairs(deps) do
-	local status = x("command -v " .. dep .. " > /dev/null 2>&1")
-	local ok = (type(status) == "boolean" and status) or (status == 0)
-	if not ok then
-		io.stderr:write("❌ Erro: A ferramenta '" .. dep .. "' não está instalada.\n")
-		os.exit(1)
-	end
-end
-
 x('gum spin --spinner dot --title "🔍 Buscando..." -- sleep 0.5')
 
 local display_list = {}
