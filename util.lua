@@ -22,7 +22,9 @@ local function getoutput_base(cmd, opts)
 	return result
 end
 
+local function getoutput(cmd, opts) return getoutput_base(cmd, "*l") end
 
+local function getoutput_all(cmd) return getoutput_base(cmd, "*a") end
 local function getoutput_base2(cmd, opts)
 	local handle = assert(op(cmd))
 	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
@@ -32,15 +34,6 @@ local function getoutput_base2(cmd, opts)
 	return handle:read(opts)
 	-- handle:close()
 	-- handle = nil
-end
-
-
-local function getoutput(cmd, opts)
-	return getoutput_base(cmd, "*l")
-end
-
-local function getoutput_all(cmd)
-	return getoutput_base(cmd, "*a")
 end
 
 local function open_stream(filename, opts)
