@@ -27,9 +27,8 @@ pandoc \
 python-feedparser \
 python-pandas \
 redhat-rpm-config \
-redhat-rpm-config\
-ruby-devel\
-ruby\
+ruby-devel \
+ruby \
 syncthing \
 unzip \
 vulkan-tools \
