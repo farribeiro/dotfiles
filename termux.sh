@@ -29,4 +29,9 @@ fpaste \
 python-feedparser \
 python-pandas \
 luanti \
+@development-tools\
+ruby\
+ruby-devel\
+openssl-devel\
+redhat-rpm-config\
 koji-tool
