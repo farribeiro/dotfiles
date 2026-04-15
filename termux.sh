@@ -6,32 +6,32 @@
 sudo sh -c "echo \"max_parallel_downloads=20\" >> /etc/dnf/dnf.conf"
 
 sudo dnf in -y \
-lua \
-git \
-pandoc \
-yt-dlp \
-ffmpeg-free \
-ImageMagick \
+@development-tools \
+aria2c \
 fastfetch \
-zip \
-unzip \
+fedpkg \
+ffmpeg-free \
+fpaste \
+git \
+git-gui \
+ImageMagick \
+inxi \
+koji \
+koji-tool\
+lua \
+luanti \
 nodejs \
 npm \
-git-gui \
-fedpkg \
-koji \
-redhat-rpm-config \
-aria2c \
-syncthing \
-vulkan-tools \
-inxi \
-fpaste \
+openssl-devel\
+pandoc \
 python-feedparser \
 python-pandas \
-luanti \
-@development-tools\
-ruby\
-ruby-devel\
-openssl-devel\
+redhat-rpm-config \
 redhat-rpm-config\
-koji-tool
+ruby-devel\
+ruby\
+syncthing \
+unzip \
+vulkan-tools \
+yt-dlp \
+zip
