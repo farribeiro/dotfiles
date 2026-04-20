@@ -5,7 +5,6 @@
 
 local x = os.execute
 x "sudo  btrfs filesystem usage /var"
-io.write("\n" .. ("*"):rep(10))
-io.write "Dusage: "
+io.write("\n" .. ("*"):rep(10) .. "\nDusage: ")
 local _ = io.read "*n" or 0
 x("sudo btrfs balance start -dusage=" .. _ .. " /var")
