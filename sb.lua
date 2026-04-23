@@ -12,6 +12,8 @@ local variant = u.openfile_match(osrelease, "VARIANT_ID=(.-)$")
 local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput "uname -r")) end
 local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
+local function fkup() x "flatpak update -y" end
+
 local function lastdeploy()
 	io.write(("Data do último deploy: %s\n"):format(u.openfile_match(osrelease,
 		"VERSION=\"(.-)\"")))
@@ -46,8 +48,9 @@ end
 local function up()
 	io.write "\n*** Atualizando imagem ostree ***\n\n"
 	rpmostree_upgrade ""
-	u.x_writemsg("flatpak update -y", "\n*** Terminado atualizar flatpak ***\n\n*** Atualizando toolbox ***\n\n")
-	x("toolbox run sudo dnf update -y")
+	fkup()
+	io.write "\n*** Terminado atualizar flatpak ***\n\n*** Atualizando toolbox ***\n\n"
+	x "toolbox run sudo dnf update -y"
 end
 
 local function clean()
@@ -87,6 +90,7 @@ local handlers = {
 	lastdeploy = lastdeploy,
 	pin = pin,
 	up = up,
+	fkup = fkup,
 	oua = oua,
 	["ostree-unpinall-pin"] = function()
 		oua()
@@ -132,7 +136,8 @@ oua, ostree-unpinall:
     Unpin all pinned commits
 ouap, ostree-unpinall-pin:
   Unpin all pinned commits and pin
-
+fkup:
+  Update flatpak
 ]]
 	end
 }
