@@ -98,9 +98,7 @@ local handlers = {
 	end,
 
 	["help"] = function()
-		io.write
-		[[
-Options:
+		io.write [[Options:
 
 cb, check-branch:
   Check new branch
