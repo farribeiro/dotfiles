@@ -10,11 +10,17 @@ local roc = ("%s cancel && "):format(ro)
 local osrelease = "/etc/os-release"
 local variant = u.openfile_match(osrelease, "VARIANT_ID=(.-)$")
 local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput "uname -r")) end
-local function lastdeploy() io.write(("Data do último deploy: %s\n"):format(u.openfile_match(osrelease,
-		"VERSION=\"(.-)\""))) end
-local function rebasesb(plus, testing) print(("%s rebase fedora:fedora/%d/%s%s/%s"):format(ro, u.sbversion() + plus,
-		u.arch(), testing, variant)) end
 local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
+local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
+local function lastdeploy()
+	io.write(("Data do último deploy: %s\n"):format(u.openfile_match(osrelease,
+		"VERSION=\"(.-)\"")))
+end
+
+local function rebasesb(plus, testing)
+	print(("%s rebase fedora:fedora/%d/%s%s/%s"):format(ro, u.sbversion() + plus,
+		u.arch(), testing, variant))
+end
 
 --[[
 function open_override()
@@ -48,7 +54,6 @@ local function clean()
 	x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all")
 		:format(ro))
 end
-local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
 
 local poff = "systemctl poweroff"
 
