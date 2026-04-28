@@ -16,15 +16,11 @@ local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):form
 local function fkup() x "flatpak update -y" end
 
 local function lastdeploy()
-	io.write(("Data do último deploy: %s\n"):format(u.openfile_match(osrelease,
-		"VERSION=\"(.-)\"")))
+	io.write(("Data do último deploy: %s\n"):format(u.openfile_match(osrelease, "VERSION=\"(.-)\"")))
 end
-
 local function rebasesb(plus, testing)
-	print(("%s rebase fedora:fedora/%d/%s%s/%s"):format(ro, u.sbversion() + plus,
-		u.arch(), testing, variant))
+	io.write(("%s rebase fedora:fedora/%d/%s%s/%s"):format(ro, u.sbversion() + plus, u.arch(), testing, variant))
 end
-
 --[[
 function open_override()
 	local pct = {}
@@ -39,10 +35,8 @@ local function rpmostree_upgrade(opts)
 	kv()
 	lastdeploy()
 	io.write "\n"
-	if os.getenv("DESKTOP_SESSION") == "gnome" then
-		u.x_writemsg("gnome-software --quit",
-			"*** Parado gnome-software ***\n\n")
 	end
+	if os.getenv("DESKTOP_SESSION") == "gnome" then u.x_writemsg("gnome-software --quit", "*** Parado gnome-software\n\n") end
 	x(("%s %s upgrade %s"):format(roc, ro, opts))
 end
 
@@ -70,8 +64,7 @@ local handlers = {
 		up()
 	end, -- Funciona mas precisa fazer funções fora da tabela, solucionado
 	["check-branch"] = function()
-		x(("ostree remote refs fedora | grep -E \"%d/%s/%s$\""):format(u.sbversion() + 1,
-			u.arch(), variant))
+		x(("ostree remote refs fedora | grep -E \"%d/%s/%s$\""):format(u.sbversion() + 1, u.arch(), variant))
 	end,
 	["in"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
