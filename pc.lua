@@ -5,9 +5,7 @@
 
 x = os.execute
 
-local function limpa()
-	x "rm -rf list.txt output.flac output.mp3 *.mp3"
-end
+local function limpa() x "rm -rf list.txt output.flac output.mp3 *.mp3" end
 
 local function arquivos()
 	local handle = assert(io.popen "\\ls -1 | sort -V")

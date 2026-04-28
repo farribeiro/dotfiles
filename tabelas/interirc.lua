@@ -108,7 +108,8 @@ local canais = {
 	["#RadioPassatempo"] = {},
 	["#IRCMania"] = {},
 	["#RadioLightHits"] = {},
-	["#Metal_Puro"] = {}
+	["#Metal_Puro"] = {},
+	["#perd1dos"] = {},
 }
 
 -- 2. Definir o cabeçalho e formato da linha (TTY)

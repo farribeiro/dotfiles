@@ -60,9 +60,7 @@ local function xargs()
 	return opts
 end
 
-local function get_fullkernelversion()
-	return getoutput "uname -r":match "(%d+)%.(%d+)%.(%d+)" -- Executa o comando uname -r para obter a versão do kernel
-end
+local function get_fullkernelversion() return getoutput "uname -r":match "(%d+)%.(%d+)%.(%d+)" end -- Executa o comando uname -r para obter a versão do kernel
 
 local function get_kernelminorwithoutpatch()
 	local major, minor = get_fullkernelversion()

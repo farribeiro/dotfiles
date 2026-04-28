@@ -15,7 +15,7 @@ local canais = {
 	["outhere"] = { { apercy = "132.226.251.210:30000" } },
 	["chuia"] = { { chuia = "" } },
 	["espertamente"] = { { espertamente = "minetest.espertamente.com.br:30000" } },
-	["luizinhosrv"] = {{ luizinho_lfl = ""}}
+	["luizinhosrv"] = { { luizinho_lfl = "" } }
 }
 
 -- 2. Definir o cabeçalho e formato da linha (TTY)
