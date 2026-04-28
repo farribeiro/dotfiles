@@ -113,11 +113,9 @@ oua, ostree-unpinall:
 ouap, ostree-unpinall-pin:
   Unpin all pinned commits and pin
 fkup:
-  Update flatpak
-]]
+  Update flatpak]]
 	end
 }
-
 -- Extra functions
 handlers['cb'] = handlers["check-branch"]
 handlers["ouap"] = handlers["ostree-unpinall-pin"]
@@ -131,7 +129,6 @@ handlers["nsb"] = handlers["nextsb"]
 handlers["p"] = handlers["poweroff"]
 handlers["r"] = handlers["reboot"]
 handlers["ostree-unpinall"] = handlers["oua"]
-
 if require "sai":ca() then
 	handlers["help"]()
 	os.exit(1)
