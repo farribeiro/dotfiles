@@ -17,12 +17,12 @@ git-gui \
 ImageMagick \
 inxi \
 koji \
-koji-tool\
+koji-tool \
 lua \
 luanti \
 nodejs \
 npm \
-openssl-devel\
+openssl-devel \
 pandoc \
 python-feedparser \
 python-pandas \
