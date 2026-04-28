@@ -7,6 +7,7 @@ local x = os.execute
 local u = require "util"
 local ro = "rpm-ostree"
 local roc = ("%s cancel && "):format(ro)
+local poff = "systemctl poweroff"
 local osrelease = "/etc/os-release"
 local variant = u.openfile_match(osrelease, "VARIANT_ID=(.-)$")
 local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput "uname -r")) end
@@ -57,8 +58,6 @@ local function clean()
 	x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all")
 		:format(ro))
 end
-
-local poff = "systemctl poweroff"
 
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
