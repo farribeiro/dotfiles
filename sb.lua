@@ -31,12 +31,11 @@ local function rpmostree_upgrade(opts)
 	if os.getenv("DESKTOP_SESSION") == "gnome" then u.x_writemsg("gnome-software --quit", "*** Parado gnome-software\n\n") end
 	x(("%s %s upgrade %s"):format(roc, ro, opts))
 end
-
 local function up()
-	io.write "\n*** Atualizando imagem ostree ***\n\n"
+	io.write "*** Informoções do sistema atual e atualizando\n"
 	rpmostree_upgrade ""
 	fkup()
-	io.write "\n*** Terminado atualizar flatpak ***\n\n*** Atualizando toolbox ***\n\n"
+	io.write "\n*** Terminado atualizar flatpak\n\n*** Atualizando toolbox\n\n"
 	x "toolbox run sudo dnf update -y"
 end
 local handlers = {
@@ -74,7 +73,6 @@ local handlers = {
 		oua()
 		pin()
 	end,
-
 	["help"] = function()
 		io.write [[Options:
 
