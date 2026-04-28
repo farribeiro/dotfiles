@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 
 -- SPDX-License-Identifier: GPL-2.0
--- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
+-- Copyright 2022-2026 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
 

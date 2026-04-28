@@ -1,5 +1,8 @@
 #!/usr/bin/env lua
 
+-- SPDX-License-Identifier: GPL-2.0
+-- Copyright 2022-2026 - Fábio Rodrigues Ribeiro and contributors
+
 local op = io.open
 local u = require "util"
 local x = os.execute
