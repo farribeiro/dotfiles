@@ -23,16 +23,6 @@ end
 local function rebasesb(plus, testing)
 	io.write(("%s rebase fedora:fedora/%d/%s%s/%s"):format(ro, u.sbversion() + plus, u.arch(), testing, variant))
 end
---[[
-function open_override()
-	local pct = {}
-	local file = assert(io.open("override.txt","r"))
-	for line in file:lines() do pct = table.insert(pct,line) end
-	file:close()
-	return table.concat(pct," ")
-end
-]] --
-
 local function rpmostree_upgrade(opts)
 	kv()
 	lastdeploy()
