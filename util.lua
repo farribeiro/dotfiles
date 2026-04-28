@@ -98,17 +98,17 @@ end
 local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 
 return {
-	sbversion = sbversion,
 	arch = arch,
+	escape = escape,
+	get_kernelminorwithoutpatch = get_kernelminorwithoutpatch,
+	get_nextkernelminorwithoutpatch = get_nextkernelminorwithoutpatch,
+	get_nextkernelversion = get_nextkernelversion,
+	getoutput = getoutput,
+	getoutput_all = getoutput_all,
+	openfile_match = openfile_match,
+	sbversion = sbversion,
 	writecmd_x = writecmd_x,
 	writemsg_x = writemsg_x,
 	x_writemsg = x_writemsg,
-	openfile_match = openfile_match,
-	xargs = xargs,
-	get_nextkernelversion = get_nextkernelversion,
-	get_nextkernelminorwithoutpatch = get_nextkernelminorwithoutpatch,
-	get_kernelminorwithoutpatch = get_kernelminorwithoutpatch,
-	escape = escape,
-	getoutput_all = getoutput_all,
-	getoutput = getoutput
+	xargs = xargs
 }
