@@ -14,7 +14,9 @@ local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput "una
 local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
 local function fkup() x "flatpak update -y" end
-
+local function clean()
+	x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro))
+end
 local function lastdeploy()
 	io.write(("Data do último deploy: %s\n"):format(u.openfile_match(osrelease, "VERSION=\"(.-)\"")))
 end
@@ -47,12 +49,6 @@ local function up()
 	io.write "\n*** Terminado atualizar flatpak ***\n\n*** Atualizando toolbox ***\n\n"
 	x "toolbox run sudo dnf update -y"
 end
-
-local function clean()
-	x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all")
-		:format(ro))
-end
-
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
