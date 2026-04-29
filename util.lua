@@ -3,23 +3,24 @@
 
 local op = io.open
 local pop = io.popen
+local x = os.execute
 
 local function getoutput_base(cmd, opts)
-	local handle = assert(pop(cmd))
-	if not handle then error(("Erro ao chamar o comando: %s."):format(cmd)) end
-
-	local function success(cmd2)
-		local r1, r2, r3 = os.execute(cmd2)
+	local tmp = os.tmpname()
+	local function success(_)
+		local r1, r2, r3 = x(_)
 		if type(r1) == "boolean" then return r1 elseif type(r1) == "number" then return r1 == 0 else return false end
 	end
-
-	if not success(cmd) then return nil end
-
-	local result = handle:read(opts)
-	handle:close()
-	-- handle = nil
-	if not result or result == "" then return nil, "Command output is empty" end
-	return result
+	if not success(cmd .. " > " .. tmp) then
+		os.remove(tmp)
+		return nil
+	end
+	local f = assert(op(tmp, "r"))
+	local content = f:read(opts):gsub("^%s*(.-)%s*$", "%1")
+	f:close()
+	f = nil
+	os.remove(tmp)
+	return content
 end
 
 local function getoutput(cmd, opts) return getoutput_base(cmd, "*l") end
