@@ -4,7 +4,9 @@
 -- Copyright 2026 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
-x "sudo  btrfs filesystem usage /var"
+
+local w = require "util".getoutput_all("echo -e '/var\n/var/home/fribeiro/Games' | gum filter --placeholder 'O que deseja fazer?'", "*a")
+x("sudo  btrfs filesystem usage " .. w)
 io.write("\n" .. ("*"):rep(10) .. "\nDusage: ")
-local _ = io.read "*n" or 0
-x("sudo btrfs balance start -dusage=" .. _ .. " /var")
+local n = io.read "*n" or 0
+x(("sudo btrfs balance start -dusage=%d %s"):format(n, w))
