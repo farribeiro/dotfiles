@@ -10,13 +10,13 @@ local roc = ("%s cancel && "):format(ro)
 local poff = "systemctl poweroff"
 local osrelease = "/etc/os-release"
 local variant = u.openfile_match(osrelease, "VARIANT_ID=(.-)$")
+local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
+local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
+local function fkup() x "flatpak update -y" end
 local function kv()
 	io.write "Versão do kernel: "
 	u.getoutput "uname -r"
 end
-local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
-local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
-local function fkup() x "flatpak update -y" end
 local function clean()
 	x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro))
 end
