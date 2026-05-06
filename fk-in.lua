@@ -16,9 +16,7 @@ if not raw_list or raw_list == "" then
 end
 local installed_raw = u.getoutput_all "flatpak list --columns=application"
 local installed_apps = {}
-if installed_raw then
-	for id in installed_raw:gmatch("[^\r\n]+") do installed_apps[id:gsub("%s+", "")] = true end
-end
+if installed_raw then for id in installed_raw:gmatch "[^\r\n]+" do installed_apps[id:gsub("%s+", "")] = true end end
 local ids_reais = {}
 local display_list = {}
 for line in raw_list:gmatch "[^\r\n]+" do
