@@ -57,15 +57,15 @@ local handlers = {
 	end,
 	["Instalar"] = function()
 		if x('gum confirm "Deseja instalar ' .. selected_id .. '?"') then
-			p("\n📦 Instalando " .. selected_id .. "...")
+			p(("📦 Instalando %s ..."):format(selected_id))
 			x(('%s install %s %s'):format(fk, ay, es))
 		else
-			p "\n🛑 Operação cancelada."
+			p "🛑 Operação cancelada."
 		end
 	end
 }
 if installed_apps[selected_id] then
-	-- print("\nℹ️  O app '" .. selected_id .. "' já está instalado.")
+	-- p(("ℹ️  O app ' %s ' já está instalado."):format(selected_id))
 	local choice = u.getoutput_all "echo -e 'Desinstalar\nForce_Uninstall\nReinstalar\nForce_Reinstall\nInfo\nCancelar' | gum filter --placeholder 'O que deseja fazer?'"
 	if choice and handlers[choice] then handlers[choice]() else print("🛑 Operação cancelada.") end
 	os.exit(0)
