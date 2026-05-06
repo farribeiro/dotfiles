@@ -7,14 +7,7 @@ local fk = "flatpak "
 
 local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 local app_query = u.getoutput_all 'gum input --placeholder "Digite o nome da aplicação"'
-if not app_query or app_query == "" then
-	os.exit(0)
-elseif app_query == "fkunused" then
-	local rm = ("%s remove "):format(fk)
-	x(rm .. "--unused")
-	x(rm .. "--delete-data")
-	os.exit(0)
-end
+if not app_query or app_query == "" then os.exit(0) end
 x 'gum spin --spinner dot --title "🔍 Buscando..." -- sleep 0.5'
 local raw_list = u.getoutput_all("flatpak search " .. escape(app_query) .. " --columns=application")
 if not raw_list or raw_list == "" then
