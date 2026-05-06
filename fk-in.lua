@@ -56,7 +56,7 @@ local handlers = {
 		p "🗑️  Expurgado com sucesso."
 	end,
 	["Instalar"] = function()
-		if x('gum confirm "Deseja instalar ' .. selected_id .. '?"') then
+		if x(('gum confirm "Deseja instalar %s ?"'):format(selected_id)) then
 			p(("📦 Instalando %s ..."):format(selected_id))
 			x(('%s install %s %s'):format(fk, ay, es))
 		else
