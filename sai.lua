@@ -1,7 +1,7 @@
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2024 - Fábio Rodrigues Ribeiro and contributors
 
-local function ca() return not arg or #arg == 0 end
+local function ca() return not arg or #arg == 0 or 0 end
 
 local function ca_none()
 	if ca() then
