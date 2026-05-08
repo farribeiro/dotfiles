@@ -4,7 +4,6 @@
 -- Copyright 2024 - Fábio Rodrigues Ribeiro and contributors
 
 local x = os.execute
-
 local container_name = "ollama" -- Define o nome do container que você quer verificar
 -- AMD
 local function podman_run() x "podman run -d --rm --device /dev/kfd --device /dev/dri -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama:rocm" end
@@ -20,7 +19,6 @@ if image_status then x("podman start " .. container_name) else podman_run() end
 -- Abre um canal para ler a saída do comando
 local container_status = require "util".getoutput_all("podman inspect -f '{{.State.Running}}' " ..
 	container_name .. " 2>/dev/null")
-
 -- A saída do `docker inspect` é uma string com quebra de linha no final.
 -- A função `string.match` com `"%S+"` remove espaços em branco (whitespaces)
 -- e captura a string "true" ou "false".
