@@ -16,7 +16,6 @@ git \
 git-gui \
 ImageMagick \
 inxi \
-koji \
 koji-tool \
 lua \
 luanti \
