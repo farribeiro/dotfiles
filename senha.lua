@@ -14,8 +14,8 @@ local tamanho = io.read("*number") -- Você pode alterar o tamanho aqui
 local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?/{}[]|"
 local senha = ""
 local random_bytes = secure_random_bytes(tamanho) -- Gera bytes aleatórios
-for i = 1, tamanho do -- Converte cada byte em um índice para a tabela de caracteres
-	local byte = random_bytes:byte(i) -- Obtém o valor do byte como índice (convertendo para o intervalo 1..#chars)
+for i = 1, tamanho do                             -- Converte cada byte em um índice para a tabela de caracteres
+	local byte = random_bytes:byte(i)             -- Obtém o valor do byte como índice (convertendo para o intervalo 1..#chars)
 	local index = (byte % #chars) + 1
 	senha = senha .. chars:sub(index, index)
 end
