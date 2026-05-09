@@ -110,7 +110,7 @@ class Fk:
                 )
                 os.system(c)
             case "in":
-                os.system("fk-in.lua")
+                os.system("gum-fkin.lua")
             case "pg":
                 c = "flatpak remove --delete-data " + sys.argv[2]
                 os.system(c)
