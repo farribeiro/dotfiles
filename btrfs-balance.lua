@@ -7,8 +7,10 @@ local x = os.execute
 local u = require "util"
 x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
 local w = u.getoutput_all("echo -e '/var\n/var/home/fribeiro/Games' | gum filter --placeholder 'O que deseja fazer?'")
-x("sudo  btrfs filesystem usage " .. w)
+local cmd_use = "sudo  btrfs filesystem usage " .. w
+x(cmd_use)
 io.write("\n" .. ("*"):rep(10) .. "\nDusage: ")
 local n = io.read "*n" or 0
-u.ca_zero(n)
+require "sai".ca_zero(n)
 x(("sudo btrfs balance start -dusage=%d %s"):format(n, w))
+x(cmd_use)
