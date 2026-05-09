@@ -5,6 +5,7 @@
 
 local x = os.execute
 local u = require "util"
+x "flatpak remove --unused --delete-data --assumeyes"
 x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
 local w = u.getoutput_all("echo -e '/var\n/var/home/fribeiro/Games' | gum filter --placeholder 'O que deseja fazer?'")
 local cmd_use = "sudo  btrfs filesystem usage " .. w
