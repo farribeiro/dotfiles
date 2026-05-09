@@ -4,7 +4,6 @@ local x = os.execute
 local p = print
 local u = require "util"
 local fk = "flatpak "
-
 local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 local app_query = u.getoutput_all 'gum input --placeholder "Digite o nome da aplicação"'
 if not app_query or app_query == "" then os.exit(0) end
