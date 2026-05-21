@@ -7,6 +7,8 @@
 	mg = merge --no-ff
 	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	histdel = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short --diff-filter=D --summary
+    pu = pull
+    ps = push
 
 [user]
 	name = Fabio Rodrigues Ribeiro
@@ -26,6 +28,7 @@
 [diff "pandoc"]
 	textconv = pandoc --to=plain
 	cachetextconv = true
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
