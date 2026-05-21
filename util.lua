@@ -4,7 +4,6 @@
 local op = io.open
 local pop = io.popen
 local x = os.execute
-
 local function getoutput_base(cmd, opts)
 	local tmp = os.tmpname()
 	local function success(_)
@@ -22,16 +21,12 @@ local function getoutput_base(cmd, opts)
 	os.remove(tmp)
 	return content
 end
-
 local function getoutput(cmd, opts) return getoutput_base(cmd, "*l") end
-
 local function getoutput_all(cmd) return getoutput_base(cmd, "*a") end
-
 local function open_stream(filename, opts)
 	local f = assert(op(filename, opts))
 	if not f then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) else return f end
 end
-
 local function open_iter(filename)
 	local f = open_stream(filename, "r")
 	return
@@ -45,7 +40,6 @@ local function open_iter(filename)
 			return line
 		end
 end
-
 local function openfile_match(filename, string)
 	local result
 	for line in open_iter(filename) do
@@ -54,50 +48,39 @@ local function openfile_match(filename, string)
 	end
 	return result
 end
-
 local function xargs()
 	local opts = ""
 	for i = 2, #arg do opts = ("%s %s"):format(opts, arg[i]) end
 	return opts
 end
-
 local function get_fullkernelversion() return getoutput "uname -r":match "(%d+)%.(%d+)%.(%d+)" end -- Executa o comando uname -r para obter a versão do kernel
-
 local function get_kernelminorwithoutpatch()
 	local major, minor = get_fullkernelversion()
 	return ("%s.%d"):format(major, minor) -- Converte o valor do Minor para número e incrementa 1 e constrói a nova versão do kernel
 end
-
 local function get_nextkernelversion()
 	local major, minor, patch = get_fullkernelversion()
 	return ("%s.%s.%d"):format(major, minor, patch + 1) -- Converte o valor do Patch para número e incrementa 1 e constrói a nova versão do kernel
 end
-
 local function get_nextkernelminorwithoutpatch()
 	local major, minor = get_fullkernelversion()
 	return ("%s.%d"):format(major, minor + 1) -- Converte o valor do Minor para número e incrementa 1 e constrói a nova versão do kernel
 end
-
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput "uname -m" end
-
 local function writecmd_x(cmd)
 	io.write(cmd .. "\n")
 	x(cmd)
 end
-
 local function writemsg_x(cmd, msg)
 	io.write(msg)
 	x(cmd)
 end
-
 local function x_writemsg(cmd, msg)
 	x(cmd)
 	io.write(msg)
 end
-
 local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
-
 return {
 	arch = arch,
 	escape = escape,
