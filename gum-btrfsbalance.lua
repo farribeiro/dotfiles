@@ -6,10 +6,11 @@
 local x = os.execute
 local u = require "util"
 local url =  "https://dl.flathub.org/repo/flathub.flatpakrepo"
-local fkargs = "--if-not-exists flathub"
-local fkrmt = "flatpak remote-add "
-local fkucmd = fkrmt .. " --user " .. fkargs .. url
-local fkcmd = fkrmt .. fkargs .. url
+local fkargs = "--if-not-exists flathub "
+locak fk = "flatpak "
+local fkrmt = "remote-add "
+local fkucmd = fk .. fkrmt .. "--user " .. fkargs .. url
+local fkcmd = fk .. fkrmt .. fkargs .. url
 x("flatpak remove --unused --delete-data --assumeyes && " .. fkucmd .. " && " .. fkcmd)
 x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
 local w = u.getoutput_all("echo -e '/var\n/var/home/fribeiro/Games' | gum filter --placeholder 'O que deseja fazer?'")
