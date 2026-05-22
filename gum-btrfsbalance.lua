@@ -5,13 +5,13 @@
 
 local x = os.execute
 local u = require "util"
-local url =  "https://dl.flathub.org/repo/flathub.flatpakrepo"
+local url = "https://dl.flathub.org/repo/flathub.flatpakrepo"
 local fh = "flathub "
-local fkargs = "--if-not-exists " .. fh
+local fkifnot = "--if-not-exists " .. fh .. " " .. url
 local fk = "flatpak "
 local fkrmt = "remote-add "
-local fkucmd = fk .. fkrmt .. "--user " .. fkargs .. url
-local fkcmd = fk .. fkrmt .. fkargs .. url
+local fkucmd = fk .. fkrmt .. "--user " .. fkifnot
+local fkcmd = fk .. fkrmt .. fkifnot
 local fkencmd = fk .. " remote-modify --enable " .. fh
 x(fk .. "remove --unused --delete-data --assumeyes && " .. fkucmd .. " && " .. fkcmd .. " && " .. fkencmd)
 x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
