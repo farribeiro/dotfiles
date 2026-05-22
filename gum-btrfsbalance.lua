@@ -8,7 +8,7 @@ local u = require "util"
 local url =  "https://dl.flathub.org/repo/flathub.flatpakrepo"
 local fkargs = "--if-not-exists flathub"
 local fkrmt = "flatpak remote-add "
-local fkucmd = fkrmt .. "--user " .. fkargs .. url
+local fkucmd = fkrmt .. " --user " .. fkargs .. url
 local fkcmd = fkrmt .. fkargs .. url
 x("flatpak remove --unused --delete-data --assumeyes && " .. fkucmd .. " && " .. fkcmd)
 x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
