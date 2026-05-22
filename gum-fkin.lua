@@ -57,7 +57,7 @@ local handlers = {
 	["Instalar"] = function()
 		if x(('gum confirm "Deseja instalar %s ?"'):format(selected_id)) then
 			p(("📦 Instalando %s ..."):format(selected_id))
-			x(('%s install %s %s'):format(fk, ay, es))
+			x(('%s install --system %s %s'):format(fk, ay, es))
 		else
 			p "🛑 Operação cancelada."
 		end
