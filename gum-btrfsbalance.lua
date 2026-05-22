@@ -1,8 +1,6 @@
 #!/usr/bin/env lua
-
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2026 - Fábio Rodrigues Ribeiro and contributors
-
 local x = os.execute
 local u = require "util"
 local url = "https://dl.flathub.org/repo/flathub.flatpakrepo"
@@ -13,8 +11,11 @@ local fkrmt = "remote-add "
 local fkucmd = fk .. fkrmt .. "--user " .. fkifnot
 local fkcmd = fk .. fkrmt .. fkifnot
 local fkencmd = fk .. " remote-modify --enable " .. fh
-x(fk .. "remove --unused --delete-data --assumeyes && " .. fkucmd .. " && " .. fkcmd .. " && " .. fkencmd)
-x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
+u.writecmd_x(fk .. "remove --unused --delete-data --assumeyes")
+u.writecmd_x(fkucmd)
+u.writecmd_x(fkcmd)
+-- u.writecmd_x(fkencmd)
+u.writecmd_x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
 local w = u.getoutput_all("echo -e '/var\n/var/home/fribeiro/Games' | gum filter --placeholder 'O que deseja fazer?'")
 local cmd_use = "sudo  btrfs filesystem usage " .. w
 x(cmd_use)
