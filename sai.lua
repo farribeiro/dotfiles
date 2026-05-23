@@ -6,5 +6,4 @@ local function ca_exit()
 end
 local function ca() return not arg or #arg == 0 end
 local function ca_none() if ca() then ca_exit() end end
-local function ca_zero(_) if _ == 0 then ca_exit() end end
-return { ca_none = ca_none, ca_zero = ca_zero, ca = ca }
+return { ca_none = ca_none, ca = ca }
