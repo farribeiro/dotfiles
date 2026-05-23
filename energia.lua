@@ -5,7 +5,7 @@ local horas4dia = 24
 local dias = 30
 function ler(mensagem)
 	io.write(mensagem)
-	return io.read("*number") or 0
+	return tonumber(io.read())
 end
 
 local function fmt(_) return ("%.2f"):format(_) end
