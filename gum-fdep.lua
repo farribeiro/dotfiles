@@ -6,7 +6,6 @@
 local op = io.open
 local x = os.execute
 local u = require "util"
--- Inicio
 local app_query = u.getoutput_all('gum input --placeholder "Digite o nome da aplicação"')
 if not app_query or app_query == "" then os.exit(0) end
 local cmd_rq = "dnf -q repoquery "
