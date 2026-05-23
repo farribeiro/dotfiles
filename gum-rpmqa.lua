@@ -2,7 +2,7 @@
 
 local op = io.open
 local x = os.execute
-local u = require "util "
+local u = require "util"
 local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 -- Inicio
 local app_query = u.getoutput_all('gum input --placeholder "Digite o nome da aplicação"')
