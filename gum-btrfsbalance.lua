@@ -21,5 +21,6 @@ local cmd_use = "sudo  btrfs filesystem usage " .. w
 x(cmd_use)
 io.write("\n" .. ("*"):rep(10) .. "\nDusage: ")
 local n = tonumber(io.read())
+require "sai".ca_none(n)
 x(("sudo btrfs balance start -dusage=%d %s"):format(n, w))
 x(cmd_use)
