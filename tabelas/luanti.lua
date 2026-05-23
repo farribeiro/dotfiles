@@ -3,10 +3,10 @@
 local u = require "util_tables"
 local c = ""
 local canais = {
-	["atcraft"] = { { animetrom = "" } },
+	["atcraft"] = { { animetrom = "animetrom.ddns.net:30000" } },
 	["bigferias"] = { { darcksama = "minetest-biglinux2.ddns.net:30003" } },
 	["bigworld"] = { { darcksama = "minetest-biglinux2.ddns.net:30000" } },
-	["brazucas"] = { { lunovox = "" } },
+	["brazucas"] = { { lunovox = "brazucas.duckdns.org:30001" } },
 	["comitenerd"] = { { gustavo = "mine.comitenerd.com.br:30000" } },
 	["joseworld_revolution"] = { { darcksama = "minetest-biglinux2.ddns.net:30002" } },
 	["mercurio"] = { { ronoaldo = "mercurio.ronoaldo.dev.br:30000" } },
