@@ -3,8 +3,8 @@
 
 local horas4dia = 24
 local dias = 30
-function ler(mensagem)
-	io.write(mensagem)
+function ler(_)
+	io.write(_)
 	return tonumber(io.read())
 end
 
