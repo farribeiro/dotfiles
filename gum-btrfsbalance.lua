@@ -20,7 +20,6 @@ local w = u.getoutput_all("echo -e '/var\n/var/home/fribeiro/Games' | gum filter
 local cmd_use = "sudo  btrfs filesystem usage " .. w
 x(cmd_use)
 io.write("\n" .. ("*"):rep(10) .. "\nDusage: ")
-local n = io.read "*n" or 0
-require "sai".ca_zero(n)
+local n = tonumber(io.read())
 x(("sudo btrfs balance start -dusage=%d %s"):format(n, w))
 x(cmd_use)
