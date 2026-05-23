@@ -10,7 +10,7 @@ local canais = {
 	["comitenerd"] = { { gustavo = "mine.comitenerd.com.br:30000" } },
 	["joseworld_revolution"] = { { darcksama = "minetest-biglinux2.ddns.net:30002" } },
 	["mercurio"] = { { ronoaldo = "mercurio.ronoaldo.dev.br:30000" } },
-	["mercurio_beta"] = { { ronoaldo = "" } },
+	["mercurio_beta"] = { { ronoaldo = "mercurio.ronoaldo.dev.br:30001" } },
 	["mercurio_dev"] = { { ronoaldo = "" } },
 	["outhere"] = { { apercy = "132.226.251.210:30000" } },
 	["chuia"] = { { chuia = "" } },
