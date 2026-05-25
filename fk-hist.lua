@@ -1,23 +1,9 @@
 #!/usr/bin/env lua
-
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2026 - Fábio Rodrigues Ribeiro and contributors
-
-local op = io.open
-local u = require "util"
 local x = os.execute
-
--- Inicio
 x 'gum spin --spinner dot --title "🔍 Buscando..." -- sleep 0.5'
-local display_list = {}
-
-for line in u.getoutput_all "flatpak history --reverse | sed -E 's/master|origin|uninstall/d;s/(deploy|stable|system.*$)//Ig'":gmatch"[^\r\n]+" do
-	table.insert(display_list, line)
-end
-
-local tmp_list = os.tmpname()
-local f = assert(op(tmp_list, "w"))
-f:write(table.concat(display_list, "\n"))
-f:close()
-x("gum filter --placeholder 'Entradas...' < " .. tmp_list)
+local tmp = os.tmpname()
+"flatpak history --reverse | sed -E 's/master|origin|uninstall/d;s/(deploy|stable|system.*$)//Ig' > " .. tmp
+x("gum filter --placeholder 'Entradas...' < " .. tmp)
 os.remove(tmp_list)
