@@ -15,7 +15,7 @@ local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):form
 local function fkup() x "flatpak update -y" end
 local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput_all "uname -r")) end
 local function clean()
-	x(("sudo -s <<< \"%s cleanup -b -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro))
+	x(("sudo -s <<< \"%s cleanup -b -p -m && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro))
 end
 local function lastdeploy()
 	io.write(("Data do último deploy: %s\n"):format(u.openfile_match(osrelease, "VERSION=\"(.-)\"")))
@@ -51,24 +51,24 @@ local handlers = {
 	["check-branch"] = function()
 		x(("ostree remote refs fedora | grep -E \"%d/%s/%s$\""):format(u.sbversion() + 1, u.arch(), variant))
 	end,
-	["in"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
+	["install"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
 	["nextsb"] = function() rebasesb(1, "") end,
 	["nexttest"] = function() rebasesb(1, "/testing") end,
 	["poweroff"] = function() x(poff) end,
-	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
 	["reboot"] = function() x "systemctl reboot" end,
-	["up-r"] = function() rpmostree_upgrade "-r" end,
 	["ro"] = function() x(("%s%s%s"):format(roc, ro, u.xargs())) end,
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
 	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(u.xargs())) end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
+	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
+	["up-r"] = function() rpmostree_upgrade "-r" end,
 	clean = clean,
+	fkup = fkup,
 	lastdeploy = lastdeploy,
+	oua = oua,
 	pin = pin,
 	up = up,
-	fkup = fkup,
-	oua = oua,
 	["ostree-unpinall-pin"] = function()
 		oua()
 		pin()
@@ -116,7 +116,8 @@ fkup:
 	end
 }
 -- Extra functions
-handlers['cb'] = handlers["check-branch"]
+handlers["in"] = handlers["install"]
+handlers["cb"] = handlers["check-branch"]
 handlers["ouap"] = handlers["ostree-unpinall-pin"]
 handlers["c"] = handlers["clean"]
 handlers["s"] = handlers["search"]
