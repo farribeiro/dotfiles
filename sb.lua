@@ -59,7 +59,6 @@ local handlers = {
 	["reboot"] = function() x "systemctl reboot" end,
 	["ro"] = function() x(("%s%s%s"):format(roc, ro, u.xargs())) end,
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
-	["search-inrpm"] = function() x(("rpm -qa | grep -E %s"):format(u.xargs())) end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
 	["up-r"] = function() rpmostree_upgrade "-r" end,
@@ -99,8 +98,6 @@ pin:
   Pin the Ostree Deployment
 mesa-drm-freeworld:
   Install RPMFusion's mesa-drm freeworld (need configure rpmfusion repo)
-search-inrpm:
-  Search for installed package
 s, search:
   Search for package
 lc, lastchage:
@@ -120,7 +117,6 @@ handlers["in"] = handlers["install"]
 handlers["cb"] = handlers["check-branch"]
 handlers["ouap"] = handlers["ostree-unpinall-pin"]
 handlers["c"] = handlers["clean"]
-handlers["s"] = handlers["search"]
 handlers["pw"] = handlers["preview"]
 handlers["nt"] = handlers["nexttest"]
 handlers["ld"] = handlers["lastdeploy"]
