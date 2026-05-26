@@ -72,6 +72,7 @@ local handlers = {
 	["ostree-unpinall-pin"] = function()
 		oua()
 		pin()
+		clean()
 	end,
 	["help"] = function()
 		io.write [[Options:
