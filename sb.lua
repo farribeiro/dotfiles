@@ -61,8 +61,10 @@ local handlers = {
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
-	["up-r"] = function() rpmostree_upgrade "-r" end,
-	clean = clean,
+	["up-r"] = function()
+		fkup()
+		rpmostree_upgrade "-r"
+	end,	clean = clean,
 	fkup = fkup,
 	lastdeploy = lastdeploy,
 	oua = oua,
