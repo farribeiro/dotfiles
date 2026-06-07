@@ -31,12 +31,14 @@ local function rpmostree_upgrade(opts)
 	end
 	x(("%s %s upgrade %s"):format(roc, ro, opts))
 end
+local function txup()
+	u.writemsg_x("toolbox run sudo dnf update -y", "\n*** Terminado atualizar flatpak\n\n*** Atualizando toolbox\n\n")
+end
 local function up()
-	io.write "*** Informoções do sistema atual e atualizando\n"
+	io.write "*** Informoções do sistema atual e atualizando\n\n"
 	rpmostree_upgrade ""
 	fkup()
-	io.write "\n*** Terminado atualizar flatpak\n\n*** Atualizando toolbox\n\n"
-	x "toolbox run sudo dnf update -y"
+	txup()
 end
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
@@ -63,6 +65,7 @@ local handlers = {
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
 	["up-r"] = function()
 		fkup()
+		txup()
 		rpmostree_upgrade "-r"
 	end,	clean = clean,
 	fkup = fkup,
