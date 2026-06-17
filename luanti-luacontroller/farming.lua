@@ -7,7 +7,7 @@ local tubos, chave = "a", "b"
 local propriedades = {
   slotseq = "priority",
   exmatch = false,
-  name      = "bonemeal:fertiliser",
+  name    = "bonemeal:fertiliser",
   count   = 8 -- Qt de Fertilizantes
 }
 local function i(vf) interrupt(s, "on", vf) end
