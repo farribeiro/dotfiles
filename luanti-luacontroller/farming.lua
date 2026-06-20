@@ -2,12 +2,14 @@
 -- Copyright 2023 João Rocha Braga Filho and contributors
 -- Copyright 2024-2026 Fabio Rodrigues Ribeiro and contributors
  
-local s            = 2 -- Segundos
 local tubos, chave = "a", "b"
-local function i(vf) interrupt(s, "on", vf) end
+local function i(vf)  end
 if pin[chave] then
   port[tubos] = not port[tubos]
-  i(true)
+  interrupt(
+    2, -- Segundos
+    "on",
+    true)
   digiline_send("Mulch", {
     slotseq = "priority",
     exmatch = false,
