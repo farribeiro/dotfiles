@@ -45,7 +45,7 @@ local handlers = {
 	["Cancelar"] = function() os.exit(0) end,
 	["Info"] = function() x(("%s info %s"):format(fk, es)) end,
 	["Desinstalar"] = function()
-		x(("%s remove %s %s"):format(fk, ay, escape(selected_id)))
+		x(("%s remove %s %s"):format(fk, ay, u.escape(selected_id)))
 		p "🗑️  Removido com sucesso."
 	end,
 	["Force_Reinstall"] = function()
