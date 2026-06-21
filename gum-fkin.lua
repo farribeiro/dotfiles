@@ -7,7 +7,7 @@ local fk = "flatpak "
 local app_query = u.getoutput_all 'gum input --placeholder "Digite o nome da aplicação"'
 if not app_query or app_query == "" then os.exit(0) end
 x 'gum spin --spinner dot --title "🔍 Buscando..." -- sleep 0.5'
-local raw_list = u.getoutput_all("flatpak search " .. escape(app_query) .. " --columns=application")
+local raw_list = u.getoutput_all("flatpak search " .. u.escape(app_query) .. " --columns=application")
 if not raw_list or raw_list == "" then
 	p "⚠️  Nenhum app encontrado."
 	os.exit(1)
