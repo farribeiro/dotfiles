@@ -4,7 +4,6 @@ local x = os.execute
 local p = print
 local u = require "util"
 local fk = "flatpak "
-local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 local app_query = u.getoutput_all 'gum input --placeholder "Digite o nome da aplicação"'
 if not app_query or app_query == "" then os.exit(0) end
 x 'gum spin --spinner dot --title "🔍 Buscando..." -- sleep 0.5'
@@ -36,7 +35,11 @@ if not selected_short or selected_short == "" then os.exit(0) end
 local selected_id = ids_reais[selected_short] or selected_short
 local dd = " --delete-data "
 local ay = " -y "
-local es = escape(selected_id)
+local es = u.escape(selected_id)
+local function Force_Uninstall()
+	x(('%s remove %s %s %s'):format(fk, ay, dd, es))
+	p "🗑️  Expurgado com sucesso."
+end
 local handlers = {
 	["Reinstalar"] = function() x(("%s install --reinstall %s %s"):format(fk, ay, es)) end,
 	["Cancelar"] = function() os.exit(0) end,
@@ -46,14 +49,11 @@ local handlers = {
 		p "🗑️  Removido com sucesso."
 	end,
 	["Force_Reinstall"] = function()
-		x(("%s remove %s %s %s"):format(fk, ay, dd, es))
+		Force_Uninstall()
 		x(("%s install %s %s"):format(fk, ay, es))
 		p "🗑️  Reinstação forçada com sucesso."
 	end,
-	["Force_Uninstall"] = function()
-		x(('%s remove %s %s %s'):format(fk, ay, dd, es))
-		p "🗑️  Expurgado com sucesso."
-	end,
+	["Force_Uninstall"] = function() Force_Uninstall() end,
 	["Instalar"] = function()
 		if x(('gum confirm "Deseja instalar %s ?"'):format(selected_id)) then
 			p(("📦 Instalando %s ..."):format(selected_id))
