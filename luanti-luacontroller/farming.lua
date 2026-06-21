@@ -3,7 +3,6 @@
 -- Copyright 2024-2026 Fabio Rodrigues Ribeiro and contributors
  
 local tubos, chave = "a", "b"
-local function i(vf)  end
 if pin[chave] then
   port[tubos] = not port[tubos]
   interrupt(
