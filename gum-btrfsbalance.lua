@@ -5,18 +5,6 @@ local x = os.execute
 local u = require "util"
 local fk = "flatpak "
 local sbtrfs = "sudo btrfs "
---[[ reabilitar flathub
-local url = "https://dl.flathub.org/repo/flathub.flatpakrepo"
-local fh = "flathub "
-local fkifnot = "--if-not-exists " .. fh .. " " .. url
-local fkradd = "remote-add "
-local fkucmd = fk .. fkradd .. "--user " .. fkifnot
-local fkcmd = fk .. fkradd .. fkifnot
-local fkencmd = fk .. " remote-modify --enable " .. fh
-u.writecmd_x(fkucmd)
-u.writecmd_x(fkcmd)
-u.writecmd_x(fkencmd)
-]] --
 u.writecmd_x(fk .. "remove --unused --delete-data -y")
 u.writecmd_x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
 local w = u.getoutput_all("echo -e '/var\n/var/home/fribeiro/Games' | gum filter --placeholder 'O que deseja fazer?'")
