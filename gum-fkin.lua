@@ -35,7 +35,7 @@ os.remove(tmp_list)
 if not selected_short or selected_short == "" then os.exit(0) end
 local selected_id = ids_reais[selected_short] or selected_short
 local dd = " --delete-data "
-local ay = " --assumeyes "
+local ay = " -y "
 local es = escape(selected_id)
 local handlers = {
 	["Reinstalar"] = function() x(("%s install --reinstall %s %s"):format(fk, ay, es)) end,
