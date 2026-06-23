@@ -5,14 +5,11 @@
 local tubos, chave = "a", "b"
 if pin[chave] then
   port[tubos] = not port[tubos]
-  interrupt(
-    2, -- Segundos
-    "on",
-    true)
-  digiline_send("Mulch", {
+  interrupt(2) -- Segundos
+  digiline_send("Mulch", { -- Tabelas com as propeiedades
     slotseq = "priority",
     exmatch = false,
-    name    = "bonemeal:fertiliser",
+    name    = "bonemeal:fertiliser", -- Tipo de Ferlizantes pode ser bonemeal:mulch
     count   = 8 -- Qt de Fertilizantes
 })
 end
