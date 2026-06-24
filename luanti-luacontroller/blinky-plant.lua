@@ -1,9 +1,2 @@
-local function i() interrupt(1) end
-
-if event.type == "program" then
-	port.a = true
-	i()
-else
-	port.a = not port.a
-	i()
-end
+port.a = event.type == "program" and true or not port.a
+interrupt(1)
