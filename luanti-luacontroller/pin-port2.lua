@@ -10,9 +10,9 @@ function i(_) interrupt(30, -- Segundos
 end
 
 if pin.a then
-  port.c = true
+  port.c = false
   i("nc")
 elseif event.iid == "nc" then
-  port.c = not port.c
+  port.c = true
   i("c")
 end
