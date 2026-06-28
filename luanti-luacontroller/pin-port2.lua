@@ -12,7 +12,4 @@ end
 if pin.a then
   port.c = false
   i("nc")
-elseif event.iid == "nc" then
-  port.c = true
-  i("c")
-end
+elseif event.iid == "nc" then port.c = true end
