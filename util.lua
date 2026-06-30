@@ -66,6 +66,16 @@ local function get_nextkernelminorwithoutpatch()
 	local major, minor = get_fullkernelversion()
 	return ("%s.%d"):format(major, minor + 1) -- Converte o valor do Minor para número e incrementa 1 e constrói a nova versão do kernel
 end
+local function ping()
+	while true do
+		if os.execute "ping -c 1 8.8.8.8 >/dev/null 2>&1" then
+			print("[" .. os.date("%H:%M:%S") .. "] Internet: \27[92mONLINE\27[0m")
+			break
+		end
+		-- Delay de 5 segundos
+		if package.config:sub(1, 1) ~= "\\" then os.execute("sleep 5") end
+	end
+end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput "uname -m" end
 local function writecmd_x(cmd)
@@ -90,6 +100,7 @@ return {
 	getoutput = getoutput,
 	getoutput_all = getoutput_all,
 	openfile_match = openfile_match,
+	ping = ping,
 	sbversion = sbversion,
 	writecmd_x = writecmd_x,
 	writemsg_x = writemsg_x,
