@@ -35,7 +35,7 @@ local function txup()
 	u.writemsg_x("toolbox run sudo dnf update -y", "\n*** Terminado atualizar flatpak\n\n*** Atualizando toolbox\n\n")
 end
 local function up()
-	io.write "*** Informoções do sistema atual e atualizando\n\n"
+	print "\n\27[32m*** Informoções do sistema atual e atualizando\27[0m"
 	rpmostree_upgrade ""
 	fkup()
 	txup()
@@ -67,7 +67,8 @@ local handlers = {
 		fkup()
 		txup()
 		rpmostree_upgrade "-r"
-	end,	clean = clean,
+	end,
+	clean = clean,
 	fkup = fkup,
 	lastdeploy = lastdeploy,
 	oua = oua,
