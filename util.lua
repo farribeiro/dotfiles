@@ -68,7 +68,7 @@ local function get_nextkernelminorwithoutpatch()
 end
 local function ping()
 	while true do
-		if os.execute "ping -c 1 8.8.8.8 >/dev/null 2>&1" then
+		if x "ping -c 1 8.8.8.8 >/dev/null 2>&1" then
 			print("[" .. os.date("%H:%M:%S") .. "] Internet: \27[92mONLINE\27[0m")
 			break
 		end
