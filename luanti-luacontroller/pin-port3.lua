@@ -9,19 +9,17 @@ local function i (s, _)
 end 
 
 if pin.c then
-  port.b = false
-  port.d = true
+  port.b, port.d = true, false
   i(1, -- Segundos
   "1")
 elseif event.iid == "1" then
-  port.d = false
   port.a = true
   i(1, -- Segundos
   "2") 
 elseif event.iid == "2" then
-  port.a = false
   i(8, -- Segundos
   "3") 
 elseif event.iid == "3" then
-  port.b = true
+  port.a, port.b = false, false
+  port.d = true
 end
