@@ -5,7 +5,7 @@
 --Continually pulses pin A, turning on/off once per second.
 
 local function i (s, _)
-  interrupt(s, _, true)
+  interrupt(s, _)
 end 
 
 if pin.c then
