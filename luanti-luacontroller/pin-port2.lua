@@ -7,6 +7,5 @@
 if pin.a then
   port.c = false
   interrupt(30, -- Segundos
-    "nc",
-    true) 
+    "nc") 
 elseif event.iid == "nc" then port.c = true end
