@@ -5,9 +5,9 @@
 
 local pop = io.popen
 -- Abertua Pipes / Stream Lua
-local p_in = assert(pop("flatpak list --app | sed -E 's/stable|flathub|system|master|cosmic|user//g' < <(column -t)", "r"))
-local p_out = assert(pop("gum pager", "w"))
+local pin = assert(pop("flatpak list --app | sed -E 's/stable|flathub|system|master|cosmic|user//g' < <(column -t)", "r"))
+local pout = assert(pop("gum pager", "w"))
 local t = {}
-for l in p_in:lines() do t[#t + 1] = l:gsub("%d+$", "") end
-p_in:close()
-p_out:write(table.concat(t, "\n")):close()
+for l in pin:lines() do t[#t + 1] = l:gsub("%d+$", "") end
+pin:close()
+pout:write(table.concat(t, "\n")):close()
