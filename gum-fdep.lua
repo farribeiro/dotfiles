@@ -13,6 +13,5 @@ local handlers = {
 	["showdeps"] = function() return cmd_rq_pv:format(app_query, "depends") end,
 	["whatdepends"] = function() return ("%s --whatdepends %s"):format(cmd_rq, app_query) end
 }
-local choice = u.getoutput_all(
-	"echo -e 'filepackage\nshowdeps\nwhatsdepends\nCancelar' | gum filter --placeholder 'O que deseja fazer?'")
+local choice = u.getoutput_all("echo -e 'filepackage\nshowdeps\nwhatsdepends\nCancelar' | gum filter --placeholder 'O que deseja fazer?'")
 if choice and handlers[choice] then x(handlers[choice]) else print("🛑 Operação cancelada.") end
