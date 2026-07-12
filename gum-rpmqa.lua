@@ -13,7 +13,7 @@ if not raw_list or raw_list == "" then
 	os.exit(1)
 end
 local display_list = {}
-for line in raw_list:gmatch("[^\r\n]+") do table.insert(display_list, line) end
+for l in raw_list:gmatch("[^\r\n]+") do table.insert(display_list, l) end
 local tmp_list = os.tmpname()
 local f = assert(op(tmp_list, "w"))
 f:write(table.concat(display_list, "\n"))
