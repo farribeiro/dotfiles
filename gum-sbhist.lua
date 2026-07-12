@@ -8,4 +8,4 @@ local p_in = assert(io.popen("rpm -qa --nodigest --nosignature --last", "r"))
 local t = {}
 for l in p_in:lines() do t[#t + 1] = l end
 p_in:close()
-os.execute("gum pager << EOF\n" .. table.concat(display_list, "\n") .. "EOF")
+os.execute("gum pager << EOF\n" .. table.concat(t, "\n") .. "EOF")
