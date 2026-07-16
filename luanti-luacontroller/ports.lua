@@ -8,11 +8,9 @@ local LUT = {
   ["clockc"] = { false, false, true, false, next_id = "clockd" },
   ["clockd"] = { false, false, false, true, next_id = "clock" },
 }
-
 -- Resolve o gatilho inicial ("program" vira "clock") ou pega o ID do evento atual
 local id = (event.type == "program") and "clock" or event.iid
 local row = LUT[id]
-
 if row then
   -- Atribuição múltipla em uma linha usando os índices da tabela
   port.a, port.b, port.c, port.d = row[1], row[2], row[3], row[4]
