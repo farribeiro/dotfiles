@@ -4,10 +4,7 @@
 --Interrupt-Driven Clock
 --Continually pulses pin A, turning on/off once per second.
 
-local function i (s, _)
-  interrupt(s, _)
-end 
-
+local i = interrupt
 if pin.c then
   port.b, port.d = true, false
   i(1, -- Segundos
