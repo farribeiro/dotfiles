@@ -13,5 +13,5 @@ local function bal(_)
 	io.write("\n" .. ("*"):rep(10) .."\n" .. _ .. "usage: ")
 	x(("%s balance start -%susage=%d %s"):format(sbtrfs, io.read "*n", w))
 end
-bal("d")
-bal("m")
+bal "d"
+bal "m"
