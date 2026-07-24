@@ -26,9 +26,6 @@ end
 local function rpmostree_upgrade(opts)
 	kv()
 	lastdeploy()
-	if os.getenv("DESKTOP_SESSION") == "gnome" then
-		u.x_writemsg("gnome-software --quit", "\n*** Parado gnome-software\n\n")
-	end
 	x(("%s %s upgrade %s"):format(roc, ro, opts))
 end
 local function txup()
