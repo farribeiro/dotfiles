@@ -49,7 +49,7 @@ local handlers = {
 		up()
 	end, -- Funciona mas precisa fazer funções fora da tabela, solucionado
 	["check-branch"] = function()
-		x(("ostree remote refs fedora | grep -E \"%d/%s/%s$\""):format(u.sbversion() + 1, u.arch(), variant))
+		x(("ostree remote refs fedora | grep -E \"%d$\""):format(u.sbversion() + 1))
 	end,
 	["install"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
