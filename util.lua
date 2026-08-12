@@ -73,7 +73,7 @@ local function ping()
 			break
 		end
 		-- Delay de 5 segundos
-		if package.config:sub(1, 1) ~= "\\" then os.execute "sleep 5" end
+		if package.config:sub(1, 1) ~= "\\" then x "sleep 5" end
 	end
 end
 local function sbversion() return getoutput "rpm -E %fedora" end
