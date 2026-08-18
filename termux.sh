@@ -19,6 +19,7 @@ inxi \
 koji-tool \
 lua \
 luanti \
+newsboat \
 nodejs \
 npm \
 openssl-devel \
