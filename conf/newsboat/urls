@@ -2,6 +2,7 @@ https://blog.documentfoundation.org/blog/category/press-releases/feed/
 https://bodhi.fedoraproject.org/rss/updates/?packages=flatpak&releases=F45
 https://bodhi.fedoraproject.org/rss/updates/?packages=kernel&releases=F45
 https://bodhi.fedoraproject.org/rss/updates/?packages=lua&releases=F45
+# https://bodhi.fedoraproject.org/rss/updates/?packages=mesa &releases=F45
 https://bodhi.fedoraproject.org/rss/updates/?search=cosmic&releases=F45
 https://bolha.blog/bolhaverso/feed/
 https://br-linux.org/feed/
