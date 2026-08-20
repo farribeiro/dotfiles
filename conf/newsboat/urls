@@ -22,7 +22,7 @@ https://flathub.org/api/v2/feed/new
 # https://github.com/vector-im/element-x-android/releases.atom
 # https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/tags?format=atom
 https://linuxiac.com/feed/
-# https://masto.ai/@phoronix.rss
+https://masto.ai/@phoronix.rss
 # https://masto.pt/@tugatech.rss
 https://mastodon.social/@tecnoblog.rss
 https://mastodon.social/tags/AtCraft.rss
