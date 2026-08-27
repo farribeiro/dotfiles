@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
--- SPDX-License-Identifier: GPL-2.0
--- Copyright 2026 - Fábio Rodrigues Ribeiro and contributors
+# SPDX-License-Identifier: GPL-2.0
+# Copyright 2026 - Fábio Rodrigues Ribeiro and contributors
 
 cd ~/Downloads
 wget2 https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-latest.flatpak
