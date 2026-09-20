@@ -59,6 +59,7 @@ local handlers = {
 	["reboot"] = function() x "systemctl reboot" end,
 	["ro"] = function() x(("%s%s%s"):format(roc, ro, u.xargs())) end,
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
+	["status"] = function() x "rpm-ostree status" end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
 	["up-r"] = function()
@@ -129,6 +130,7 @@ handlers["lc"] = handlers["lastchange"]
 handlers["nsb"] = handlers["nextsb"]
 handlers["p"] = handlers["poweroff"]
 handlers["r"] = handlers["reboot"]
+handlers["st"] = handlers["status"]
 handlers["ostree-unpinall"] = handlers["oua"]
 if require "sai":ca() then
 	handlers["help"]()
