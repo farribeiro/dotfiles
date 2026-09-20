@@ -51,6 +51,7 @@ local handlers = {
 	["check-branch"] = function()
 		x(("ostree remote refs fedora | grep -E \"%d$\""):format(u.sbversion() + 1))
 	end,
+	["diff"] = function() x(ro .. " db diff") end,
 	["install"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
 	["jup"] = function() rpmostree_upgrade "" end,
 	["jup-r"] = function() rpmostree_upgrade "-r" end,
