@@ -121,19 +121,19 @@ fkup:
 	end
 }
 -- Extra functions
-handlers["in"] = handlers["install"]
-handlers["cb"] = handlers["check-branch"]
-handlers["ouap"] = handlers["ostree-unpinall-pin"]
 handlers["c"] = handlers["clean"]
-handlers["pw"] = handlers["preview"]
-handlers["nt"] = handlers["nexttest"]
-handlers["ld"] = handlers["lastdeploy"]
+handlers["cb"] = handlers["check-branch"]
+handlers["in"] = handlers["install"]
 handlers["lc"] = handlers["lastchange"]
+handlers["ld"] = handlers["lastdeploy"]
 handlers["nsb"] = handlers["nextsb"]
+handlers["nt"] = handlers["nexttest"]
+handlers["ostree-unpinall"] = handlers["oua"]
+handlers["ouap"] = handlers["ostree-unpinall-pin"]
 handlers["p"] = handlers["poweroff"]
+handlers["pw"] = handlers["preview"]
 handlers["r"] = handlers["reboot"]
 handlers["st"] = handlers["status"]
-handlers["ostree-unpinall"] = handlers["oua"]
 if require "sai":ca() then
 	handlers["help"]()
 	os.exit(1)
