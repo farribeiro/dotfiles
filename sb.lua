@@ -64,18 +64,18 @@ local handlers = {
 	["status"] = function() x(ro .. " status") end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
-	["up-r"] = function()
-		u.ping()
-		fkup()
-		txup()
-		rpmostree_upgrade "-r"
-	end,
 	clean = clean,
 	fkup = fkup,
 	lastdeploy = lastdeploy,
 	oua = oua,
 	pin = pin,
 	up = up,
+	["up-r"] = function()
+		u.ping()
+		fkup()
+		txup()
+		rpmostree_upgrade "-r"
+	end,
 	["ostree-unpinall-pin"] = function()
 		oua()
 		pin()
