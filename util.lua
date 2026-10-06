@@ -82,13 +82,16 @@ local function writecmd_x(cmd)
 	io.write(cmd .. "\n")
 	x(cmd)
 end
-local function writemsg_x(cmd, msg)
-	io.write(msg)
+local function prompt(p)
+	io.write(p ~= nil and tostring(p) or '')
+end
+local function writemsg_x(cmd, p)
+	prompt(p)
 	x(cmd)
 end
-local function x_writemsg(cmd, msg)
+local function x_writemsg(cmd, p)
 	x(cmd)
-	io.write(msg)
+	prompt(p)
 end
 local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 return {
