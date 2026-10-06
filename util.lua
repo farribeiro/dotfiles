@@ -78,12 +78,10 @@ local function ping()
 end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput "uname -m" end
+local function prompt(p) io.write(p ~= nil and tostring(p) or '') end
 local function writecmd_x(cmd)
-	io.write(cmd .. "\n")
+	prompt(cmd .. "\n")
 	x(cmd)
-end
-local function prompt(p)
-	io.write(p ~= nil and tostring(p) or '')
 end
 local function writemsg_x(cmd, p)
 	prompt(p)
