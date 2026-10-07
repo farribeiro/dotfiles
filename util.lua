@@ -91,6 +91,10 @@ local function x_writemsg(cmd, p)
 	x(cmd)
 	prompt(p)
 end
+local function input(p, opts)
+	wr(p)
+	return io.read(opts)
+end
 local function escape(str) return "'" .. str:gsub("'", "'\\''") .. "'" end
 return {
 	arch = arch,
