@@ -104,6 +104,7 @@ return {
 	get_nextkernelversion = get_nextkernelversion,
 	getoutput = getoutput,
 	getoutput_all = getoutput_all,
+	input = input,
 	openfile_match = openfile_match,
 	ping = ping,
 	sbversion = sbversion,
