@@ -1,8 +1,6 @@
 #!/usr/bin/env lua
-
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2023-2024 - Fábio Rodrigues Ribeiro and contributors
-
 require "sai":ca_none()
 local yt = "yt-dlp -x --embed-thumbnail --embed-metadata --audio-format %s " .. arg[2]
 local handlers = { ["mp3"] = function() return yt:format("mp3") end, ["opus"] = function() return yt:format("opus") end }
