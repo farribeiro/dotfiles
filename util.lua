@@ -89,7 +89,7 @@ local function writemsg_x(cmd, p)
 end
 local function x_writemsg(cmd, p)
 	x(cmd)
-	prompt(p)
+	wr(p)
 end
 local function input(p, opts)
 	wr(p)
