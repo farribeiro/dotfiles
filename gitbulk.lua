@@ -1,10 +1,7 @@
 #!/usr/bin/env lua
-
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2026 - Fábio Rodrigues Ribeiro and contributors
-
 local x = os.execute
-
 local handlers = {
 	["clone"] = function()
 		local file = assert(io.open("git.txt", "r"))
@@ -14,6 +11,5 @@ local handlers = {
 	["sm"] = function() x "git submodule update && git submodule update --init" end,
 	["pull"] = function() x "find . -maxdepth 1 -type d -exec bash -c \"cd '{}' && git pull\" \\;" end
 }
-
 require "sai":ca_none()
 handlers[arg[1]]()
