@@ -25,7 +25,7 @@ local function getoutput(cmd, opts) return getoutput_base(cmd, "*l") end
 local function getoutput_all(cmd) return getoutput_base(cmd, "*a") end
 local function sbversion() return getoutput "rpm -E %fedora" end
 local function arch() return getoutput "uname -m" end
-local function prompt(p) io.write(p ~= nil and tostring(p) or '') end
+local function wr(p) io.write(p ~= nil and tostring(p) or '') end
 local function open_stream(filename, opts)
 	local f = assert(op(filename, opts))
 	if not f then error(("Erro ao abrir o arquivo %s para leitura."):format(filename)) else return f end
@@ -80,11 +80,11 @@ local function ping()
 	end
 end
 local function writecmd_x(cmd)
-	prompt(cmd .. "\n")
+	wr(cmd .. "\n")
 	x(cmd)
 end
 local function writemsg_x(cmd, p)
-	prompt(p)
+	wr(p)
 	x(cmd)
 end
 local function x_writemsg(cmd, p)
