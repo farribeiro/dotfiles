@@ -1,10 +1,7 @@
 #!/usr/bin/env lua
-
 -- SPDX-License-Identifier: GPL-2.0
 -- Copyright 2022-2024 - Fábio Rodrigues Ribeiro and contributors
-
 local x = os.execute
-
 local function readLinesFromFile(filename)
 	local tabela = {}
 	local file = assert(io.open(filename, "r"))
@@ -12,41 +9,31 @@ local function readLinesFromFile(filename)
 	file:close()
 	return tabela
 end
-
 local function cloneRepositories(filename)
 	for _, repo in ipairs(readLinesFromFile(filename)) do x(("git clone %s"):format(repo)) end
 end
-
 local function writeWorldMtFile(modules)
 	local file = io.open("world.mt", "w")
 	if not file then error "Erro ao abrir o arquivo world.mt para escrita." end
-
 	file:write "gameid = minetest\nworld_name =\n\n"
 	file:write(table.concat(modules, "\n"))
-
 	file:close()
 	print "world.mt criado com sucesso."
 end
-
 local handlers = {
 	["bootstrap"] = function()
 		local repositoriesFile = "git.txt"
 		local modulesFile = "modules.txt"
-
 		local count_repo = 0
 		for _ in ipairs(readLinesFromFile(repositoriesFile)) do count_repo = count_repo + 1 end
-
 		cloneRepositories(repositoriesFile)
-
 		local count_modules = 0
 		local modules = readLinesFromFile(modulesFile)
 		for i, item in ipairs(modules) do
 			modules[i] = ("load_mod_%s = true"):format(modules[i])
 			count_modules = count_modules + 1
 		end
-
 		writeWorldMtFile(modules)
-
 		io.write(("Quantidade de repositórios: %d\nQuantidade de mods: %d\n"):format(count_repo, count_modules))
 	end,
 
@@ -54,17 +41,14 @@ local handlers = {
 	["up-secfix"] = function() x "dnf up -y" end,
 	["start"] = function() x "minetest --server --terminal --gameid minetest" end,
 	["stop"] = function() x "killall minetest" end,
-
 	["up"] = function()
 		handlers["up-mods"]()
 		handlers["up-secfix"]()
 	end,
-
 	["restart"] = function()
 		handlers["stop"]()
 		handlers["start"]()
 	end
-
 	--[[
 	["in-up-game"]
 		print(sudo dnf install make \
@@ -96,7 +80,6 @@ local handlers = {
 		ninja
 		)
 end
-
 cmake -G Ninja /usr/src/minetest \
         -DENABLE_POSTGRESQL=TRUE \
         -DPostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql \
@@ -114,7 +97,6 @@ cmake -G Ninja /usr/src/minetest \
 
 -- Extra functions
 handlers["bs"] = handlers["bootstrap"]
-
 if require "sai":ca() then
 	handlers["help"]()
 	os.exit(1)
