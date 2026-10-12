@@ -5,6 +5,6 @@
 
 cd ~/Downloads
 wget2 https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-latest.flatpak
-flatpak remove com.hypixel.HytaleLauncher
-flatpak --user install ~/Downloads/hytale-launcher-latest.flatpak
+flatpak remove com.hypixel.HytaleLauncher -y
+flatpak --user install ~/Downloads/hytale-launcher-latest.flatpak -y
 rm -rf hytale-launcher-latest.flatpak
