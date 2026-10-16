@@ -70,7 +70,7 @@ local handlers = {
 	lastdeploy = lastdeploy,
 	oua = oua,
 	pin = pin,
-	"up-nr" = up,
+	"up-nr" = up_nr,
 	["up"] = function()
 		u.ping()
 		fkup()
