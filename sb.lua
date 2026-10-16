@@ -94,6 +94,8 @@ nt, nexttest:
 nsb, nextsb:
   Upgrade to next version of silverblue
 up:
+  Upgrade the role system to latest commit and reboot
+up-nr:
   Upgrade the role system to latest commit
 in:
   Install a layered package
