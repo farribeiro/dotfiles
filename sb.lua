@@ -65,6 +65,7 @@ local handlers = {
 	["status"] = function() x(ro .. " status") end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
+	["dbdf"] = function() x(ro .. "db diff") end,
 	clean = clean,
 	fkup = fkup,
 	lastdeploy = lastdeploy,
