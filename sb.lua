@@ -31,7 +31,7 @@ end
 local function txup()
 	u.writemsg_x("toolbox run sudo dnf update -y", "\n*** Terminado atualizar flatpak\n\n*** Atualizando toolbox\n\n")
 end
-local function up()
+local function up_nr()
 	u.ping()
 	print "\n\27[32m*** Informoções do sistema atual e atualizando\27[0m"
 	rpmostree_upgrade ""
@@ -53,8 +53,8 @@ local handlers = {
 	end,
 	["diff"] = function() x(ro .. " db diff") end,
 	["install"] = function() x(("%s%s upgrade --install=%s"):format(roc, ro, u.xargs())) end,
-	["jup"] = function() rpmostree_upgrade "" end,
-	["jup-r"] = function() rpmostree_upgrade "-r" end,
+	["jup-nr"] = function() rpmostree_upgrade "" end,
+	["jup"] = function() rpmostree_upgrade "-r" end,
 	["lastchange"] = function() x(("%s db diff"):format(ro)) end,
 	["nextsb"] = function() rebasesb(1, "") end,
 	["nexttest"] = function() rebasesb(1, "/testing") end,
@@ -70,8 +70,8 @@ local handlers = {
 	lastdeploy = lastdeploy,
 	oua = oua,
 	pin = pin,
-	up = up,
-	["up-r"] = function()
+	up-nr = up,
+	["up"] = function()
 		u.ping()
 		fkup()
 		txup()
