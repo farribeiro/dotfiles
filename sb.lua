@@ -64,7 +64,7 @@ local handlers = {
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
 	["status"] = function()
 		x(ro .. " status")
-		u.writensg_x("\n", ro .. " db diff")
+		u.writemsg_x("\n", ro .. " db diff")
 	end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
