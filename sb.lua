@@ -29,7 +29,7 @@ local function rpmostree_upgrade(opts)
 	x(("%s %s upgrade %s"):format(roc, ro, opts))
 end
 local function txup()
-	u.p_x("toolbox run sudo dnf update -y", "\n\27[32m***\27[0m  Terminado atualizar flatpak\n\n\27[32m***\27[0m Atualizando toolbox\n\n")
+	u.p_x("toolbox run sudo dnf update -y", "\n\27[32m***\27[0m Terminado atualizar flatpak\n\n\27[32m***\27[0m Atualizando toolbox\n\n")
 end
 local function up_nr()
 	u.ping()
