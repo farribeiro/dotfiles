@@ -79,15 +79,15 @@ local function ping()
 		if package.config:sub(1, 1) ~= "\\" then x "sleep 5" end
 	end
 end
-local function writecmd_x(cmd)
+local function p_x(cmd)
 	wr(cmd .. "\n")
 	x(cmd)
 end
-local function writemsg_x(cmd, p)
+local function p_x(cmd, p)
 	wr(p)
 	x(cmd)
 end
-local function x_writemsg(cmd, p)
+local function x_p(cmd, p)
 	x(cmd)
 	wr(p)
 end
@@ -109,7 +109,7 @@ return {
 	ping = ping,
 	sbversion = sbversion,
 	writecmd_x = writecmd_x,
-	writemsg_x = writemsg_x,
-	x_writemsg = x_writemsg,
+	p_x = p_x,
+	x_p = x_p,
 	xargs = xargs
 }
