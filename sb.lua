@@ -33,8 +33,7 @@ local function txup()
 end
 local function up_nr()
 	u.ping()
-	print "\n\27[32m*** Informoções do sistema atual e atualizando\27[0m"
-	rpmostree_upgrade ""
+	u.p_x(rpmostree_upgrade "" , "\n\27[32m*** Informoções do sistema atual e atualizando\27[0m")
 	fkup()
 	txup()
 end
