@@ -62,10 +62,12 @@ local handlers = {
 	["reboot"] = function() x "systemctl reboot" end,
 	["ro"] = function() x(("%s%s%s"):format(roc, ro, u.xargs())) end,
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
-	["status"] = function() x(ro .. " status") end,
+	["status"] = function()
+		x(ro .. " status")
+		u.writensg_x("\n", ro .. " db diff")
+	end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
-	["dbdf"] = function() x(ro .. " db diff") end,
 	clean = clean,
 	fkup = fkup,
 	lastdeploy = lastdeploy,
