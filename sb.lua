@@ -10,7 +10,7 @@ local roc = ("%s cancel && "):format(ro)
 local poff = "systemctl poweroff"
 local osrelease = "/etc/os-release"
 local variant = u.openfile_match(osrelease, "VARIANT_ID=(.-)$")
-local function pin() u.writemsg_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
+local function pin() u.writep_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
 local function fkup() x "flatpak update -y" end
 local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput_all "uname -r")) end
@@ -29,7 +29,7 @@ local function rpmostree_upgrade(opts)
 	x(("%s %s upgrade %s"):format(roc, ro, opts))
 end
 local function txup()
-	u.writemsg_x("toolbox run sudo dnf update -y", "\n*** Terminado atualizar flatpak\n\n*** Atualizando toolbox\n\n")
+	u.writep_x("toolbox run sudo dnf update -y", "\n*** Terminado atualizar flatpak\n\n*** Atualizando toolbox\n\n")
 end
 local function up_nr()
 	u.ping()
@@ -64,7 +64,7 @@ local handlers = {
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
 	["status"] = function()
 		x(ro .. " status")
-		u.writemsg_x(ro .. " db diff", "\n")
+		u.writep_x(ro .. " db diff", "\n")
 	end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
