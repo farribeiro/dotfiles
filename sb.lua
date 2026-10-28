@@ -29,11 +29,11 @@ local function rpmostree_upgrade(opts)
 	x(("%s %s upgrade %s"):format(roc, ro, opts))
 end
 local function txup()
-	u.p_x("toolbox run sudo dnf update -y", "\n\27[32m***\27[0m  Terminado atualizar flatpak\n\n\27[32m***\27[0m  Atualizando toolbox\n\n")
+	u.p_x("toolbox run sudo dnf update -y", "\n\27[32m***\27[0m  Terminado atualizar flatpak\n\n\27[32m***\27[0m Atualizando toolbox\n\n")
 end
 local function up_nr()
 	u.ping()
-	u.p_x(rpmostree_upgrade "" , "\n\27[32m***\27[0m Informoções do sistema atual e atualizando")
+	x(rpmostree_upgrade "") -- , "\n\27[32m***\27[0m Informoções do sistema atual e atualizando")
 	fkup()
 	txup()
 end
