@@ -143,8 +143,8 @@ print(header_fmt:format("InterIRC",
 ))
 
 local function r(qt) return ("-"):rep(qt) end
-r18, r32 = r(18), r(32)
-valores = { r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r32, r32, r32, r32 }
+local r18, r32 = r(18), r(32)
+local valores = { r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r18, r32, r32, r32, r32 }
 print(("|%s|"):format(table.concat(valores, "|")))
 
 -- 3. Iterar pelos canais ordenados e extrair valores das sub-tabelas
