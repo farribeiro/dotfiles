@@ -110,6 +110,7 @@ local canais = {
 	["#RadioLightHits"] = {},
 	["#Metal_Puro"] = {},
 	["#perd1dos"] = {},
+	["#jacksoow"] = {},
 }
 
 -- 2. Definir o cabeçalho e formato da linha (TTY)
