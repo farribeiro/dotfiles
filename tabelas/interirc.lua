@@ -119,7 +119,6 @@ local canais = {
 local h16, h30 = u.md_h(16), u.md_h(30)
 local header_fmt = u.md_s({ h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h30, h30, h30,
 	h30 })
-valores = nil
 
 print(header_fmt:format("InterIRC",
 	"BrasPort",
