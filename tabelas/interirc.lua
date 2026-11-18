@@ -121,7 +121,7 @@ local header_fmt = u.md_s({ h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h1
 	h30 })
 valores = nil
 
-print((header_fmt:format("InterIRC",
+print(header_fmt:format("InterIRC",
 	"BrasPort",
 	"BRIrc",
 	"Dalnet",
@@ -141,7 +141,7 @@ print((header_fmt:format("InterIRC",
 	"WhatsApp",
 	"XMPP",
 	"Matrix"
-)))
+))
 
 local function r(qt) return ("-"):rep(qt) end
 r18, r32 = r(18), r(32)
@@ -178,7 +178,7 @@ for _, nome in ipairs(u.nomes_ordenados(canais)) do
 	-- Varre a lista de objetos de cada canal
 	for _, obj in ipairs(info) do for k, v in pairs(obj) do if v ~= "" then row[k] = v end end end
 
-	print((header_fmt):format(nome,
+	print(header_fmt:format(nome,
 		row.brasport,
 		row.brirc,
 		row.dalnet,
