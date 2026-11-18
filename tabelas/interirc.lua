@@ -120,27 +120,9 @@ local h16, h30 = u.md_h(16), u.md_h(30)
 local header_fmt = u.md_s({ h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h16, h30, h30, h30,
 	h30 })
 
-print(header_fmt:format("InterIRC",
-	"BrasPort",
-	"BRIrc",
-	"Dalnet",
-	"IRCHighway",
-	"IRCMania",
-	"JacksoowNET",
-	"OFTC",
-	"Quakenet",
-	"RadioCast",
-	"RavenX",
-	"RedeJampa",
-	"RedeSul",
-	"Snoonet",
-	"sVIPChat",
-	"Virtualife",
-	"Telegram",
-	"WhatsApp",
-	"XMPP",
-	"Matrix"
-))
+print(header_fmt:format("InterIRC", "BrasPort", "BRIrc", "Dalnet", "IRCHighway", "IRCMania", "JacksoowNET", "OFTC",
+	"Quakenet", "RadioCast", "RavenX", "RedeJampa", "RedeSul", "Snoonet", "sVIPChat", "Virtualife", "Telegram",
+	"WhatsApp", "XMPP", "Matrix"))
 
 local function r(qt) return ("-"):rep(qt) end
 local r18, r32 = r(18), r(32)
