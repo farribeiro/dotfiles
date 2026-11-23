@@ -12,7 +12,7 @@ local osrelease = "/etc/os-release"
 local variant = u.openfile_match(osrelease, "VARIANT_ID=(.-)$")
 local function pin() u.p_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
-local function fkup() x "flatpak update -y" end
+local function fkup() u.x_p("flatpak update -y", "\n") end
 local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput_all "uname -r")) end
 local function lastchange() u.x_p(("%s db diff"):format(ro), "\n") end
 local function clean()
