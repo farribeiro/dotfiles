@@ -37,6 +37,7 @@ local function up_nr()
 	fkup()
 	txup()
 end
+local function lastchange() x(("%s db diff"):format(ro)) end
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
@@ -63,7 +64,8 @@ local handlers = {
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
 	["status"] = function()
 		x(ro .. " status")
-		u.p_x(ro .. " db diff", "\n")
+		lastchange()
+		print ""
 	end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
@@ -72,6 +74,7 @@ local handlers = {
 	lastdeploy = lastdeploy,
 	oua = oua,
 	pin = pin,
+	lastchange, lastchange,
 	["up-nr"] = up_nr,
 	["up"] = function()
 		u.ping()
