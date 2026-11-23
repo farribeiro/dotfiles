@@ -14,7 +14,7 @@ local function pin() u.p_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
 local function fkup() x "flatpak update -y" end
 local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput_all "uname -r")) end
-local function lastchange() x(("%s db diff"):format(ro)) end
+local function lastchange() u.x_p(("%s db diff"):format(ro), "\n") end
 local function clean()
 	x(("sudo -s <<< \"%s cleanup -bpm && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro))
 end
@@ -63,9 +63,8 @@ local handlers = {
 	["ro"] = function() x(("%s%s%s"):format(roc, ro, u.xargs())) end,
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
 	["status"] = function()
-		x(ro .. " status")
+		u.p_x(ro .. " status", "\n")
 		lastchange()
-		print ""
 	end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
