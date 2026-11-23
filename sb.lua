@@ -14,6 +14,7 @@ local function pin() u.p_x("sudo ostree admin pin 0", "\n*** Pinning: \n") end
 local function oua() for i = 2, 5 do x(("sudo ostree admin pin --unpin %d"):format(i)) end end
 local function fkup() x "flatpak update -y" end
 local function kv() io.write(("Versão do kernel: %s\n"):format(u.getoutput_all "uname -r")) end
+local function lastchange() x(("%s db diff"):format(ro)) end
 local function clean()
 	x(("sudo -s <<< \"%s cleanup -bpm && ostree admin cleanup\" && toolbox run dnf clean all"):format(ro))
 end
@@ -37,7 +38,6 @@ local function up_nr()
 	fkup()
 	txup()
 end
-local function lastchange() x(("%s db diff"):format(ro)) end
 local handlers = {
 	-- ["reinstall"] = function() x "rpm-ostree upgrade --install=flatpak-builder" end
 	-- ["mesa-drm-freeworld"] = function() x "rpm-ostree override remove mesa-va-drivers --install=mesa-va-drivers-freeworld --install=mesa-vdpau-drivers-freeworld --install=ffmpeg" end,
