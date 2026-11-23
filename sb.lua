@@ -69,12 +69,12 @@ local handlers = {
 	end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
 	["up-p"] = function() rpmostree_upgrade((" && %s"):format(poff)) end,
-	clean = clean,
-	fkup = fkup,
-	lastdeploy = lastdeploy,
-	oua = oua,
-	pin = pin,
-	lastchange = lastchange,
+	clean,
+	fkup,
+	lastdeploy,
+	oua,
+	pin,
+	lastchange,
 	["up-nr"] = up_nr,
 	["up"] = function()
 		u.ping()
