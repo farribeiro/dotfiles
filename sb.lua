@@ -34,7 +34,7 @@ local function txup()
 end
 local function up_nr()
 	u.ping()
-	x(rpmostree_upgrade "") -- , "\n\27[32m***\27[0m Informoções do sistema atual e atualizando")
+	u.x_p(rpmostree_upgrade "", "\n") -- , "\n\27[32m***\27[0m Informoções do sistema atual e atualizando")
 	fkup()
 	txup()
 end
@@ -63,7 +63,7 @@ local handlers = {
 	["ro"] = function() x(("%s%s%s"):format(roc, ro, u.xargs())) end,
 	["search"] = function() x(("%s search %s"):format(ro, u.xargs())) end,
 	["status"] = function()
-		u.p_x(ro .. " status", "\n")
+		u.x_p(ro .. " status", "\n")
 		lastchange()
 	end,
 	["testsb"] = function() rebasesb(0, "/testing") end,
