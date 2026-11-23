@@ -74,7 +74,7 @@ local handlers = {
 	lastdeploy = lastdeploy,
 	oua = oua,
 	pin = pin,
-	lastchange, lastchange,
+	lastchange = lastchange,
 	["up-nr"] = up_nr,
 	["up"] = function()
 		u.ping()
