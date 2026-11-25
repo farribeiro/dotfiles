@@ -9,9 +9,11 @@ u.p_x "sudo -s <<< 'journalctl --rotate && journalctl --vacuum-time=2d'"
 local w = u.getoutput_all("echo -e '/var\n/var/home/fribeiro/Games' | gum filter --placeholder 'Onde deseja fazer o balance?'")
 local cmd_use = sbtrfs .. "filesystem usage " .. w .. " | grep -E '^(Me|Da)ta'"
 local function bal(_)
-	x(cmd_use)
+	local function b() x(cmd_use) end
+	b()
 	io.write("\n" .. ("*"):rep(10) .."\n" .. _ .. "usage: ")
 	x(("%s balance start -%susage=%d %s"):format(sbtrfs, io.read "*n", w))
+	b()
 end
 bal "d"
 bal "m"
