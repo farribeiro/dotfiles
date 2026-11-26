@@ -12,7 +12,7 @@ local function bal(_)
 	local function b() x(cmd_use) end
 	b()
 	io.write("\n" .. ("*"):rep(10) .."\n" .. _ .. "usage: ")
-	x(("%s balance start -%susage=%d %s"):format(sbtrfs, tonumber(io.read()), w))
+	x(("%s balance start -%susage=%d %s"):format(sbtrfs, _, io.read "*n", w))
 	b()
 end
 bal "d"
